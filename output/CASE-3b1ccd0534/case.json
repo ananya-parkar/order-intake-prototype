@@ -1,0 +1,40 @@
+{
+  "case_id": "CASE-3b1ccd0534",
+  "source_file": "N02_new_order_excel.eml",
+  "source_path": "C:\\dev\\order-intake-prototype\\data\\samples\\N02_new_order_excel.eml",
+  "source_sha256": "3b1ccd0534df2be0466b32c3b9dcec93ce734382e9512c754e2ec21565bf8490",
+  "received_at": "2026-08-03T10:40:00-05:00",
+  "subject": "[EXTERNAL] New PO PSF-77120",
+  "from_address": "mlindqvist@prairiesnack.example",
+  "from_name": "Marcus Lindqvist",
+  "to": "Northfield Starch Orders <starchorders@northfield-ingredients.example>",
+  "cc": "",
+  "in_reply_to": "",
+  "body_text": "Good morning,\n\nAttached is our purchase order PSF-77120 (3 lines). Please ship to our Sioux Falls plant.\nLet me know if anything is not available.\n\nRegards,\n\nMarcus Lindqvist\nSenior Buyer | Prairie Snack Foods Inc.\nSioux Falls, SD 57104\nOffice: 555-0174\n\nContents may be confidential and legally privileged, and are intended only for the recipient(s) named above. Nothing herein is intended to be a binding signature.\n",
+  "attachments": [
+    {
+      "filename": "PSF-77120.xlsx",
+      "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "kind": "excel",
+      "size_bytes": 5598,
+      "saved_path": "..\\output\\CASE-3b1ccd0534\\attachments\\PSF-77120.xlsx",
+      "is_inline": false,
+      "likely_signature": false,
+      "from_nested_email": null
+    }
+  ],
+  "status": "classified",
+  "duplicate_of": null,
+  "classification": {
+    "category": "new_order",
+    "detail": "new_po_attachment",
+    "po_numbers": [
+      "PSF-77120"
+    ],
+    "po_count": 1,
+    "confidence": 0.99,
+    "reason": "The email includes an attached purchase order file and explicitly states it is a new PO."
+  },
+  "flags": [],
+  "notes": []
+}

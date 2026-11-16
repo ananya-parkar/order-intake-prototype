@@ -1,0 +1,58 @@
+{
+  "email_file": "N08_new_order_portal_html_table.eml",
+  "scenario": "New order from a supplier portal, PO as HTML table in body",
+  "expected": {
+    "classification": "new_order",
+    "detail": null,
+    "po_count": 1,
+    "route": "review",
+    "flags": []
+  },
+  "purchase_orders": [
+    {
+      "customer_key": "lakeshore",
+      "customer_name": "Lakeshore Confections Inc.",
+      "sold_to_expected": "100301",
+      "customer_po_number": "LC-PO-660219",
+      "po_date": "08/05/2026",
+      "requested_delivery_date": "08/24/2026",
+      "vendor_name": "Northfield Ingredients Inc.",
+      "bill_to": "Lakeshore Confections Inc., 1900 Lakeshore Dr, Racine, WI 53403",
+      "ship_to_name": "Lakeshore Confections - Racine",
+      "ship_to_address": "1900 Lakeshore Dr, Racine, WI 53403",
+      "ship_to_expected": "200301",
+      "payment_terms": "Net 60",
+      "incoterms": "FOB Origin",
+      "currency": "USD",
+      "revision": null,
+      "notes": "",
+      "lines": [
+        {
+          "line": 1,
+          "customer_material": "LC-200-17",
+          "supplier_material": "70004200",
+          "description": "Corn Syrup Solids 42 DE, Bulk",
+          "qty": 36000,
+          "uom": "LB",
+          "unit_price": 0.55,
+          "price_per": "LB",
+          "line_total": 19800.0
+        },
+        {
+          "line": 2,
+          "customer_material": "LC-200-22",
+          "supplier_material": "70009900",
+          "description": "Dextrose Monohydrate DX-99, 50 LB bags",
+          "qty": 12000,
+          "uom": "LB",
+          "unit_price": 0.52,
+          "price_per": "LB",
+          "line_total": 6240.0
+        }
+      ],
+      "total": 26040.0,
+      "source": "email body (HTML table)"
+    }
+  ],
+  "notes": ""
+}

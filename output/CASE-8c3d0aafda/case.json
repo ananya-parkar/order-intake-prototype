@@ -1,0 +1,40 @@
+{
+  "case_id": "CASE-8c3d0aafda",
+  "source_file": "N16_po_addressed_to_other_vendor.eml",
+  "source_path": "C:\\dev\\order-intake-prototype\\data\\samples\\N16_po_addressed_to_other_vendor.eml",
+  "source_sha256": "8c3d0aafda04321f332054ee9d210102fb1597734c3ac66c8c8084eff5141811",
+  "received_at": "2026-08-06T12:00:00-05:00",
+  "subject": "PO NPD-24-1195",
+  "from_address": "orders@nplainsdist.example",
+  "from_name": "Greg Halvorsen",
+  "to": "Northfield Starch Orders <starchorders@northfield-ingredients.example>",
+  "cc": "",
+  "in_reply_to": "",
+  "body_text": "Please process attached PO.\n\nGreg\n\nGreg Halvorsen\nOrder Desk | Northern Plains Distributors\nFargo, ND 58102\nOffice: 555-0145\n\nContents may be confidential and legally privileged, and are intended only for the recipient(s) named above. Nothing herein is intended to be a binding signature.\n",
+  "attachments": [
+    {
+      "filename": "NPD-24-1195.pdf",
+      "content_type": "application/pdf",
+      "kind": "pdf",
+      "size_bytes": 2721,
+      "saved_path": "..\\output\\CASE-8c3d0aafda\\attachments\\NPD-24-1195.pdf",
+      "is_inline": false,
+      "likely_signature": false,
+      "from_nested_email": null
+    }
+  ],
+  "status": "classified",
+  "duplicate_of": null,
+  "classification": {
+    "category": "new_order",
+    "detail": "new_po_attachment",
+    "po_numbers": [
+      "NPD-24-1195"
+    ],
+    "po_count": 1,
+    "confidence": 0.99,
+    "reason": "The email explicitly requests processing of an attached purchase order, indicating a new order."
+  },
+  "flags": [],
+  "notes": []
+}

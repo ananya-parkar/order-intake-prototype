@@ -1,0 +1,50 @@
+{
+  "email_file": "N13_new_order_missing_ship_to_and_date.eml",
+  "scenario": "New order missing ship-to and delivery date -> clarification email (A6)",
+  "expected": {
+    "classification": "new_order",
+    "detail": null,
+    "po_count": 1,
+    "route": "clarification",
+    "flags": [
+      "missing_ship_to",
+      "missing_delivery_date"
+    ]
+  },
+  "purchase_orders": [
+    {
+      "customer_key": "summit",
+      "customer_name": "Summit Artisan Bakeries",
+      "sold_to_expected": "100262",
+      "customer_po_number": "SAB-2026-0822",
+      "po_date": "08/05/2026",
+      "requested_delivery_date": null,
+      "vendor_name": "Northfield Ingredients Inc.",
+      "bill_to": "Summit Artisan Bakeries, 5600 Brighton Blvd, Denver, CO 80216",
+      "ship_to_name": null,
+      "ship_to_address": null,
+      "ship_to_expected": null,
+      "payment_terms": "Net 30",
+      "incoterms": "FOB Origin",
+      "currency": "USD",
+      "revision": null,
+      "notes": "",
+      "lines": [
+        {
+          "line": 1,
+          "customer_material": "SAB-0091",
+          "supplier_material": "70009900",
+          "description": "Dextrose Monohydrate DX-99, bags",
+          "qty": 60,
+          "uom": "BAG25KG",
+          "unit_price": 1.18,
+          "price_per": "KG",
+          "line_total": 1770.0
+        }
+      ],
+      "total": 1770.0,
+      "source": "attachment: SAB-2026-0822.pdf"
+    }
+  ],
+  "notes": ""
+}

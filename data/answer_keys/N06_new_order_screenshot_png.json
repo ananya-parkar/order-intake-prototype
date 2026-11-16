@@ -1,0 +1,49 @@
+{
+  "email_file": "N06_new_order_screenshot_png.eml",
+  "scenario": "New order, PNG screenshot of ERP PO",
+  "expected": {
+    "classification": "new_order",
+    "detail": null,
+    "po_count": 1,
+    "route": "review",
+    "flags": [
+      "ocr_required"
+    ]
+  },
+  "purchase_orders": [
+    {
+      "customer_key": "redwood",
+      "customer_name": "Redwood Dairy Cooperative",
+      "sold_to_expected": "100295",
+      "customer_po_number": "RDC-1044",
+      "po_date": "08/04/2026",
+      "requested_delivery_date": "08/12/2026",
+      "vendor_name": "Northfield Ingredients Inc.",
+      "bill_to": "Redwood Dairy Cooperative, 250 Harbor Way, Eureka, CA 95501",
+      "ship_to_name": "Redwood Dairy - Eureka",
+      "ship_to_address": "250 Harbor Way, Eureka, CA 95501",
+      "ship_to_expected": "200295",
+      "payment_terms": "Net 30",
+      "incoterms": "FOB Origin",
+      "currency": "USD",
+      "revision": null,
+      "notes": "",
+      "lines": [
+        {
+          "line": 1,
+          "customer_material": "RDC-MALT10",
+          "supplier_material": "70001000",
+          "description": "Maltodextrin 10 DE, 50 LB bags",
+          "qty": 18000,
+          "uom": "LB",
+          "unit_price": 0.49,
+          "price_per": "LB",
+          "line_total": 8820.0
+        }
+      ],
+      "total": 8820.0,
+      "source": "attachment: PO_RDC-1044.png (image)"
+    }
+  ],
+  "notes": ""
+}

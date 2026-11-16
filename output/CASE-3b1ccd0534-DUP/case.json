@@ -1,0 +1,20 @@
+{
+  "case_id": "CASE-3b1ccd0534-DUP",
+  "source_file": "N02_new_order_excel (1).eml",
+  "source_path": "C:\\dev\\order-intake-prototype\\data\\samples\\N02_new_order_excel (1).eml",
+  "source_sha256": "3b1ccd0534df2be0466b32c3b9dcec93ce734382e9512c754e2ec21565bf8490",
+  "received_at": null,
+  "subject": "",
+  "from_address": "",
+  "from_name": "",
+  "to": "",
+  "cc": "",
+  "in_reply_to": "",
+  "body_text": "",
+  "attachments": [],
+  "status": "duplicate_file",
+  "duplicate_of": "CASE-3b1ccd0534",
+  "classification": null,
+  "flags": [],
+  "notes": []
+}

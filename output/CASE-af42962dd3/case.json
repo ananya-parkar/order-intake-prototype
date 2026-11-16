@@ -1,0 +1,40 @@
+{
+  "case_id": "CASE-af42962dd3",
+  "source_file": "N13_new_order_missing_ship_to_and_date.eml",
+  "source_path": "C:\\dev\\order-intake-prototype\\data\\samples\\N13_new_order_missing_ship_to_and_date.eml",
+  "source_sha256": "af42962dd3421db296d39d919481ddf0103405b55e4e44e21ac14b5693478046",
+  "received_at": "2026-08-05T14:10:00-05:00",
+  "subject": "PO SAB-2026-0822",
+  "from_address": "praman@summitbakeries.example",
+  "from_name": "Priya Raman",
+  "to": "Northfield Starch Orders <starchorders@northfield-ingredients.example>",
+  "cc": "",
+  "in_reply_to": "",
+  "body_text": "Hi, PO attached. Thanks.\n\nPriya Raman\nProcurement Specialist | Summit Artisan Bakeries\nDenver, CO 80216\nOffice: 555-0159\n\nContents may be confidential and legally privileged, and are intended only for the recipient(s) named above. Nothing herein is intended to be a binding signature.\n",
+  "attachments": [
+    {
+      "filename": "SAB-2026-0822.pdf",
+      "content_type": "application/pdf",
+      "kind": "pdf",
+      "size_bytes": 2684,
+      "saved_path": "..\\output\\CASE-af42962dd3\\attachments\\SAB-2026-0822.pdf",
+      "is_inline": false,
+      "likely_signature": false,
+      "from_nested_email": null
+    }
+  ],
+  "status": "classified",
+  "duplicate_of": null,
+  "classification": {
+    "category": "new_order",
+    "detail": "new_po_attachment",
+    "po_numbers": [
+      "SAB-2026-0822"
+    ],
+    "po_count": 1,
+    "confidence": 0.98,
+    "reason": "Email states a PO is attached and includes a PDF named with the PO number, indicating a new order."
+  },
+  "flags": [],
+  "notes": []
+}

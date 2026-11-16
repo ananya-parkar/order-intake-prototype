@@ -1,0 +1,80 @@
+{
+  "email_file": "N15_new_order_two_page_pdf.eml",
+  "scenario": "New order, 2-page PDF, total on page 2, repeated material on 2 lines",
+  "expected": {
+    "classification": "new_order",
+    "detail": null,
+    "po_count": 1,
+    "route": "review",
+    "flags": []
+  },
+  "purchase_orders": [
+    {
+      "customer_key": "golden",
+      "customer_name": "Golden Valley Soups Co.",
+      "sold_to_expected": "100277",
+      "customer_po_number": "GVS-31902",
+      "po_date": "08/06/2026",
+      "requested_delivery_date": "09/02/2026",
+      "vendor_name": "Northfield Ingredients Inc.",
+      "bill_to": "Golden Valley Soups Co., 3100 S Cherry Ave, Fresno, CA 93725",
+      "ship_to_name": "Golden Valley Soups - Fresno",
+      "ship_to_address": "3100 S Cherry Ave, Fresno, CA 93725",
+      "ship_to_expected": "200277",
+      "payment_terms": "Net 30",
+      "incoterms": "FOB Origin",
+      "currency": "USD",
+      "revision": null,
+      "notes": "",
+      "lines": [
+        {
+          "line": 1,
+          "customer_material": "GV-ING-3500",
+          "supplier_material": "70003500",
+          "description": "Rice Starch RS-35, 50 LB bags",
+          "qty": 10000,
+          "uom": "LB",
+          "unit_price": 0.88,
+          "price_per": "LB",
+          "line_total": 8800.0
+        },
+        {
+          "line": 2,
+          "customer_material": "GV-ING-4100",
+          "supplier_material": "70004100",
+          "description": "Modified Food Starch MS-410, Bulk",
+          "qty": 20000,
+          "uom": "LB",
+          "unit_price": 0.64,
+          "price_per": "LB",
+          "line_total": 12800.0
+        },
+        {
+          "line": 3,
+          "customer_material": "GV-ING-3500",
+          "supplier_material": "70003500",
+          "description": "Rice Starch RS-35, 50 LB bags - 2nd drop",
+          "qty": 5000,
+          "uom": "LB",
+          "unit_price": 0.88,
+          "price_per": "LB",
+          "line_total": 4400.0
+        },
+        {
+          "line": 4,
+          "customer_material": "GV-ING-4100",
+          "supplier_material": "70004100",
+          "description": "Modified Food Starch MS-410, Bulk - 2nd truck",
+          "qty": 20000,
+          "uom": "LB",
+          "unit_price": 0.64,
+          "price_per": "LB",
+          "line_total": 12800.0
+        }
+      ],
+      "total": 38800.0,
+      "source": "attachment: GVS-31902.pdf"
+    }
+  ],
+  "notes": ""
+}

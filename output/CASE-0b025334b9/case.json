@@ -1,0 +1,40 @@
+{
+  "case_id": "CASE-0b025334b9",
+  "source_file": "N15_new_order_two_page_pdf.eml",
+  "source_path": "C:\\dev\\order-intake-prototype\\data\\samples\\N15_new_order_two_page_pdf.eml",
+  "source_sha256": "0b025334b9c6528d0852b9c295dc4471cb6b1be5d1a210577713615c438bc0e2",
+  "received_at": "2026-08-06T09:45:00-05:00",
+  "subject": "PO GVS-31902 (4 lines)",
+  "from_address": "tbecker@goldenvalleysoups.example",
+  "from_name": "Tom Becker",
+  "to": "Northfield Starch Orders <starchorders@northfield-ingredients.example>",
+  "cc": "",
+  "in_reply_to": "",
+  "body_text": "Please find attached PO GVS-31902. Total is on page 2.\n\nTom\n\nTom Becker\nMaterials Planner | Golden Valley Soups Co.\nFresno, CA 93725\nOffice: 555-0120\n\nContents may be confidential and legally privileged, and are intended only for the recipient(s) named above. Nothing herein is intended to be a binding signature.\n",
+  "attachments": [
+    {
+      "filename": "GVS-31902.pdf",
+      "content_type": "application/pdf",
+      "kind": "pdf",
+      "size_bytes": 3603,
+      "saved_path": "..\\output\\CASE-0b025334b9\\attachments\\GVS-31902.pdf",
+      "is_inline": false,
+      "likely_signature": false,
+      "from_nested_email": null
+    }
+  ],
+  "status": "classified",
+  "duplicate_of": null,
+  "classification": {
+    "category": "new_order",
+    "detail": "new_po_attachment",
+    "po_numbers": [
+      "GVS-31902"
+    ],
+    "po_count": 1,
+    "confidence": 0.98,
+    "reason": "The email includes a PO attachment and explicitly states it is a PO, indicating a new order."
+  },
+  "flags": [],
+  "notes": []
+}

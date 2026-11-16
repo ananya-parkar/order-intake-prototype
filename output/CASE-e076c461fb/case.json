@@ -1,0 +1,40 @@
+{
+  "case_id": "CASE-e076c461fb",
+  "source_file": "N14_new_order_price_mismatch.eml",
+  "source_path": "C:\\dev\\order-intake-prototype\\data\\samples\\N14_new_order_price_mismatch.eml",
+  "source_sha256": "e076c461fb7ccbaafb41b36e00c8c40a9639dbf1de439a3ab9fa7182a952aaba",
+  "received_at": "2026-08-06T08:30:00-05:00",
+  "subject": "PO PSF-77140",
+  "from_address": "mlindqvist@prairiesnack.example",
+  "from_name": "Marcus Lindqvist",
+  "to": "Northfield Starch Orders <starchorders@northfield-ingredients.example>",
+  "cc": "",
+  "in_reply_to": "",
+  "body_text": "Hello, please see attached PO PSF-77140.\n\nRegards,\n\nMarcus Lindqvist\nSenior Buyer | Prairie Snack Foods Inc.\nSioux Falls, SD 57104\nOffice: 555-0117\n\nContents may be confidential and legally privileged, and are intended only for the recipient(s) named above. Nothing herein is intended to be a binding signature.\n",
+  "attachments": [
+    {
+      "filename": "PSF-77140.pdf",
+      "content_type": "application/pdf",
+      "kind": "pdf",
+      "size_bytes": 2689,
+      "saved_path": "..\\output\\CASE-e076c461fb\\attachments\\PSF-77140.pdf",
+      "is_inline": false,
+      "likely_signature": false,
+      "from_nested_email": null
+    }
+  ],
+  "status": "classified",
+  "duplicate_of": null,
+  "classification": {
+    "category": "new_order",
+    "detail": "new_po_attachment",
+    "po_numbers": [
+      "PSF-77140"
+    ],
+    "po_count": 1,
+    "confidence": 0.98,
+    "reason": "The email explicitly sends a purchase order PDF attachment, indicating a new order."
+  },
+  "flags": [],
+  "notes": []
+}

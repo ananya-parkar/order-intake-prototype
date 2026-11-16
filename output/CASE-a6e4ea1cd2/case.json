@@ -1,0 +1,40 @@
+{
+  "case_id": "CASE-a6e4ea1cd2",
+  "source_file": "I05_invoice_question_with_invoice_pdf.eml",
+  "source_path": "C:\\dev\\order-intake-prototype\\data\\samples\\I05_invoice_question_with_invoice_pdf.eml",
+  "source_sha256": "a6e4ea1cd2ff003c15b3c65843985ddf98a244c44f21d851484b26e4680934bc",
+  "received_at": "2026-08-06T11:30:00-05:00",
+  "subject": "Invoice 9100045512 - price question",
+  "from_address": "jprice@bluegrassmeat.example",
+  "from_name": "Jolene Price",
+  "to": "Northfield Starch Orders <starchorders@northfield-ingredients.example>",
+  "cc": "",
+  "in_reply_to": "",
+  "body_text": "Hi,\n\nThe attached invoice for PO BMS-90377 shows $0.65/LB but our contract is $0.63/LB. Can you issue a credit for the difference?\n\nJolene\n\nJolene Price\nPurchasing Agent | Bluegrass Meat Snacks Co.\nBowling Green, KY 42101\nOffice: 555-0172\n\nContents may be confidential and legally privileged, and are intended only for the recipient(s) named above. Nothing herein is intended to be a binding signature.\n",
+  "attachments": [
+    {
+      "filename": "Invoice_9100045512.pdf",
+      "content_type": "application/pdf",
+      "kind": "pdf",
+      "size_bytes": 1743,
+      "saved_path": "..\\output\\CASE-a6e4ea1cd2\\attachments\\Invoice_9100045512.pdf",
+      "is_inline": false,
+      "likely_signature": false,
+      "from_nested_email": null
+    }
+  ],
+  "status": "manual_queue",
+  "duplicate_of": null,
+  "classification": {
+    "category": "not_an_order",
+    "detail": "billing_question",
+    "po_numbers": [],
+    "po_count": 0,
+    "confidence": 0.99,
+    "reason": "Customer asks about invoice price discrepancy, not placing or changing an order."
+  },
+  "flags": [],
+  "notes": [
+    "A2: not_an_order (billing_question) - Customer asks about invoice price discrepancy, not placing or changing an order."
+  ]
+}

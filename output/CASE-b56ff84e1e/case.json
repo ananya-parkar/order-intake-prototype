@@ -1,0 +1,29 @@
+{
+  "case_id": "CASE-b56ff84e1e",
+  "source_file": "I06_expiration_date_question.eml",
+  "source_path": "C:\\dev\\order-intake-prototype\\data\\samples\\I06_expiration_date_question.eml",
+  "source_sha256": "b56ff84e1ed066d74795a5cf85cd4be6fea7eff3a3aa7e608266f56893a410aa",
+  "received_at": "2026-08-06T14:40:00-05:00",
+  "subject": "RE: PO HPN-5477 - Expiration Date",
+  "from_address": "amoreno@harborpet.example",
+  "from_name": "Alicia Moreno",
+  "to": "Northfield Starch Orders <starchorders@northfield-ingredients.example>",
+  "cc": "",
+  "in_reply_to": "<179482127463.165.4883902672325290085@sfdc.example>",
+  "body_text": "Hi Jordan,\n\nThe bags we received on PO HPN-5477 show an expiration date of 10/2026. Our requirement is at least 9 months of shelf life at receipt. Can you check?\n\nAlicia\n\nAlicia Moreno\nBuyer | Harbor Pet Nutrition LLC\nJoplin, MO 64801\nOffice: 555-0171\n\nContents may be confidential and legally privileged, and are intended only for the recipient(s) named above. Nothing herein is intended to be a binding signature.\n",
+  "attachments": [],
+  "status": "manual_queue",
+  "duplicate_of": null,
+  "classification": {
+    "category": "not_an_order",
+    "detail": "quality_question",
+    "po_numbers": [],
+    "po_count": 0,
+    "confidence": 0.99,
+    "reason": "The email concerns a quality issue with a received PO, not a new or revised order."
+  },
+  "flags": [],
+  "notes": [
+    "A2: not_an_order (quality_question) - The email concerns a quality issue with a received PO, not a new or revised order."
+  ]
+}

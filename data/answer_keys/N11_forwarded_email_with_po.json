@@ -1,0 +1,49 @@
+{
+  "email_file": "N11_forwarded_email_with_po.eml",
+  "scenario": "Forwarded email; the PO PDF is inside an attached email",
+  "expected": {
+    "classification": "new_order",
+    "detail": null,
+    "po_count": 1,
+    "route": "review",
+    "flags": [
+      "nested_attachment"
+    ]
+  },
+  "purchase_orders": [
+    {
+      "customer_key": "prairie",
+      "customer_name": "Prairie Snack Foods Inc.",
+      "sold_to_expected": "100245",
+      "customer_po_number": "PSF-77131",
+      "po_date": "08/05/2026",
+      "requested_delivery_date": "08/26/2026",
+      "vendor_name": "Northfield Ingredients Inc.",
+      "bill_to": "Prairie Snack Foods Inc., PO Box 3301, Sioux Falls, SD 57101",
+      "ship_to_name": "Prairie Snack Foods - Mitchell",
+      "ship_to_address": "915 E Spruce St, Mitchell, SD 57301",
+      "ship_to_expected": "200246",
+      "payment_terms": "Net 30",
+      "incoterms": "FOB Origin",
+      "currency": "USD",
+      "revision": null,
+      "notes": "",
+      "lines": [
+        {
+          "line": 1,
+          "customer_material": "PSF-STR-410",
+          "supplier_material": "70004100",
+          "description": "Modified Food Starch MS-410, Bulk",
+          "qty": 30000,
+          "uom": "LB",
+          "unit_price": 0.62,
+          "price_per": "LB",
+          "line_total": 18600.0
+        }
+      ],
+      "total": 18600.0,
+      "source": "attachment inside forwarded email: PSF-77131.pdf"
+    }
+  ],
+  "notes": ""
+}

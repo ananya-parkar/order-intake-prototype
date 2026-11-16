@@ -1,0 +1,40 @@
+{
+  "case_id": "CASE-123a619fde",
+  "source_file": "N03_new_order_word.eml",
+  "source_path": "C:\\dev\\order-intake-prototype\\data\\samples\\N03_new_order_word.eml",
+  "source_sha256": "123a619fdea4faa752c57faca6a0b63315b14540edf2670c2024570eaa322685",
+  "received_at": "2026-08-04T07:55:00-05:00",
+  "subject": "Purchase Order SAB-2026-0815",
+  "from_address": "praman@summitbakeries.example",
+  "from_name": "Priya Raman",
+  "to": "Northfield Starch Orders <starchorders@northfield-ingredients.example>",
+  "cc": "",
+  "in_reply_to": "",
+  "body_text": "Hi Northfield team,\n\nPlease see the attached PO for dextrose and maltodextrin (25 kg bags).\n\nThanks!\n\nPriya Raman\nProcurement Specialist | Summit Artisan Bakeries\nDenver, CO 80216\nOffice: 555-0182\n\nContents may be confidential and legally privileged, and are intended only for the recipient(s) named above. Nothing herein is intended to be a binding signature.\n",
+  "attachments": [
+    {
+      "filename": "Summit_PO_SAB-2026-0815.docx",
+      "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "kind": "word",
+      "size_bytes": 36924,
+      "saved_path": "..\\output\\CASE-123a619fde\\attachments\\Summit_PO_SAB-2026-0815.docx",
+      "is_inline": false,
+      "likely_signature": false,
+      "from_nested_email": null
+    }
+  ],
+  "status": "classified",
+  "duplicate_of": null,
+  "classification": {
+    "category": "new_order",
+    "detail": "new_po_attachment",
+    "po_numbers": [
+      "SAB-2026-0815"
+    ],
+    "po_count": 1,
+    "confidence": 0.99,
+    "reason": "Customer attached a new purchase order document for dextrose and maltodextrin."
+  },
+  "flags": [],
+  "notes": []
+}

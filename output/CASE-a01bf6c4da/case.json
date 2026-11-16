@@ -1,0 +1,40 @@
+{
+  "case_id": "CASE-a01bf6c4da",
+  "source_file": "I01_order_release_inquiry_with_coa.eml",
+  "source_path": "C:\\dev\\order-intake-prototype\\data\\samples\\I01_order_release_inquiry_with_coa.eml",
+  "source_sha256": "a01bf6c4dab32982e1872de126957188d94b560fab1a9eb600c4fc4755c06381",
+  "received_at": "2026-08-04T13:20:00-05:00",
+  "subject": "Re: [EXTERNAL] Re: More pea starch orders",
+  "from_address": "dholloway@cascadebatter.example",
+  "from_name": "Dana Holloway",
+  "to": "Northfield Starch Orders <starchorders@northfield-ingredients.example>",
+  "cc": "Ron Pike <rpike@cascadebatter.example>",
+  "in_reply_to": "<179482127460.165.8882528225872406572@sfdc.example>",
+  "body_text": "Jordan, please see attached COA and advise. We can accept batch NFB2291 for CBB-450098 only.\n\nThank you.\n\nDana Holloway\nPurchasing Manager | Cascade Batter & Breading LLC\nHood River, OR 97031\nOffice: 555-0191\n\nContents may be confidential and legally privileged, and are intended only for the recipient(s) named above. Nothing herein is intended to be a binding signature.\n\n________________________________\nFrom: Jordan Avery <starchorders@northfield-ingredients.example>\nSent: Tuesday, August 4, 2026 11:17 AM\nTo: Dana Holloway <dholloway@cascadebatter.example>\nSubject: RE: [EXTERNAL] Re: More pea starch orders\n\nHello Dana,\n\nAll orders below are covered except the last one, PO CBB-450102.\nBatch NFB2291 is slightly out of spec for pH. Please review the attached COA and confirm if it can ship against CBB-450102 or any other order.\n\nJordan Avery\n\n________________________________\nFrom: Dana Holloway <dholloway@cascadebatter.example>\nSent: Friday, July 31, 2026 12:39 PM\nTo: starchorders@northfield-ingredients.example\nSubject: More pea starch orders\n\nHello,\n\nCan you help get the following orders released ASAP so we can get them on the road? Monday pickup:\n\nCBB-450091\nCBB-450094\nCBB-450098\nCBB-450101\nCBB-450102\n",
+  "attachments": [
+    {
+      "filename": "PS-200 COA Batch NFB2291.pdf",
+      "content_type": "application/pdf",
+      "kind": "pdf",
+      "size_bytes": 1853,
+      "saved_path": "..\\output\\CASE-a01bf6c4da\\attachments\\PS-200 COA Batch NFB2291.pdf",
+      "is_inline": false,
+      "likely_signature": false,
+      "from_nested_email": null
+    }
+  ],
+  "status": "manual_queue",
+  "duplicate_of": null,
+  "classification": {
+    "category": "not_an_order",
+    "detail": "quality_question",
+    "po_numbers": [],
+    "po_count": 0,
+    "confidence": 0.97,
+    "reason": "The email only requests COA review and acceptance for an existing PO, with no new or revised order details."
+  },
+  "flags": [],
+  "notes": [
+    "A2: not_an_order (quality_question) - The email only requests COA review and acceptance for an existing PO, with no new or revised order details."
+  ]
+}

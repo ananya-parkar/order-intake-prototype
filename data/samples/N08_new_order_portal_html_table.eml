@@ -1,0 +1,52 @@
+From:
+ Lakeshore Procurement Portal <orders-noreply@lakeshoreconfections.example>
+To: "Northfield Starch Orders" <starchorders@northfield-ingredients.example>
+Subject: Lakeshore Supplier Portal: New PO LC-PO-660219
+Date: Wed, 05 Aug 2026 02:14:00 -0500
+Message-ID:
+ <179482127446.165.12894171407449403802@lakeshoreconfections.example>
+X-MS-Has-Attach:
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="===============5298123596289569599=="
+
+--===============5298123596289569599==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+A new purchase order has been issued to Northfield Ingredients Inc.
+PO Number: LC-PO-660219
+PO Date: 08/05/2026
+Need By: 08/24/2026
+Ship To: Lakeshore Confections - Racine, 1900 Lakeshore Dr, Racine, WI 53403
+Terms: Net 60
+
+1  LC-200-17  Corn Syrup Solids 42 DE, Bulk  36,000 LB  0.55/LB  $19,800.00
+2  LC-200-22  Dextrose Monohydrate DX-99, 50 LB bags  12,000 LB  0.52/LB  $6,=
+240.00
+Total: $26,040.00
+
+This is an automated message from the Lakeshore Supplier Portal. Do not reply.
+
+--===============5298123596289569599==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<div style=3D"background:#f7ff33;border-top:4px solid #d3d7a1;padding:7px 16p=
+x;font-family:Arial"><b>This Message Is From an External Sender</b><br>This m=
+essage came from outside your organization.</div><html><body><div style=3D'fo=
+nt-family:Tahoma;font-size:12pt'><p>A new purchase order has been issued to <=
+b>Northfield Ingredients Inc.</b></p><p>PO Number: <b>LC-PO-660219</b><br>PO =
+Date: 08/05/2026<br>Need By: 08/24/2026<br>Ship To: Lakeshore Confections - R=
+acine, 1900 Lakeshore Dr, Racine, WI 53403<br>Terms: Net 60</p><table border=
+=3D1 cellpadding=3D4><tr><th>Line</th><th>Item</th><th>Description</th><th>Qt=
+y</th><th>UOM</th><th>Price</th><th>Amount</th></tr><tr><td>1</td><td>LC-200-=
+17</td><td>Corn Syrup Solids 42 DE, Bulk</td><td>36,000</td><td>LB</td><td>0.=
+55/LB</td><td>$19,800.00</td></tr><tr><td>2</td><td>LC-200-22</td><td>Dextros=
+e Monohydrate DX-99, 50 LB bags</td><td>12,000</td><td>LB</td><td>0.52/LB</td=
+><td>$6,240.00</td></tr></table><p>Total: $26,040.00</p><p>This is an automat=
+ed message from the Lakeshore Supplier Portal. Do not reply.</p></div></body>=
+</html>
+
+--===============5298123596289569599==--

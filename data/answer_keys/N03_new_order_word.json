@@ -1,0 +1,58 @@
+{
+  "email_file": "N03_new_order_word.eml",
+  "scenario": "New order, Word attachment, 25 KG bags, price per KG",
+  "expected": {
+    "classification": "new_order",
+    "detail": null,
+    "po_count": 1,
+    "route": "review",
+    "flags": []
+  },
+  "purchase_orders": [
+    {
+      "customer_key": "summit",
+      "customer_name": "Summit Artisan Bakeries",
+      "sold_to_expected": "100262",
+      "customer_po_number": "SAB-2026-0815",
+      "po_date": "08/04/2026",
+      "requested_delivery_date": "08/21/2026",
+      "vendor_name": "Northfield Ingredients Inc.",
+      "bill_to": "Summit Artisan Bakeries, 5600 Brighton Blvd, Denver, CO 80216",
+      "ship_to_name": "Summit Artisan Bakeries - Denver",
+      "ship_to_address": "5600 Brighton Blvd, Denver, CO 80216",
+      "ship_to_expected": "200262",
+      "payment_terms": "Net 45",
+      "incoterms": "DAP Denver",
+      "currency": "USD",
+      "revision": null,
+      "notes": "",
+      "lines": [
+        {
+          "line": 1,
+          "customer_material": "SAB-0091",
+          "supplier_material": "70009900",
+          "description": "Dextrose Monohydrate DX-99, 25 KG bag",
+          "qty": 80,
+          "uom": "BAG25KG",
+          "unit_price": 1.18,
+          "price_per": "KG",
+          "line_total": 2360.0
+        },
+        {
+          "line": 2,
+          "customer_material": "SAB-0093",
+          "supplier_material": "70001000",
+          "description": "Maltodextrin 10 DE, 25 KG bag",
+          "qty": 40,
+          "uom": "BAG25KG",
+          "unit_price": 1.05,
+          "price_per": "KG",
+          "line_total": 1050.0
+        }
+      ],
+      "total": 3410.0,
+      "source": "attachment: Summit_PO_SAB-2026-0815.docx"
+    }
+  ],
+  "notes": ""
+}

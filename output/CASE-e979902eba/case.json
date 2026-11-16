@@ -1,0 +1,40 @@
+{
+  "case_id": "CASE-e979902eba",
+  "source_file": "N09_new_order_contract_release_zero_price.eml",
+  "source_path": "C:\\dev\\order-intake-prototype\\data\\samples\\N09_new_order_contract_release_zero_price.eml",
+  "source_sha256": "e979902eba7c6252f98af040685e4f9fd11542ea8bff075541a04f93f33c69b7",
+  "received_at": "2026-08-05T09:00:00-05:00",
+  "subject": "Release PO BMS-90412 against contract C-2026-118",
+  "from_address": "jprice@bluegrassmeat.example",
+  "from_name": "Jolene Price",
+  "to": "Northfield Starch Orders <starchorders@northfield-ingredients.example>",
+  "cc": "",
+  "in_reply_to": "",
+  "body_text": "Hello,\n\nAttached release PO BMS-90412. Pricing per our contract C-2026-118 (shown as $0.00 on the PO).\n\nThanks,\n\nJolene Price\nPurchasing Agent | Bluegrass Meat Snacks Co.\nBowling Green, KY 42101\nOffice: 555-0173\n\nContents may be confidential and legally privileged, and are intended only for the recipient(s) named above. Nothing herein is intended to be a binding signature.\n",
+  "attachments": [
+    {
+      "filename": "BMS-90412.pdf",
+      "content_type": "application/pdf",
+      "kind": "pdf",
+      "size_bytes": 2905,
+      "saved_path": "..\\output\\CASE-e979902eba\\attachments\\BMS-90412.pdf",
+      "is_inline": false,
+      "likely_signature": false,
+      "from_nested_email": null
+    }
+  ],
+  "status": "classified",
+  "duplicate_of": null,
+  "classification": {
+    "category": "new_order",
+    "detail": "new_po_attachment",
+    "po_numbers": [
+      "BMS-90412"
+    ],
+    "po_count": 1,
+    "confidence": 0.98,
+    "reason": "The email includes an attached PO and explicitly states it is a release PO, indicating a new purchase order."
+  },
+  "flags": [],
+  "notes": []
+}

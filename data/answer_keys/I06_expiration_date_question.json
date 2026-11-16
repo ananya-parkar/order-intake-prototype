@@ -1,0 +1,13 @@
+{
+  "email_file": "I06_expiration_date_question.eml",
+  "scenario": "Shelf-life / expiration question on an earlier PO",
+  "expected": {
+    "classification": "not_an_order",
+    "detail": "quality_question",
+    "po_count": 0,
+    "route": "manual_queue",
+    "flags": []
+  },
+  "purchase_orders": [],
+  "notes": ""
+}

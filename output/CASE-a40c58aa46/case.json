@@ -1,0 +1,29 @@
+{
+  "case_id": "CASE-a40c58aa46",
+  "source_file": "I04_coa_spec_request.eml",
+  "source_path": "C:\\dev\\order-intake-prototype\\data\\samples\\I04_coa_spec_request.eml",
+  "source_sha256": "a40c58aa469e6afdc3c6e8845cf4508664b6b133e36b8c159d531f50db0b9100",
+  "received_at": "2026-08-06T08:05:00-05:00",
+  "subject": "Spec sheet and COA request - maltodextrin",
+  "from_address": "praman@summitbakeries.example",
+  "from_name": "Priya Raman",
+  "to": "Northfield Starch Orders <starchorders@northfield-ingredients.example>",
+  "cc": "",
+  "in_reply_to": "",
+  "body_text": "Hello,\n\nCould you send the current spec sheet and allergen statement for Maltodextrin 10 DE, and the COA for our last delivery (PO SAB-2026-0790)?\n\nThanks, Priya\n\nPriya Raman\nProcurement Specialist | Summit Artisan Bakeries\nDenver, CO 80216\nOffice: 555-0129\n\nContents may be confidential and legally privileged, and are intended only for the recipient(s) named above. Nothing herein is intended to be a binding signature.\n",
+  "attachments": [],
+  "status": "manual_queue",
+  "duplicate_of": null,
+  "classification": {
+    "category": "not_an_order",
+    "detail": "document_request",
+    "po_numbers": [],
+    "po_count": 0,
+    "confidence": 0.99,
+    "reason": "The email requests spec sheet and COA documents and does not place or modify an order."
+  },
+  "flags": [],
+  "notes": [
+    "A2: not_an_order (document_request) - The email requests spec sheet and COA documents and does not place or modify an order."
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "case_id": "CASE-03be4c8856",
+  "source_file": "N04_new_order_scanned_pdf.eml",
+  "source_path": "C:\\dev\\order-intake-prototype\\data\\samples\\N04_new_order_scanned_pdf.eml",
+  "source_sha256": "03be4c88565631d014243a780a0235b372e04dca3b4bb09fcabee626d5254891",
+  "received_at": "2026-08-04T08:05:00-05:00",
+  "subject": "PO 31877",
+  "from_address": "tbecker@goldenvalleysoups.example",
+  "from_name": "Tom Becker",
+  "to": "Northfield Starch Orders <starchorders@northfield-ingredients.example>",
+  "cc": "",
+  "in_reply_to": "",
+  "body_text": "See attached scanned PO.\n\nTom\n\nTom Becker\nMaterials Planner | Golden Valley Soups Co.\nFresno, CA 93725\nOffice: 555-0116\n\nContents may be confidential and legally privileged, and are intended only for the recipient(s) named above. Nothing herein is intended to be a binding signature.\n",
+  "attachments": [
+    {
+      "filename": "SCAN_20260804_0742.pdf",
+      "content_type": "application/pdf",
+      "kind": "pdf",
+      "size_bytes": 753823,
+      "saved_path": "..\\output\\CASE-03be4c8856\\attachments\\SCAN_20260804_0742.pdf",
+      "is_inline": false,
+      "likely_signature": false,
+      "from_nested_email": null
+    }
+  ],
+  "status": "classified",
+  "duplicate_of": null,
+  "classification": {
+    "category": "new_order",
+    "detail": "new_po_attachment",
+    "po_numbers": [
+      "31877"
+    ],
+    "po_count": 1,
+    "confidence": 0.97,
+    "reason": "The email contains a scanned PO attachment, indicating a new purchase order submission."
+  },
+  "flags": [],
+  "notes": []
+}

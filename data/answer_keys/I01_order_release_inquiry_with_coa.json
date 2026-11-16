@@ -1,0 +1,13 @@
+{
+  "email_file": "I01_order_release_inquiry_with_coa.eml",
+  "scenario": "Order release / quality inquiry thread with many PO numbers and a COA PDF (no new order)",
+  "expected": {
+    "classification": "not_an_order",
+    "detail": "order_status_inquiry",
+    "po_count": 0,
+    "route": "manual_queue",
+    "flags": []
+  },
+  "purchase_orders": [],
+  "notes": "Trap: many PO numbers and a PDF attachment, but the PDF is a COA and no new order is placed."
+}

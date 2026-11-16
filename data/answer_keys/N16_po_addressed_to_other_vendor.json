@@ -1,0 +1,49 @@
+{
+  "email_file": "N16_po_addressed_to_other_vendor.eml",
+  "scenario": "PO's vendor field is another company (Midwest Starch Traders) -> flag, manual check",
+  "expected": {
+    "classification": "new_order",
+    "detail": null,
+    "po_count": 1,
+    "route": "manual_queue",
+    "flags": [
+      "vendor_mismatch"
+    ]
+  },
+  "purchase_orders": [
+    {
+      "customer_key": "nplains",
+      "customer_name": "Northern Plains Distributors",
+      "sold_to_expected": "100320",
+      "customer_po_number": "NPD-24-1195",
+      "po_date": "08/06/2026",
+      "requested_delivery_date": "08/28/2026",
+      "vendor_name": "Midwest Starch Traders LLC",
+      "bill_to": "Northern Plains Distributors, 3200 Main Ave, Fargo, ND 58102",
+      "ship_to_name": "Red River Tortilla Co. c/o Northern Plains",
+      "ship_to_address": "18 Riverside Rd, Moorhead, MN 56560",
+      "ship_to_expected": "200320",
+      "payment_terms": "Net 30",
+      "incoterms": "FOB Origin",
+      "currency": "USD",
+      "revision": null,
+      "notes": "",
+      "lines": [
+        {
+          "line": 1,
+          "customer_material": "NPD-PS200",
+          "supplier_material": "70001200",
+          "description": "Pea Starch Native PS-200, Bulk",
+          "qty": 42000,
+          "uom": "LB",
+          "unit_price": 47.75,
+          "price_per": "CWT",
+          "line_total": 20055.0
+        }
+      ],
+      "total": 20055.0,
+      "source": "attachment: NPD-24-1195.pdf"
+    }
+  ],
+  "notes": ""
+}

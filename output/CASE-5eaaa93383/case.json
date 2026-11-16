@@ -1,0 +1,29 @@
+{
+  "case_id": "CASE-5eaaa93383",
+  "source_file": "N08_new_order_portal_html_table.eml",
+  "source_path": "C:\\dev\\order-intake-prototype\\data\\samples\\N08_new_order_portal_html_table.eml",
+  "source_sha256": "5eaaa933830b75b672154d5b2f5fe2085e40b9012c4ac83715e0a44add616980",
+  "received_at": "2026-08-05T02:14:00-05:00",
+  "subject": "Lakeshore Supplier Portal: New PO LC-PO-660219",
+  "from_address": "orders-noreply@lakeshoreconfections.example",
+  "from_name": "Lakeshore Procurement Portal",
+  "to": "Northfield Starch Orders <starchorders@northfield-ingredients.example>",
+  "cc": "",
+  "in_reply_to": "",
+  "body_text": "A new purchase order has been issued to Northfield Ingredients Inc.\nPO Number: LC-PO-660219\nPO Date: 08/05/2026\nNeed By: 08/24/2026\nShip To: Lakeshore Confections - Racine, 1900 Lakeshore Dr, Racine, WI 53403\nTerms: Net 60\n\n1  LC-200-17  Corn Syrup Solids 42 DE, Bulk  36,000 LB  0.55/LB  $19,800.00\n2  LC-200-22  Dextrose Monohydrate DX-99, 50 LB bags  12,000 LB  0.52/LB  $6,240.00\nTotal: $26,040.00\n\nThis is an automated message from the Lakeshore Supplier Portal. Do not reply.\n",
+  "attachments": [],
+  "status": "classified",
+  "duplicate_of": null,
+  "classification": {
+    "category": "new_order",
+    "detail": "po_in_body",
+    "po_numbers": [
+      "LC-PO-660219"
+    ],
+    "po_count": 1,
+    "confidence": 0.99,
+    "reason": "The email provides a new purchase order with PO number and line items, indicating a new order."
+  },
+  "flags": [],
+  "notes": []
+}

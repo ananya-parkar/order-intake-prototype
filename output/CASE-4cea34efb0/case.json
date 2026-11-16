@@ -1,0 +1,29 @@
+{
+  "case_id": "CASE-4cea34efb0",
+  "source_file": "N07_new_order_email_body_only.eml",
+  "source_path": "C:\\dev\\order-intake-prototype\\data\\samples\\N07_new_order_email_body_only.eml",
+  "source_sha256": "4cea34efb063f3069db862379236c43f1ca396c9924ffbda9f38a67645d5f06c",
+  "received_at": "2026-08-04T15:30:00-05:00",
+  "subject": "Order - 2 trucks MS-410 - PO CBB-450131",
+  "from_address": "dholloway@cascadebatter.example",
+  "from_name": "Dana Holloway",
+  "to": "Northfield Starch Orders <starchorders@northfield-ingredients.example>",
+  "cc": "",
+  "in_reply_to": "",
+  "body_text": "Hi team,\n\nPlease enter the following order, no attachment:\n\nPO#: CBB-450131\nItem: RM-10450 Modified Food Starch MS-410\nQty: 2 bulk trucks (88,000 LB total)\nPrice: $61.25/cwt per contract\nShip to: Plant 1, 410 Industrial Pkwy, Hood River, OR 97031\nDelivery: 8/20/2026\n\nThanks,\n\nDana Holloway\nPurchasing Manager | Cascade Batter & Breading LLC\nHood River, OR 97031\nOffice: 555-0150\n\nContents may be confidential and legally privileged, and are intended only for the recipient(s) named above. Nothing herein is intended to be a binding signature.\n",
+  "attachments": [],
+  "status": "classified",
+  "duplicate_of": null,
+  "classification": {
+    "category": "new_order",
+    "detail": "po_in_body",
+    "po_numbers": [
+      "CBB-450131"
+    ],
+    "po_count": 1,
+    "confidence": 0.99,
+    "reason": "The email provides a new PO number and full order details in the message body."
+  },
+  "flags": [],
+  "notes": []
+}

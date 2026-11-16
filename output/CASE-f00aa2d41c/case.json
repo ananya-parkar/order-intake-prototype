@@ -1,0 +1,40 @@
+{
+  "case_id": "CASE-f00aa2d41c",
+  "source_file": "N01_new_order_text_pdf.eml",
+  "source_path": "C:\\dev\\order-intake-prototype\\data\\samples\\N01_new_order_text_pdf.eml",
+  "source_sha256": "f00aa2d41c74af7c643821e531748bc489f1f96de1b01e5eaceb01ba6e1103d1",
+  "received_at": "2026-08-03T08:12:00-05:00",
+  "subject": "PO CBB-450123 - Pea Starch",
+  "from_address": "dholloway@cascadebatter.example",
+  "from_name": "Dana Holloway",
+  "to": "Northfield Starch Orders <starchorders@northfield-ingredients.example>",
+  "cc": "",
+  "in_reply_to": "",
+  "body_text": "Hello,\n\nPlease find attached PO CBB-450123 for one bulk truck of pea starch for delivery 8/14.\nKindly confirm receipt.\n\nThank you,\n\nDana Holloway\nPurchasing Manager | Cascade Batter & Breading LLC\nHood River, OR 97031\nOffice: 555-0129\n\nContents may be confidential and legally privileged, and are intended only for the recipient(s) named above. Nothing herein is intended to be a binding signature.\n",
+  "attachments": [
+    {
+      "filename": "PO_CBB-450123.pdf",
+      "content_type": "application/pdf",
+      "kind": "pdf",
+      "size_bytes": 2761,
+      "saved_path": "..\\output\\CASE-f00aa2d41c\\attachments\\PO_CBB-450123.pdf",
+      "is_inline": false,
+      "likely_signature": false,
+      "from_nested_email": null
+    }
+  ],
+  "status": "classified",
+  "duplicate_of": null,
+  "classification": {
+    "category": "new_order",
+    "detail": "new_po_attachment",
+    "po_numbers": [
+      "CBB-450123"
+    ],
+    "po_count": 1,
+    "confidence": 0.99,
+    "reason": "The email includes a new purchase order attached with a PO number and order details."
+  },
+  "flags": [],
+  "notes": []
+}

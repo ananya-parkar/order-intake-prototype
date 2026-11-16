@@ -1,0 +1,47 @@
+{
+  "email_file": "R01_revised_po_quantity_change.eml",
+  "scenario": "Revised PO (Rev 1), quantity change on an order already in SAP",
+  "expected": {
+    "classification": "revised_po",
+    "detail": "quantity_change",
+    "po_count": 1,
+    "route": "manual_queue",
+    "flags": []
+  },
+  "purchase_orders": [
+    {
+      "customer_key": "harbor",
+      "customer_name": "Harbor Pet Nutrition LLC",
+      "sold_to_expected": "100288",
+      "customer_po_number": "HPN-5498",
+      "po_date": "07/28/2026",
+      "requested_delivery_date": "08/12/2026",
+      "vendor_name": "Northfield Ingredients Inc.",
+      "bill_to": "Harbor Pet Nutrition LLC, 1 Harbor Plaza, Joplin, MO 64801",
+      "ship_to_name": "Harbor Pet Nutrition - Joplin Plant",
+      "ship_to_address": "4400 Arrowhead Dr, Joplin, MO 64801",
+      "ship_to_expected": "200288",
+      "payment_terms": "Net 30",
+      "incoterms": "FOB Origin",
+      "currency": "USD",
+      "revision": "Rev 1 - qty changed from 30,000 to 36,000 LB",
+      "notes": "",
+      "lines": [
+        {
+          "line": 1,
+          "customer_material": "HPN-7712",
+          "supplier_material": "70001200",
+          "description": "Pea Starch Native PS-200, Bulk",
+          "qty": 36000,
+          "uom": "LB",
+          "unit_price": 49.0,
+          "price_per": "CWT",
+          "line_total": 17640.0
+        }
+      ],
+      "total": 17640.0,
+      "source": "attachment: HPN-5498_Rev1.pdf"
+    }
+  ],
+  "notes": "Original HPN-5498 exists in SAP (see existing_orders). Phase 1: change orders go to manual queue/reviewer."
+}

@@ -1,0 +1,47 @@
+{
+  "email_file": "N07_new_order_email_body_only.eml",
+  "scenario": "New order written in the email body, no attachment",
+  "expected": {
+    "classification": "new_order",
+    "detail": null,
+    "po_count": 1,
+    "route": "review",
+    "flags": []
+  },
+  "purchase_orders": [
+    {
+      "customer_key": "cascade",
+      "customer_name": "Cascade Batter & Breading LLC",
+      "sold_to_expected": "100231",
+      "customer_po_number": "CBB-450131",
+      "po_date": "08/04/2026",
+      "requested_delivery_date": "08/20/2026",
+      "vendor_name": "Northfield Ingredients Inc.",
+      "bill_to": "Cascade Batter & Breading LLC, Accounts Payable, 88 Orchard Way, Hood River, OR 97031",
+      "ship_to_name": "Cascade Batter & Breading - Plant 1",
+      "ship_to_address": "410 Industrial Pkwy, Hood River, OR 97031",
+      "ship_to_expected": "200231",
+      "payment_terms": "Net 30",
+      "incoterms": "FOB Origin",
+      "currency": "USD",
+      "revision": null,
+      "notes": "",
+      "lines": [
+        {
+          "line": 1,
+          "customer_material": "RM-10450",
+          "supplier_material": "70004100",
+          "description": "Modified Food Starch MS-410, Bulk truck",
+          "qty": 88000,
+          "uom": "LB",
+          "unit_price": 61.25,
+          "price_per": "CWT",
+          "line_total": 53900.0
+        }
+      ],
+      "total": 53900.0,
+      "source": "email body"
+    }
+  ],
+  "notes": ""
+}

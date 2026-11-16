@@ -1,0 +1,69 @@
+{
+  "email_file": "N02_new_order_excel.eml",
+  "scenario": "New order, Excel attachment, 3 lines, bags/bulk/totes, price per LB",
+  "expected": {
+    "classification": "new_order",
+    "detail": null,
+    "po_count": 1,
+    "route": "review",
+    "flags": []
+  },
+  "purchase_orders": [
+    {
+      "customer_key": "prairie",
+      "customer_name": "Prairie Snack Foods Inc.",
+      "sold_to_expected": "100245",
+      "customer_po_number": "PSF-77120",
+      "po_date": "08/03/2026",
+      "requested_delivery_date": "08/18/2026",
+      "vendor_name": "Northfield Ingredients Inc.",
+      "bill_to": "Prairie Snack Foods Inc., PO Box 3301, Sioux Falls, SD 57101",
+      "ship_to_name": "Prairie Snack Foods - Sioux Falls",
+      "ship_to_address": "2700 N Cliff Ave, Sioux Falls, SD 57104",
+      "ship_to_expected": "200245",
+      "payment_terms": "Net 30",
+      "incoterms": "FOB Origin",
+      "currency": "USD",
+      "revision": null,
+      "notes": "",
+      "lines": [
+        {
+          "line": 1,
+          "customer_material": "PSF-STR-410",
+          "supplier_material": "70004100",
+          "description": "Modified Food Starch MS-410, 50 LB bag",
+          "qty": 400,
+          "uom": "BAG50LB",
+          "unit_price": 0.62,
+          "price_per": "LB",
+          "line_total": 12400.0
+        },
+        {
+          "line": 2,
+          "customer_material": "PSF-STR-150",
+          "supplier_material": "70001500",
+          "description": "Tapioca Starch TS-150, Bulk",
+          "qty": 20000,
+          "uom": "LB",
+          "unit_price": 0.71,
+          "price_per": "LB",
+          "line_total": 14200.0
+        },
+        {
+          "line": 3,
+          "customer_material": "PSF-SWT-42",
+          "supplier_material": "70004200",
+          "description": "Corn Syrup Solids 42 DE, 2,000 LB tote",
+          "qty": 10,
+          "uom": "TOTE2000LB",
+          "unit_price": 0.54,
+          "price_per": "LB",
+          "line_total": 10800.0
+        }
+      ],
+      "total": 37400.0,
+      "source": "attachment: PSF-77120.xlsx"
+    }
+  ],
+  "notes": "Qty in bags/totes must be converted to LB for SAP."
+}

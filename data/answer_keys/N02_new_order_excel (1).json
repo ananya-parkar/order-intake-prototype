@@ -1,0 +1,15 @@
+{
+  "email_file": "N02_new_order_excel (1).eml",
+  "scenario": "Byte-identical copy of N02 (same file saved twice)",
+  "expected": {
+    "classification": "duplicate",
+    "detail": null,
+    "po_count": 0,
+    "route": "skip",
+    "flags": [
+      "duplicate_file"
+    ]
+  },
+  "purchase_orders": [],
+  "notes": "A1 should detect identical file content."
+}

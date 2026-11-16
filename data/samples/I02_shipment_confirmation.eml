@@ -1,0 +1,44 @@
+From: FreightLine Tracking <noreply@freightline.example>
+To: "Northfield Starch Orders" <starchorders@northfield-ingredients.example>
+Subject: Shipment confirmation for PO LC-PO-660180
+Date: Wed, 05 Aug 2026 16:00:00 -0500
+Message-ID:
+ <179482127461.165.11081462065516102037@lakeshoreconfections.example>
+X-MS-Has-Attach:
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="===============5227656119053142472=="
+
+--===============5227656119053142472==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+
+Shipment Notification
+
+PO: LC-PO-660180
+Carrier: FreightLine Logistics
+PRO#: FL88231940
+Ship date: 08/05/2026
+Status: Delivered to dock 4.
+
+This is an automated message.
+
+--===============5227656119053142472==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<div style=3D"background:#f7ff33;border-top:4px solid #d3d7a1;padding:7px 16p=
+x;font-family:Arial"><b>This Message Is From an External Sender</b><br>This m=
+essage came from outside your organization.</div><html><body><div style=3D'fo=
+nt-family:Tahoma;font-size:12pt'>Shipment Notification<br>
+<br>
+PO: LC-PO-660180<br>
+Carrier: FreightLine Logistics<br>
+PRO#: FL88231940<br>
+Ship date: 08/05/2026<br>
+Status: Delivered to dock 4.<br>
+<br>
+This is an automated message.</div></body></html>
+
+--===============5227656119053142472==--

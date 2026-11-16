@@ -1,0 +1,60 @@
+{
+  "email_file": "N09_new_order_contract_release_zero_price.eml",
+  "scenario": "Release order vs contract, price $0.00 on PO (SAP prices from contract)",
+  "expected": {
+    "classification": "new_order",
+    "detail": null,
+    "po_count": 1,
+    "route": "review",
+    "flags": [
+      "price_from_contract"
+    ]
+  },
+  "purchase_orders": [
+    {
+      "customer_key": "bluegrass",
+      "customer_name": "Bluegrass Meat Snacks Co.",
+      "sold_to_expected": "100312",
+      "customer_po_number": "BMS-90412",
+      "po_date": "08/05/2026",
+      "requested_delivery_date": "08/25/2026",
+      "vendor_name": "Northfield Ingredients Inc.",
+      "bill_to": "Bluegrass Meat Snacks Co., 77 Commerce St, Bowling Green, KY 42101",
+      "ship_to_name": "Bluegrass Meat Snacks - BG Plant",
+      "ship_to_address": "1450 Lovers Ln, Bowling Green, KY 42103",
+      "ship_to_expected": "200312",
+      "payment_terms": "Net 30",
+      "incoterms": "FOB Origin",
+      "currency": "USD",
+      "revision": null,
+      "notes": "Release against blanket contract C-2026-118. Pricing per contract.",
+      "lines": [
+        {
+          "line": 1,
+          "customer_material": "BMS-55021",
+          "supplier_material": "70004100",
+          "description": "Modified Food Starch MS-410, Bulk - release vs contract C-2026-118",
+          "qty": 40000,
+          "uom": "LB",
+          "unit_price": 0.0,
+          "price_per": "LB",
+          "line_total": 0.0
+        },
+        {
+          "line": 2,
+          "customer_material": "BMS-55030",
+          "supplier_material": "70009900",
+          "description": "Dextrose Monohydrate DX-99, 50 LB bags - release vs contract C-2026-118",
+          "qty": 8000,
+          "uom": "LB",
+          "unit_price": 0.0,
+          "price_per": "LB",
+          "line_total": 0.0
+        }
+      ],
+      "total": 0.0,
+      "source": "attachment: BMS-90412.pdf"
+    }
+  ],
+  "notes": ""
+}

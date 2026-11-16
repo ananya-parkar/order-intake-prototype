@@ -1,0 +1,29 @@
+{
+  "case_id": "CASE-3da156d491",
+  "source_file": "I03_short_shipped_complaint.eml",
+  "source_path": "C:\\dev\\order-intake-prototype\\data\\samples\\I03_short_shipped_complaint.eml",
+  "source_sha256": "3da156d4916d654626ae419c6126523bf78a4a1ab1ef307f11a7deb895270e0e",
+  "received_at": "2026-08-05T09:50:00-05:00",
+  "subject": "PO PSF-77095 - short shipped 1 bag",
+  "from_address": "mlindqvist@prairiesnack.example",
+  "from_name": "Marcus Lindqvist",
+  "to": "Northfield Starch Orders <starchorders@northfield-ingredients.example>",
+  "cc": "",
+  "in_reply_to": "",
+  "body_text": "Hi,\n\nWe received PO PSF-77095 today but it was short by 1 bag (received 399 of 400 x 50 LB). Please advise on credit or replacement.\n\nMarcus\n\nMarcus Lindqvist\nSenior Buyer | Prairie Snack Foods Inc.\nSioux Falls, SD 57104\nOffice: 555-0122\n\nContents may be confidential and legally privileged, and are intended only for the recipient(s) named above. Nothing herein is intended to be a binding signature.\n",
+  "attachments": [],
+  "status": "manual_queue",
+  "duplicate_of": null,
+  "classification": {
+    "category": "not_an_order",
+    "detail": "complaint",
+    "po_numbers": [],
+    "po_count": 0,
+    "confidence": 0.99,
+    "reason": "The email reports a short shipment and asks for credit or replacement, which is not a new or revised order."
+  },
+  "flags": [],
+  "notes": [
+    "A2: not_an_order (complaint) - The email reports a short shipment and asks for credit or replacement, which is not a new or revised order."
+  ]
+}

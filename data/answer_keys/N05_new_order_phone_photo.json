@@ -1,0 +1,60 @@
+{
+  "email_file": "N05_new_order_phone_photo.eml",
+  "scenario": "New order, phone photo JPG (skewed, shadowed)",
+  "expected": {
+    "classification": "new_order",
+    "detail": null,
+    "po_count": 1,
+    "route": "review",
+    "flags": [
+      "ocr_required"
+    ]
+  },
+  "purchase_orders": [
+    {
+      "customer_key": "harbor",
+      "customer_name": "Harbor Pet Nutrition LLC",
+      "sold_to_expected": "100288",
+      "customer_po_number": "HPN-5530",
+      "po_date": "08/04/2026",
+      "requested_delivery_date": "08/17/2026",
+      "vendor_name": "Northfield Ingredients Inc.",
+      "bill_to": "Harbor Pet Nutrition LLC, 1 Harbor Plaza, Joplin, MO 64801",
+      "ship_to_name": "Harbor Pet Nutrition - Joplin Plant",
+      "ship_to_address": "4400 Arrowhead Dr, Joplin, MO 64801",
+      "ship_to_expected": "200288",
+      "payment_terms": "Net 30",
+      "incoterms": "FOB Origin",
+      "currency": "USD",
+      "revision": null,
+      "notes": "",
+      "lines": [
+        {
+          "line": 1,
+          "customer_material": "HPN-7712",
+          "supplier_material": "70001200",
+          "description": "Pea Starch Native PS-200, Bulk",
+          "qty": 30000,
+          "uom": "LB",
+          "unit_price": 49.0,
+          "price_per": "CWT",
+          "line_total": 14700.0
+        },
+        {
+          "line": 2,
+          "customer_material": "HPN-7740",
+          "supplier_material": "70001500",
+          "description": "Tapioca Starch TS-150, 50 LB bag",
+          "qty": 300,
+          "uom": "BAG50LB",
+          "unit_price": 70.5,
+          "price_per": "CWT",
+          "line_total": 10575.0
+        }
+      ],
+      "total": 25275.0,
+      "source": "attachment: IMG_4471.jpg (photo)"
+    }
+  ],
+  "notes": ""
+}

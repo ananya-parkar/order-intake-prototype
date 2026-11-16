@@ -1,0 +1,42 @@
+{
+  "case_id": "CASE-a1585e549f",
+  "source_file": "R01_revised_po_quantity_change.eml",
+  "source_path": "C:\\dev\\order-intake-prototype\\data\\samples\\R01_revised_po_quantity_change.eml",
+  "source_sha256": "a1585e549f4c8ae69c2808729ea779538bd17d8c8598fc63baf217bf30f601d9",
+  "received_at": "2026-08-05T08:20:00-05:00",
+  "subject": "REVISED PO HPN-5498 Rev 1",
+  "from_address": "amoreno@harborpet.example",
+  "from_name": "Alicia Moreno",
+  "to": "Northfield Starch Orders <starchorders@northfield-ingredients.example>",
+  "cc": "",
+  "in_reply_to": "<179482127458.165.4278848962992766397@sfdc.example>",
+  "body_text": "Hi,\n\nPlease see revised PO HPN-5498 (Rev 1). Quantity increased from 30,000 LB to 36,000 LB. All else unchanged.\n\nAlicia\n\nAlicia Moreno\nBuyer | Harbor Pet Nutrition LLC\nJoplin, MO 64801\nOffice: 555-0194\n\nContents may be confidential and legally privileged, and are intended only for the recipient(s) named above. Nothing herein is intended to be a binding signature.\n",
+  "attachments": [
+    {
+      "filename": "HPN-5498_Rev1.pdf",
+      "content_type": "application/pdf",
+      "kind": "pdf",
+      "size_bytes": 2770,
+      "saved_path": "..\\output\\CASE-a1585e549f\\attachments\\HPN-5498_Rev1.pdf",
+      "is_inline": false,
+      "likely_signature": false,
+      "from_nested_email": null
+    }
+  ],
+  "status": "manual_queue",
+  "duplicate_of": null,
+  "classification": {
+    "category": "revised_po",
+    "detail": "quantity_change",
+    "po_numbers": [
+      "HPN-5498"
+    ],
+    "po_count": 1,
+    "confidence": 0.99,
+    "reason": "The email specifies a revised PO with increased quantity, indicating a change to an existing order."
+  },
+  "flags": [],
+  "notes": [
+    "A2: revised_po (quantity_change) - The email specifies a revised PO with increased quantity, indicating a change to an existing order."
+  ]
+}

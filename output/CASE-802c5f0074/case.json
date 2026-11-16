@@ -1,0 +1,31 @@
+{
+  "case_id": "CASE-802c5f0074",
+  "source_file": "R02_revised_delivery_date_body_only.eml",
+  "source_path": "C:\\dev\\order-intake-prototype\\data\\samples\\R02_revised_delivery_date_body_only.eml",
+  "source_sha256": "802c5f00747cb90b255d07c75b134e4a1edd06056a68132746b257d80a9f50de",
+  "received_at": "2026-08-05T13:45:00-05:00",
+  "subject": "RE: PO GVS-31810 - delivery date change",
+  "from_address": "tbecker@goldenvalleysoups.example",
+  "from_name": "Tom Becker",
+  "to": "Northfield Starch Orders <starchorders@northfield-ingredients.example>",
+  "cc": "",
+  "in_reply_to": "<179482127459.165.6811526131810497537@sfdc.example>",
+  "body_text": "Hi Jordan,\n\nCan we push delivery of PO GVS-31810 from 8/11 to 8/18? Our line is down for maintenance.\nQuantities stay the same.\n\nThanks,\n\nTom Becker\nMaterials Planner | Golden Valley Soups Co.\nFresno, CA 93725\nOffice: 555-0188\n\nContents may be confidential and legally privileged, and are intended only for the recipient(s) named above. Nothing herein is intended to be a binding signature.\n\n________________________________\nFrom: Jordan Avery <starchorders@northfield-ingredients.example>\nSent: Monday, August 3, 2026 2:10 PM\nTo: Tom Becker <tbecker@goldenvalleysoups.example>\nSubject: PO GVS-31810 confirmation\n\nHi Tom, PO GVS-31810 is confirmed for delivery 8/11. Sales order 4500091233.\n\nJordan Avery\nCustomer Support Specialist\n",
+  "attachments": [],
+  "status": "manual_queue",
+  "duplicate_of": null,
+  "classification": {
+    "category": "revised_po",
+    "detail": "delivery_date_change",
+    "po_numbers": [
+      "GVS-31810"
+    ],
+    "po_count": 1,
+    "confidence": 0.99,
+    "reason": "The email asks to change the delivery date of an existing PO, which is a revision of the order."
+  },
+  "flags": [],
+  "notes": [
+    "A2: revised_po (delivery_date_change) - The email asks to change the delivery date of an existing PO, which is a revision of the order."
+  ]
+}

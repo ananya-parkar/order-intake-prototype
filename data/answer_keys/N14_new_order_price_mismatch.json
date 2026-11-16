@@ -1,0 +1,49 @@
+{
+  "email_file": "N14_new_order_price_mismatch.eml",
+  "scenario": "New order with price $0.58/LB vs contract $0.62/LB -> SAP simulation mismatch",
+  "expected": {
+    "classification": "new_order",
+    "detail": null,
+    "po_count": 1,
+    "route": "clarification",
+    "flags": [
+      "price_mismatch"
+    ]
+  },
+  "purchase_orders": [
+    {
+      "customer_key": "prairie",
+      "customer_name": "Prairie Snack Foods Inc.",
+      "sold_to_expected": "100245",
+      "customer_po_number": "PSF-77140",
+      "po_date": "08/06/2026",
+      "requested_delivery_date": "08/27/2026",
+      "vendor_name": "Northfield Ingredients Inc.",
+      "bill_to": "Prairie Snack Foods Inc., PO Box 3301, Sioux Falls, SD 57101",
+      "ship_to_name": "Prairie Snack Foods - Sioux Falls",
+      "ship_to_address": "2700 N Cliff Ave, Sioux Falls, SD 57104",
+      "ship_to_expected": "200245",
+      "payment_terms": "Net 30",
+      "incoterms": "FOB Origin",
+      "currency": "USD",
+      "revision": null,
+      "notes": "",
+      "lines": [
+        {
+          "line": 1,
+          "customer_material": "PSF-STR-410",
+          "supplier_material": "70004100",
+          "description": "Modified Food Starch MS-410, Bulk",
+          "qty": 40000,
+          "uom": "LB",
+          "unit_price": 0.58,
+          "price_per": "LB",
+          "line_total": 23200.0
+        }
+      ],
+      "total": 23200.0,
+      "source": "attachment: PSF-77140.pdf"
+    }
+  ],
+  "notes": "Contract price for 70004100 for sold-to 100245 is 0.62/LB."
+}

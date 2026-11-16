@@ -1,0 +1,82 @@
+{
+  "email_file": "N10_multi_po_two_pdfs.eml",
+  "scenario": "One email, two POs (two PDFs), distributor with two ship-tos -> split",
+  "expected": {
+    "classification": "new_order",
+    "detail": null,
+    "po_count": 2,
+    "route": "review",
+    "flags": [
+      "multi_po"
+    ]
+  },
+  "purchase_orders": [
+    {
+      "customer_key": "nplains",
+      "customer_name": "Northern Plains Distributors",
+      "sold_to_expected": "100320",
+      "customer_po_number": "NPD-24-1187",
+      "po_date": "08/05/2026",
+      "requested_delivery_date": "08/19/2026",
+      "vendor_name": "Northfield Ingredients Inc.",
+      "bill_to": "Northern Plains Distributors, 3200 Main Ave, Fargo, ND 58102",
+      "ship_to_name": "Red River Tortilla Co. c/o Northern Plains",
+      "ship_to_address": "18 Riverside Rd, Moorhead, MN 56560",
+      "ship_to_expected": "200320",
+      "payment_terms": "Net 30",
+      "incoterms": "FOB Origin",
+      "currency": "USD",
+      "revision": null,
+      "notes": "",
+      "lines": [
+        {
+          "line": 1,
+          "customer_material": "NPD-PS200",
+          "supplier_material": "70001200",
+          "description": "Pea Starch Native PS-200, Bulk",
+          "qty": 42000,
+          "uom": "LB",
+          "unit_price": 47.75,
+          "price_per": "CWT",
+          "line_total": 20055.0
+        }
+      ],
+      "total": 20055.0,
+      "source": "attachment: NPD-24-1187.pdf"
+    },
+    {
+      "customer_key": "nplains",
+      "customer_name": "Northern Plains Distributors",
+      "sold_to_expected": "100320",
+      "customer_po_number": "NPD-24-1188",
+      "po_date": "08/05/2026",
+      "requested_delivery_date": "08/21/2026",
+      "vendor_name": "Northfield Ingredients Inc.",
+      "bill_to": "Northern Plains Distributors, 3200 Main Ave, Fargo, ND 58102",
+      "ship_to_name": "Prairie Rose Noodles c/o Northern Plains",
+      "ship_to_address": "602 1st Ave N, Grand Forks, ND 58203",
+      "ship_to_expected": "200321",
+      "payment_terms": "Net 30",
+      "incoterms": "FOB Origin",
+      "currency": "USD",
+      "revision": null,
+      "notes": "",
+      "lines": [
+        {
+          "line": 1,
+          "customer_material": "NPD-TS150",
+          "supplier_material": "70001500",
+          "description": "Tapioca Starch TS-150, 50 LB bag",
+          "qty": 400,
+          "uom": "BAG50LB",
+          "unit_price": 69.9,
+          "price_per": "CWT",
+          "line_total": 13980.0
+        }
+      ],
+      "total": 13980.0,
+      "source": "attachment: NPD-24-1188.pdf"
+    }
+  ],
+  "notes": ""
+}

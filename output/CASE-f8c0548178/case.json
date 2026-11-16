@@ -1,0 +1,51 @@
+{
+  "case_id": "CASE-f8c0548178",
+  "source_file": "N10_multi_po_two_pdfs.eml",
+  "source_path": "C:\\dev\\order-intake-prototype\\data\\samples\\N10_multi_po_two_pdfs.eml",
+  "source_sha256": "f8c0548178960319847f5a9e9c8679262de71576db90d2f6471812ba68d119eb",
+  "received_at": "2026-08-05T10:45:00-05:00",
+  "subject": "2 POs - NPD-24-1187 / NPD-24-1188",
+  "from_address": "orders@nplainsdist.example",
+  "from_name": "Greg Halvorsen",
+  "to": "Northfield Starch Orders <starchorders@northfield-ingredients.example>",
+  "cc": "",
+  "in_reply_to": "",
+  "body_text": "Hi,\n\nTwo POs attached for two different end customers (different ship-tos). Please enter both.\n\nGreg\nOrder Desk\n\nGreg Halvorsen\nOrder Desk | Northern Plains Distributors\nFargo, ND 58102\nOffice: 555-0153\n\nContents may be confidential and legally privileged, and are intended only for the recipient(s) named above. Nothing herein is intended to be a binding signature.\n",
+  "attachments": [
+    {
+      "filename": "NPD-24-1187.pdf",
+      "content_type": "application/pdf",
+      "kind": "pdf",
+      "size_bytes": 2721,
+      "saved_path": "..\\output\\CASE-f8c0548178\\attachments\\NPD-24-1187.pdf",
+      "is_inline": false,
+      "likely_signature": false,
+      "from_nested_email": null
+    },
+    {
+      "filename": "NPD-24-1188.pdf",
+      "content_type": "application/pdf",
+      "kind": "pdf",
+      "size_bytes": 2726,
+      "saved_path": "..\\output\\CASE-f8c0548178\\attachments\\NPD-24-1188.pdf",
+      "is_inline": false,
+      "likely_signature": false,
+      "from_nested_email": null
+    }
+  ],
+  "status": "classified",
+  "duplicate_of": null,
+  "classification": {
+    "category": "new_order",
+    "detail": "new_po_attachment",
+    "po_numbers": [
+      "NPD-24-1187",
+      "NPD-24-1188"
+    ],
+    "po_count": 2,
+    "confidence": 0.99,
+    "reason": "The email explicitly asks to enter two new purchase orders attached as PDFs."
+  },
+  "flags": [],
+  "notes": []
+}

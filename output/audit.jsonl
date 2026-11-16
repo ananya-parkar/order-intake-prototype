@@ -1,0 +1,179 @@
+{"ts": "2026-11-16T10:11:40.637171+00:00", "case_id": "CASE-a01bf6c4da", "step": "A1", "event": "read", "file": "I01_order_release_inquiry_with_coa.eml"}
+{"ts": "2026-11-16T10:11:40.663753+00:00", "case_id": "CASE-d731396f50", "step": "A1", "event": "read", "file": "I02_shipment_confirmation.eml"}
+{"ts": "2026-11-16T10:11:40.682990+00:00", "case_id": "CASE-3da156d491", "step": "A1", "event": "read", "file": "I03_short_shipped_complaint.eml"}
+{"ts": "2026-11-16T10:11:40.703176+00:00", "case_id": "CASE-a40c58aa46", "step": "A1", "event": "read", "file": "I04_coa_spec_request.eml"}
+{"ts": "2026-11-16T10:11:40.732978+00:00", "case_id": "CASE-a6e4ea1cd2", "step": "A1", "event": "read", "file": "I05_invoice_question_with_invoice_pdf.eml"}
+{"ts": "2026-11-16T10:11:40.752234+00:00", "case_id": "CASE-b56ff84e1e", "step": "A1", "event": "read", "file": "I06_expiration_date_question.eml"}
+{"ts": "2026-11-16T10:11:40.782078+00:00", "case_id": "CASE-f00aa2d41c", "step": "A1", "event": "read", "file": "N01_new_order_text_pdf.eml"}
+{"ts": "2026-11-16T10:11:40.830000+00:00", "case_id": "CASE-3b1ccd0534", "step": "A1", "event": "read", "file": "N02_new_order_excel.eml"}
+{"ts": "2026-11-16T10:11:40.839701+00:00", "case_id": "CASE-3b1ccd0534-DUP", "step": "A1", "event": "duplicate_file", "file": "N02_new_order_excel (1).eml"}
+{"ts": "2026-11-16T10:11:40.857358+00:00", "case_id": "CASE-123a619fde", "step": "A1", "event": "read", "file": "N03_new_order_word.eml"}
+{"ts": "2026-11-16T10:11:40.923205+00:00", "case_id": "CASE-03be4c8856", "step": "A1", "event": "read", "file": "N04_new_order_scanned_pdf.eml"}
+{"ts": "2026-11-16T10:11:40.943735+00:00", "case_id": "CASE-0a03eaf9be", "step": "A1", "event": "read", "file": "N05_new_order_phone_photo.eml"}
+{"ts": "2026-11-16T10:11:40.963928+00:00", "case_id": "CASE-4747c31909", "step": "A1", "event": "read", "file": "N06_new_order_screenshot_png.eml"}
+{"ts": "2026-11-16T10:11:40.976930+00:00", "case_id": "CASE-4cea34efb0", "step": "A1", "event": "read", "file": "N07_new_order_email_body_only.eml"}
+{"ts": "2026-11-16T10:11:40.985149+00:00", "case_id": "CASE-5eaaa93383", "step": "A1", "event": "read", "file": "N08_new_order_portal_html_table.eml"}
+{"ts": "2026-11-16T10:11:41.012027+00:00", "case_id": "CASE-e979902eba", "step": "A1", "event": "read", "file": "N09_new_order_contract_release_zero_price.eml"}
+{"ts": "2026-11-16T10:11:41.030249+00:00", "case_id": "CASE-f8c0548178", "step": "A1", "event": "read", "file": "N10_multi_po_two_pdfs.eml"}
+{"ts": "2026-11-16T10:11:41.059699+00:00", "case_id": "CASE-9a4a4e1a20", "step": "A1", "event": "read", "file": "N11_forwarded_email_with_po.eml"}
+{"ts": "2026-11-16T10:11:41.080549+00:00", "case_id": "CASE-dd14199820", "step": "A1", "event": "read", "file": "N12_duplicate_resend_of_N01.eml"}
+{"ts": "2026-11-16T10:11:41.097752+00:00", "case_id": "CASE-af42962dd3", "step": "A1", "event": "read", "file": "N13_new_order_missing_ship_to_and_date.eml"}
+{"ts": "2026-11-16T10:11:41.115740+00:00", "case_id": "CASE-e076c461fb", "step": "A1", "event": "read", "file": "N14_new_order_price_mismatch.eml"}
+{"ts": "2026-11-16T10:11:41.143148+00:00", "case_id": "CASE-0b025334b9", "step": "A1", "event": "read", "file": "N15_new_order_two_page_pdf.eml"}
+{"ts": "2026-11-16T10:11:41.162170+00:00", "case_id": "CASE-8c3d0aafda", "step": "A1", "event": "read", "file": "N16_po_addressed_to_other_vendor.eml"}
+{"ts": "2026-11-16T10:11:41.181571+00:00", "case_id": "CASE-a1585e549f", "step": "A1", "event": "read", "file": "R01_revised_po_quantity_change.eml"}
+{"ts": "2026-11-16T10:11:41.196567+00:00", "case_id": "CASE-802c5f0074", "step": "A1", "event": "read", "file": "R02_revised_delivery_date_body_only.eml"}
+{"ts": "2026-11-16T10:11:41.214823+00:00", "case_id": "CASE-430465ffb7", "step": "A1", "event": "read", "file": "R03_cancel_po.eml"}
+{"ts": "2026-11-16T16:06:08.593977+00:00", "case_id": "CASE-a01bf6c4da", "step": "A1", "event": "read", "file": "I01_order_release_inquiry_with_coa.eml"}
+{"ts": "2026-11-16T16:06:08.622591+00:00", "case_id": "CASE-d731396f50", "step": "A1", "event": "read", "file": "I02_shipment_confirmation.eml"}
+{"ts": "2026-11-16T16:06:08.660239+00:00", "case_id": "CASE-3da156d491", "step": "A1", "event": "read", "file": "I03_short_shipped_complaint.eml"}
+{"ts": "2026-11-16T16:06:08.684050+00:00", "case_id": "CASE-a40c58aa46", "step": "A1", "event": "read", "file": "I04_coa_spec_request.eml"}
+{"ts": "2026-11-16T16:06:08.716697+00:00", "case_id": "CASE-a6e4ea1cd2", "step": "A1", "event": "read", "file": "I05_invoice_question_with_invoice_pdf.eml"}
+{"ts": "2026-11-16T16:06:08.741657+00:00", "case_id": "CASE-b56ff84e1e", "step": "A1", "event": "read", "file": "I06_expiration_date_question.eml"}
+{"ts": "2026-11-16T16:06:08.795056+00:00", "case_id": "CASE-f00aa2d41c", "step": "A1", "event": "read", "file": "N01_new_order_text_pdf.eml"}
+{"ts": "2026-11-16T16:06:08.839054+00:00", "case_id": "CASE-3b1ccd0534", "step": "A1", "event": "read", "file": "N02_new_order_excel.eml"}
+{"ts": "2026-11-16T16:06:08.852132+00:00", "case_id": "CASE-3b1ccd0534-DUP", "step": "A1", "event": "duplicate_file", "file": "N02_new_order_excel (1).eml"}
+{"ts": "2026-11-16T16:06:08.928073+00:00", "case_id": "CASE-123a619fde", "step": "A1", "event": "read", "file": "N03_new_order_word.eml"}
+{"ts": "2026-11-16T16:06:09.053393+00:00", "case_id": "CASE-03be4c8856", "step": "A1", "event": "read", "file": "N04_new_order_scanned_pdf.eml"}
+{"ts": "2026-11-16T16:06:09.113322+00:00", "case_id": "CASE-0a03eaf9be", "step": "A1", "event": "read", "file": "N05_new_order_phone_photo.eml"}
+{"ts": "2026-11-16T16:06:09.159334+00:00", "case_id": "CASE-4747c31909", "step": "A1", "event": "read", "file": "N06_new_order_screenshot_png.eml"}
+{"ts": "2026-11-16T16:06:09.219775+00:00", "case_id": "CASE-4cea34efb0", "step": "A1", "event": "read", "file": "N07_new_order_email_body_only.eml"}
+{"ts": "2026-11-16T16:06:09.268633+00:00", "case_id": "CASE-5eaaa93383", "step": "A1", "event": "read", "file": "N08_new_order_portal_html_table.eml"}
+{"ts": "2026-11-16T16:06:09.338167+00:00", "case_id": "CASE-e979902eba", "step": "A1", "event": "read", "file": "N09_new_order_contract_release_zero_price.eml"}
+{"ts": "2026-11-16T16:06:09.395551+00:00", "case_id": "CASE-f8c0548178", "step": "A1", "event": "read", "file": "N10_multi_po_two_pdfs.eml"}
+{"ts": "2026-11-16T16:06:09.428699+00:00", "case_id": "CASE-9a4a4e1a20", "step": "A1", "event": "read", "file": "N11_forwarded_email_with_po.eml"}
+{"ts": "2026-11-16T16:06:09.450850+00:00", "case_id": "CASE-dd14199820", "step": "A1", "event": "read", "file": "N12_duplicate_resend_of_N01.eml"}
+{"ts": "2026-11-16T16:06:09.477180+00:00", "case_id": "CASE-af42962dd3", "step": "A1", "event": "read", "file": "N13_new_order_missing_ship_to_and_date.eml"}
+{"ts": "2026-11-16T16:06:09.500980+00:00", "case_id": "CASE-e076c461fb", "step": "A1", "event": "read", "file": "N14_new_order_price_mismatch.eml"}
+{"ts": "2026-11-16T16:06:09.518681+00:00", "case_id": "CASE-0b025334b9", "step": "A1", "event": "read", "file": "N15_new_order_two_page_pdf.eml"}
+{"ts": "2026-11-16T16:06:09.541094+00:00", "case_id": "CASE-8c3d0aafda", "step": "A1", "event": "read", "file": "N16_po_addressed_to_other_vendor.eml"}
+{"ts": "2026-11-16T16:06:09.568509+00:00", "case_id": "CASE-a1585e549f", "step": "A1", "event": "read", "file": "R01_revised_po_quantity_change.eml"}
+{"ts": "2026-11-16T16:06:09.587299+00:00", "case_id": "CASE-802c5f0074", "step": "A1", "event": "read", "file": "R02_revised_delivery_date_body_only.eml"}
+{"ts": "2026-11-16T16:06:09.612607+00:00", "case_id": "CASE-430465ffb7", "step": "A1", "event": "read", "file": "R03_cancel_po.eml"}
+{"ts": "2026-11-16T16:06:23.350787+00:00", "case_id": "CASE-f00aa2d41c", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["CBB-450123"], "flags": []}
+{"ts": "2026-11-16T16:06:25.132626+00:00", "case_id": "CASE-3b1ccd0534", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["PSF-77120"], "flags": []}
+{"ts": "2026-11-16T16:06:27.058952+00:00", "case_id": "CASE-123a619fde", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["SAB-2026-0815"], "flags": []}
+{"ts": "2026-11-16T16:06:28.969268+00:00", "case_id": "CASE-03be4c8856", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["31877"], "flags": []}
+{"ts": "2026-11-16T16:06:31.064691+00:00", "case_id": "CASE-dd14199820", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "duplicate", "pos": ["CBB-450123"], "flags": ["possible_duplicate"]}
+{"ts": "2026-11-16T16:06:40.043902+00:00", "case_id": "CASE-0a03eaf9be", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": [], "flags": []}
+{"ts": "2026-11-16T16:06:41.978154+00:00", "case_id": "CASE-4747c31909", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["RDC-1044"], "flags": []}
+{"ts": "2026-11-16T16:06:44.490404+00:00", "case_id": "CASE-a01bf6c4da", "step": "A2", "event": "manual_queue", "model": "openai/gpt-oss-120b", "category": "not_an_order", "pos": [], "flags": []}
+{"ts": "2026-11-16T16:06:46.341585+00:00", "case_id": "CASE-4cea34efb0", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["CBB-450131"], "flags": []}
+{"ts": "2026-11-16T16:06:48.170325+00:00", "case_id": "CASE-5eaaa93383", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["LC-PO-660219"], "flags": []}
+{"ts": "2026-11-16T16:06:49.708139+00:00", "case_id": "CASE-a1585e549f", "step": "A2", "event": "manual_queue", "model": "openai/gpt-oss-120b", "category": "revised_po", "pos": ["HPN-5498"], "flags": []}
+{"ts": "2026-11-16T16:06:51.346009+00:00", "case_id": "CASE-e979902eba", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["BMS-90412"], "flags": []}
+{"ts": "2026-11-16T16:06:53.082266+00:00", "case_id": "CASE-3da156d491", "step": "A2", "event": "manual_queue", "model": "openai/gpt-oss-120b", "category": "not_an_order", "pos": [], "flags": []}
+{"ts": "2026-11-16T16:06:54.080553+00:00", "case_id": "CASE-f8c0548178", "step": "A2", "event": "manual_queue", "model": "openai/gpt-oss-120b", "category": null, "pos": [], "flags": []}
+{"ts": "2026-11-16T16:06:55.075351+00:00", "case_id": "CASE-9a4a4e1a20", "step": "A2", "event": "manual_queue", "model": "openai/gpt-oss-120b", "category": null, "pos": [], "flags": []}
+{"ts": "2026-11-16T16:06:56.219318+00:00", "case_id": "CASE-802c5f0074", "step": "A2", "event": "manual_queue", "model": "openai/gpt-oss-120b", "category": null, "pos": [], "flags": []}
+{"ts": "2026-11-16T16:06:57.815815+00:00", "case_id": "CASE-af42962dd3", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["SAB-2026-0822"], "flags": []}
+{"ts": "2026-11-16T16:06:58.923689+00:00", "case_id": "CASE-d731396f50", "step": "A2", "event": "manual_queue", "model": "openai/gpt-oss-120b", "category": null, "pos": [], "flags": []}
+{"ts": "2026-11-16T16:06:59.917114+00:00", "case_id": "CASE-a40c58aa46", "step": "A2", "event": "manual_queue", "model": "openai/gpt-oss-120b", "category": null, "pos": [], "flags": []}
+{"ts": "2026-11-16T16:07:00.869752+00:00", "case_id": "CASE-e076c461fb", "step": "A2", "event": "manual_queue", "model": "openai/gpt-oss-120b", "category": null, "pos": [], "flags": []}
+{"ts": "2026-11-16T16:07:01.990804+00:00", "case_id": "CASE-0b025334b9", "step": "A2", "event": "manual_queue", "model": "openai/gpt-oss-120b", "category": null, "pos": [], "flags": []}
+{"ts": "2026-11-16T16:07:04.559960+00:00", "case_id": "CASE-430465ffb7", "step": "A2", "event": "manual_queue", "model": "openai/gpt-oss-120b", "category": "revised_po", "pos": ["RDC-1031"], "flags": []}
+{"ts": "2026-11-16T16:07:06.556727+00:00", "case_id": "CASE-a6e4ea1cd2", "step": "A2", "event": "manual_queue", "model": "openai/gpt-oss-120b", "category": "not_an_order", "pos": [], "flags": []}
+{"ts": "2026-11-16T16:07:07.620167+00:00", "case_id": "CASE-8c3d0aafda", "step": "A2", "event": "manual_queue", "model": "openai/gpt-oss-120b", "category": null, "pos": [], "flags": []}
+{"ts": "2026-11-16T16:07:09.524783+00:00", "case_id": "CASE-b56ff84e1e", "step": "A2", "event": "manual_queue", "model": "openai/gpt-oss-120b", "category": "not_an_order", "pos": [], "flags": []}
+{"ts": "2026-11-16T16:10:31.359416+00:00", "case_id": "CASE-a01bf6c4da", "step": "A1", "event": "read", "file": "I01_order_release_inquiry_with_coa.eml"}
+{"ts": "2026-11-16T16:10:31.379289+00:00", "case_id": "CASE-d731396f50", "step": "A1", "event": "read", "file": "I02_shipment_confirmation.eml"}
+{"ts": "2026-11-16T16:10:31.413667+00:00", "case_id": "CASE-3da156d491", "step": "A1", "event": "read", "file": "I03_short_shipped_complaint.eml"}
+{"ts": "2026-11-16T16:10:31.450790+00:00", "case_id": "CASE-a40c58aa46", "step": "A1", "event": "read", "file": "I04_coa_spec_request.eml"}
+{"ts": "2026-11-16T16:10:31.484124+00:00", "case_id": "CASE-a6e4ea1cd2", "step": "A1", "event": "read", "file": "I05_invoice_question_with_invoice_pdf.eml"}
+{"ts": "2026-11-16T16:10:31.515190+00:00", "case_id": "CASE-b56ff84e1e", "step": "A1", "event": "read", "file": "I06_expiration_date_question.eml"}
+{"ts": "2026-11-16T16:10:31.540624+00:00", "case_id": "CASE-f00aa2d41c", "step": "A1", "event": "read", "file": "N01_new_order_text_pdf.eml"}
+{"ts": "2026-11-16T16:10:31.563602+00:00", "case_id": "CASE-3b1ccd0534", "step": "A1", "event": "read", "file": "N02_new_order_excel.eml"}
+{"ts": "2026-11-16T16:10:31.577951+00:00", "case_id": "CASE-3b1ccd0534-DUP", "step": "A1", "event": "duplicate_file", "file": "N02_new_order_excel (1).eml"}
+{"ts": "2026-11-16T16:10:31.602701+00:00", "case_id": "CASE-123a619fde", "step": "A1", "event": "read", "file": "N03_new_order_word.eml"}
+{"ts": "2026-11-16T16:10:31.719530+00:00", "case_id": "CASE-03be4c8856", "step": "A1", "event": "read", "file": "N04_new_order_scanned_pdf.eml"}
+{"ts": "2026-11-16T16:10:31.745884+00:00", "case_id": "CASE-0a03eaf9be", "step": "A1", "event": "read", "file": "N05_new_order_phone_photo.eml"}
+{"ts": "2026-11-16T16:10:31.792718+00:00", "case_id": "CASE-4747c31909", "step": "A1", "event": "read", "file": "N06_new_order_screenshot_png.eml"}
+{"ts": "2026-11-16T16:10:31.817587+00:00", "case_id": "CASE-4cea34efb0", "step": "A1", "event": "read", "file": "N07_new_order_email_body_only.eml"}
+{"ts": "2026-11-16T16:10:31.836309+00:00", "case_id": "CASE-5eaaa93383", "step": "A1", "event": "read", "file": "N08_new_order_portal_html_table.eml"}
+{"ts": "2026-11-16T16:10:31.862398+00:00", "case_id": "CASE-e979902eba", "step": "A1", "event": "read", "file": "N09_new_order_contract_release_zero_price.eml"}
+{"ts": "2026-11-16T16:10:31.894605+00:00", "case_id": "CASE-f8c0548178", "step": "A1", "event": "read", "file": "N10_multi_po_two_pdfs.eml"}
+{"ts": "2026-11-16T16:10:31.946286+00:00", "case_id": "CASE-9a4a4e1a20", "step": "A1", "event": "read", "file": "N11_forwarded_email_with_po.eml"}
+{"ts": "2026-11-16T16:10:31.967487+00:00", "case_id": "CASE-dd14199820", "step": "A1", "event": "read", "file": "N12_duplicate_resend_of_N01.eml"}
+{"ts": "2026-11-16T16:10:32.001883+00:00", "case_id": "CASE-af42962dd3", "step": "A1", "event": "read", "file": "N13_new_order_missing_ship_to_and_date.eml"}
+{"ts": "2026-11-16T16:10:32.046777+00:00", "case_id": "CASE-e076c461fb", "step": "A1", "event": "read", "file": "N14_new_order_price_mismatch.eml"}
+{"ts": "2026-11-16T16:10:32.079525+00:00", "case_id": "CASE-0b025334b9", "step": "A1", "event": "read", "file": "N15_new_order_two_page_pdf.eml"}
+{"ts": "2026-11-16T16:10:32.112516+00:00", "case_id": "CASE-8c3d0aafda", "step": "A1", "event": "read", "file": "N16_po_addressed_to_other_vendor.eml"}
+{"ts": "2026-11-16T16:10:32.134876+00:00", "case_id": "CASE-a1585e549f", "step": "A1", "event": "read", "file": "R01_revised_po_quantity_change.eml"}
+{"ts": "2026-11-16T16:10:32.152459+00:00", "case_id": "CASE-802c5f0074", "step": "A1", "event": "read", "file": "R02_revised_delivery_date_body_only.eml"}
+{"ts": "2026-11-16T16:10:32.171304+00:00", "case_id": "CASE-430465ffb7", "step": "A1", "event": "read", "file": "R03_cancel_po.eml"}
+{"ts": "2026-11-16T16:10:42.162044+00:00", "case_id": "CASE-f00aa2d41c", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["CBB-450123"], "flags": []}
+{"ts": "2026-11-16T16:10:44.923208+00:00", "case_id": "CASE-3b1ccd0534", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["PSF-77120"], "flags": []}
+{"ts": "2026-11-16T16:10:47.272403+00:00", "case_id": "CASE-123a619fde", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["SAB-2026-0815"], "flags": []}
+{"ts": "2026-11-16T16:10:49.220187+00:00", "case_id": "CASE-03be4c8856", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["31877"], "flags": []}
+{"ts": "2026-11-16T16:10:51.378248+00:00", "case_id": "CASE-dd14199820", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "duplicate", "pos": ["CBB-450123"], "flags": ["possible_duplicate"]}
+{"ts": "2026-11-16T16:11:00.932763+00:00", "case_id": "CASE-0a03eaf9be", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": [], "flags": []}
+{"ts": "2026-11-16T16:11:03.601539+00:00", "case_id": "CASE-4747c31909", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["RDC-1044"], "flags": []}
+{"ts": "2026-11-16T16:11:05.933373+00:00", "case_id": "CASE-a01bf6c4da", "step": "A2", "event": "manual_queue", "model": "openai/gpt-oss-120b", "category": "not_an_order", "pos": [], "flags": []}
+{"ts": "2026-11-16T16:11:07.746413+00:00", "case_id": "CASE-4cea34efb0", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["CBB-450131"], "flags": []}
+{"ts": "2026-11-16T16:11:10.211959+00:00", "case_id": "CASE-5eaaa93383", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["LC-PO-660219"], "flags": []}
+{"ts": "2026-11-16T16:11:12.161161+00:00", "case_id": "CASE-a1585e549f", "step": "A2", "event": "manual_queue", "model": "openai/gpt-oss-120b", "category": "revised_po", "pos": ["HPN-5498"], "flags": []}
+{"ts": "2026-11-16T16:11:14.008573+00:00", "case_id": "CASE-e979902eba", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["BMS-90412"], "flags": []}
+{"ts": "2026-11-16T16:11:16.146291+00:00", "case_id": "CASE-3da156d491", "step": "A2", "event": "manual_queue", "model": "openai/gpt-oss-120b", "category": "not_an_order", "pos": [], "flags": []}
+{"ts": "2026-11-16T16:11:18.088560+00:00", "case_id": "CASE-f8c0548178", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["NPD-24-1187", "NPD-24-1188"], "flags": []}
+{"ts": "2026-11-16T16:11:19.733511+00:00", "case_id": "CASE-9a4a4e1a20", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["PSF-77131"], "flags": []}
+{"ts": "2026-11-16T16:11:21.474185+00:00", "case_id": "CASE-802c5f0074", "step": "A2", "event": "manual_queue", "model": "openai/gpt-oss-120b", "category": "revised_po", "pos": ["GVS-31810"], "flags": []}
+{"ts": "2026-11-16T16:11:23.327237+00:00", "case_id": "CASE-af42962dd3", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["SAB-2026-0822"], "flags": []}
+{"ts": "2026-11-16T16:11:24.953687+00:00", "case_id": "CASE-d731396f50", "step": "A2", "event": "manual_queue", "model": "openai/gpt-oss-120b", "category": "not_an_order", "pos": [], "flags": []}
+{"ts": "2026-11-16T16:11:28.847540+00:00", "case_id": "CASE-a40c58aa46", "step": "A2", "event": "manual_queue", "model": "openai/gpt-oss-120b", "category": "not_an_order", "pos": [], "flags": []}
+{"ts": "2026-11-16T16:11:33.323424+00:00", "case_id": "CASE-e076c461fb", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["PSF-77140"], "flags": []}
+{"ts": "2026-11-16T16:11:35.704433+00:00", "case_id": "CASE-0b025334b9", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["GVS-31902"], "flags": []}
+{"ts": "2026-11-16T16:11:37.349437+00:00", "case_id": "CASE-430465ffb7", "step": "A2", "event": "manual_queue", "model": "openai/gpt-oss-120b", "category": "revised_po", "pos": ["RDC-1031"], "flags": []}
+{"ts": "2026-11-16T16:11:47.911749+00:00", "case_id": "CASE-a6e4ea1cd2", "step": "A2", "event": "manual_queue", "model": "openai/gpt-oss-120b", "category": "not_an_order", "pos": [], "flags": []}
+{"ts": "2026-11-16T16:11:49.764796+00:00", "case_id": "CASE-8c3d0aafda", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["NPD-24-1195"], "flags": []}
+{"ts": "2026-11-16T16:11:58.332222+00:00", "case_id": "CASE-b56ff84e1e", "step": "A2", "event": "manual_queue", "model": "openai/gpt-oss-120b", "category": "not_an_order", "pos": [], "flags": []}
+{"ts": "2026-11-16T16:45:20.436628+00:00", "case_id": "CASE-a01bf6c4da", "step": "A1", "event": "read", "file": "I01_order_release_inquiry_with_coa.eml"}
+{"ts": "2026-11-16T16:45:20.477618+00:00", "case_id": "CASE-d731396f50", "step": "A1", "event": "read", "file": "I02_shipment_confirmation.eml"}
+{"ts": "2026-11-16T16:45:20.512420+00:00", "case_id": "CASE-3da156d491", "step": "A1", "event": "read", "file": "I03_short_shipped_complaint.eml"}
+{"ts": "2026-11-16T16:45:20.561135+00:00", "case_id": "CASE-a40c58aa46", "step": "A1", "event": "read", "file": "I04_coa_spec_request.eml"}
+{"ts": "2026-11-16T16:45:20.626385+00:00", "case_id": "CASE-a6e4ea1cd2", "step": "A1", "event": "read", "file": "I05_invoice_question_with_invoice_pdf.eml"}
+{"ts": "2026-11-16T16:45:20.665699+00:00", "case_id": "CASE-b56ff84e1e", "step": "A1", "event": "read", "file": "I06_expiration_date_question.eml"}
+{"ts": "2026-11-16T16:45:20.727195+00:00", "case_id": "CASE-f00aa2d41c", "step": "A1", "event": "read", "file": "N01_new_order_text_pdf.eml"}
+{"ts": "2026-11-16T16:45:20.835636+00:00", "case_id": "CASE-3b1ccd0534", "step": "A1", "event": "read", "file": "N02_new_order_excel.eml"}
+{"ts": "2026-11-16T16:45:20.852701+00:00", "case_id": "CASE-3b1ccd0534-DUP", "step": "A1", "event": "duplicate_file", "file": "N02_new_order_excel (1).eml"}
+{"ts": "2026-11-16T16:45:20.891849+00:00", "case_id": "CASE-123a619fde", "step": "A1", "event": "read", "file": "N03_new_order_word.eml"}
+{"ts": "2026-11-16T16:45:21.027652+00:00", "case_id": "CASE-03be4c8856", "step": "A1", "event": "read", "file": "N04_new_order_scanned_pdf.eml"}
+{"ts": "2026-11-16T16:45:21.084511+00:00", "case_id": "CASE-0a03eaf9be", "step": "A1", "event": "read", "file": "N05_new_order_phone_photo.eml"}
+{"ts": "2026-11-16T16:45:21.148962+00:00", "case_id": "CASE-4747c31909", "step": "A1", "event": "read", "file": "N06_new_order_screenshot_png.eml"}
+{"ts": "2026-11-16T16:45:21.182307+00:00", "case_id": "CASE-4cea34efb0", "step": "A1", "event": "read", "file": "N07_new_order_email_body_only.eml"}
+{"ts": "2026-11-16T16:45:21.221340+00:00", "case_id": "CASE-5eaaa93383", "step": "A1", "event": "read", "file": "N08_new_order_portal_html_table.eml"}
+{"ts": "2026-11-16T16:45:21.256957+00:00", "case_id": "CASE-e979902eba", "step": "A1", "event": "read", "file": "N09_new_order_contract_release_zero_price.eml"}
+{"ts": "2026-11-16T16:45:21.298045+00:00", "case_id": "CASE-f8c0548178", "step": "A1", "event": "read", "file": "N10_multi_po_two_pdfs.eml"}
+{"ts": "2026-11-16T16:45:21.359176+00:00", "case_id": "CASE-9a4a4e1a20", "step": "A1", "event": "read", "file": "N11_forwarded_email_with_po.eml"}
+{"ts": "2026-11-16T16:45:21.397143+00:00", "case_id": "CASE-dd14199820", "step": "A1", "event": "read", "file": "N12_duplicate_resend_of_N01.eml"}
+{"ts": "2026-11-16T16:45:21.462827+00:00", "case_id": "CASE-af42962dd3", "step": "A1", "event": "read", "file": "N13_new_order_missing_ship_to_and_date.eml"}
+{"ts": "2026-11-16T16:45:21.506914+00:00", "case_id": "CASE-e076c461fb", "step": "A1", "event": "read", "file": "N14_new_order_price_mismatch.eml"}
+{"ts": "2026-11-16T16:45:21.559009+00:00", "case_id": "CASE-0b025334b9", "step": "A1", "event": "read", "file": "N15_new_order_two_page_pdf.eml"}
+{"ts": "2026-11-16T16:45:21.608743+00:00", "case_id": "CASE-8c3d0aafda", "step": "A1", "event": "read", "file": "N16_po_addressed_to_other_vendor.eml"}
+{"ts": "2026-11-16T16:45:21.647528+00:00", "case_id": "CASE-a1585e549f", "step": "A1", "event": "read", "file": "R01_revised_po_quantity_change.eml"}
+{"ts": "2026-11-16T16:45:21.693640+00:00", "case_id": "CASE-802c5f0074", "step": "A1", "event": "read", "file": "R02_revised_delivery_date_body_only.eml"}
+{"ts": "2026-11-16T16:45:21.741518+00:00", "case_id": "CASE-430465ffb7", "step": "A1", "event": "read", "file": "R03_cancel_po.eml"}
+{"ts": "2026-11-16T16:45:39.436002+00:00", "case_id": "CASE-f00aa2d41c", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["CBB-450123"], "flags": []}
+{"ts": "2026-11-16T16:45:41.623102+00:00", "case_id": "CASE-3b1ccd0534", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["PSF-77120"], "flags": []}
+{"ts": "2026-11-16T16:45:44.120948+00:00", "case_id": "CASE-123a619fde", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["SAB-2026-0815"], "flags": []}
+{"ts": "2026-11-16T16:45:45.966905+00:00", "case_id": "CASE-03be4c8856", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["31877"], "flags": []}
+{"ts": "2026-11-16T16:45:50.795705+00:00", "case_id": "CASE-dd14199820", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "duplicate", "pos": ["CBB-450123"], "flags": ["possible_duplicate"]}
+{"ts": "2026-11-16T16:45:56.020560+00:00", "case_id": "CASE-0a03eaf9be", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": [], "flags": []}
+{"ts": "2026-11-16T16:46:00.375373+00:00", "case_id": "CASE-4747c31909", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["RDC-1044"], "flags": []}
+{"ts": "2026-11-16T16:46:02.868944+00:00", "case_id": "CASE-a01bf6c4da", "step": "A2", "event": "manual_queue", "model": "openai/gpt-oss-120b", "category": "not_an_order", "pos": [], "flags": []}
+{"ts": "2026-11-16T16:46:05.430437+00:00", "case_id": "CASE-4cea34efb0", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["CBB-450131"], "flags": []}
+{"ts": "2026-11-16T16:46:08.135853+00:00", "case_id": "CASE-5eaaa93383", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["LC-PO-660219"], "flags": []}
+{"ts": "2026-11-16T16:46:10.035620+00:00", "case_id": "CASE-a1585e549f", "step": "A2", "event": "manual_queue", "model": "openai/gpt-oss-120b", "category": "revised_po", "pos": ["HPN-5498"], "flags": []}
+{"ts": "2026-11-16T16:46:12.184965+00:00", "case_id": "CASE-e979902eba", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["BMS-90412"], "flags": []}
+{"ts": "2026-11-16T16:46:14.321394+00:00", "case_id": "CASE-3da156d491", "step": "A2", "event": "manual_queue", "model": "openai/gpt-oss-120b", "category": "not_an_order", "pos": [], "flags": []}
+{"ts": "2026-11-16T16:46:16.924944+00:00", "case_id": "CASE-f8c0548178", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["NPD-24-1187", "NPD-24-1188"], "flags": []}
+{"ts": "2026-11-16T16:46:18.828879+00:00", "case_id": "CASE-9a4a4e1a20", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["PSF-77131"], "flags": []}
+{"ts": "2026-11-16T16:46:20.894003+00:00", "case_id": "CASE-802c5f0074", "step": "A2", "event": "manual_queue", "model": "openai/gpt-oss-120b", "category": "revised_po", "pos": ["GVS-31810"], "flags": []}
+{"ts": "2026-11-16T16:46:22.927541+00:00", "case_id": "CASE-af42962dd3", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["SAB-2026-0822"], "flags": []}
+{"ts": "2026-11-16T16:46:26.320100+00:00", "case_id": "CASE-d731396f50", "step": "A2", "event": "manual_queue", "model": "openai/gpt-oss-120b", "category": "not_an_order", "pos": [], "flags": []}
+{"ts": "2026-11-16T16:46:28.778085+00:00", "case_id": "CASE-a40c58aa46", "step": "A2", "event": "manual_queue", "model": "openai/gpt-oss-120b", "category": "not_an_order", "pos": [], "flags": []}
+{"ts": "2026-11-16T16:46:37.151109+00:00", "case_id": "CASE-e076c461fb", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["PSF-77140"], "flags": []}
+{"ts": "2026-11-16T16:46:39.844882+00:00", "case_id": "CASE-0b025334b9", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["GVS-31902"], "flags": []}
+{"ts": "2026-11-16T16:46:42.154139+00:00", "case_id": "CASE-430465ffb7", "step": "A2", "event": "manual_queue", "model": "openai/gpt-oss-120b", "category": "revised_po", "pos": ["RDC-1031"], "flags": []}
+{"ts": "2026-11-16T16:46:44.447517+00:00", "case_id": "CASE-a6e4ea1cd2", "step": "A2", "event": "manual_queue", "model": "openai/gpt-oss-120b", "category": "not_an_order", "pos": [], "flags": []}
+{"ts": "2026-11-16T16:46:47.533962+00:00", "case_id": "CASE-8c3d0aafda", "step": "A2", "event": "classified", "model": "openai/gpt-oss-120b", "category": "new_order", "pos": ["NPD-24-1195"], "flags": []}
+{"ts": "2026-11-16T16:46:49.396394+00:00", "case_id": "CASE-b56ff84e1e", "step": "A2", "event": "manual_queue", "model": "openai/gpt-oss-120b", "category": "not_an_order", "pos": [], "flags": []}

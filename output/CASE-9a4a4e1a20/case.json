@@ -1,0 +1,50 @@
+{
+  "case_id": "CASE-9a4a4e1a20",
+  "source_file": "N11_forwarded_email_with_po.eml",
+  "source_path": "C:\\dev\\order-intake-prototype\\data\\samples\\N11_forwarded_email_with_po.eml",
+  "source_sha256": "9a4a4e1a207d00be4113eabf7733aaf0d6cafa853123783a277ae9ac77363cd5",
+  "received_at": "2026-08-05T11:05:00-05:00",
+  "subject": "FW: PO PSF-77131 for Mitchell",
+  "from_address": "mlindqvist@prairiesnack.example",
+  "from_name": "Marcus Lindqvist",
+  "to": "Northfield Starch Orders <starchorders@northfield-ingredients.example>",
+  "cc": "",
+  "in_reply_to": "",
+  "body_text": "Forwarding the PO below from our Mitchell plant. Please process.\n\nMarcus\n\nMarcus Lindqvist\nSenior Buyer | Prairie Snack Foods Inc.\nSioux Falls, SD 57104\nOffice: 555-0150\n\nContents may be confidential and legally privileged, and are intended only for the recipient(s) named above. Nothing herein is intended to be a binding signature.\n",
+  "attachments": [
+    {
+      "filename": "PO PSF-77131 for Mitchell.eml",
+      "content_type": "message/rfc822",
+      "kind": "email",
+      "size_bytes": 4340,
+      "saved_path": "..\\output\\CASE-9a4a4e1a20\\attachments\\PO PSF-77131 for Mitchell.eml",
+      "is_inline": false,
+      "likely_signature": false,
+      "from_nested_email": null
+    },
+    {
+      "filename": "PSF-77131.pdf",
+      "content_type": "application/pdf",
+      "kind": "pdf",
+      "size_bytes": 2698,
+      "saved_path": "..\\output\\CASE-9a4a4e1a20\\attachments\\PSF-77131.pdf",
+      "is_inline": false,
+      "likely_signature": false,
+      "from_nested_email": "PO PSF-77131 for Mitchell.eml"
+    }
+  ],
+  "status": "classified",
+  "duplicate_of": null,
+  "classification": {
+    "category": "new_order",
+    "detail": "new_po_attachment",
+    "po_numbers": [
+      "PSF-77131"
+    ],
+    "po_count": 1,
+    "confidence": 0.98,
+    "reason": "The email forwards a purchase order (PSF-77131) for processing, indicating a new order."
+  },
+  "flags": [],
+  "notes": []
+}

@@ -1,0 +1,60 @@
+{
+  "email_file": "N04_new_order_scanned_pdf.eml",
+  "scenario": "New order, scanned/faxed image-only PDF (needs OCR)",
+  "expected": {
+    "classification": "new_order",
+    "detail": null,
+    "po_count": 1,
+    "route": "review",
+    "flags": [
+      "ocr_required"
+    ]
+  },
+  "purchase_orders": [
+    {
+      "customer_key": "golden",
+      "customer_name": "Golden Valley Soups Co.",
+      "sold_to_expected": "100277",
+      "customer_po_number": "GVS-31877",
+      "po_date": "08/04/2026",
+      "requested_delivery_date": "08/19/2026",
+      "vendor_name": "Northfield Ingredients Inc.",
+      "bill_to": "Golden Valley Soups Co., 3100 S Cherry Ave, Fresno, CA 93725",
+      "ship_to_name": "Golden Valley Soups - Fresno",
+      "ship_to_address": "3100 S Cherry Ave, Fresno, CA 93725",
+      "ship_to_expected": "200277",
+      "payment_terms": "Net 30",
+      "incoterms": "FOB Origin",
+      "currency": "USD",
+      "revision": null,
+      "notes": "",
+      "lines": [
+        {
+          "line": 1,
+          "customer_material": "GV-ING-3500",
+          "supplier_material": "70003500",
+          "description": "Rice Starch RS-35, 50 LB bags",
+          "qty": 15000,
+          "uom": "LB",
+          "unit_price": 0.88,
+          "price_per": "LB",
+          "line_total": 13200.0
+        },
+        {
+          "line": 2,
+          "customer_material": "GV-ING-4100",
+          "supplier_material": "70004100",
+          "description": "Modified Food Starch MS-410, Bulk",
+          "qty": 22000,
+          "uom": "LB",
+          "unit_price": 0.64,
+          "price_per": "LB",
+          "line_total": 14080.0
+        }
+      ],
+      "total": 27280.0,
+      "source": "attachment: SCAN_20260804_0742.pdf (scan)"
+    }
+  ],
+  "notes": ""
+}

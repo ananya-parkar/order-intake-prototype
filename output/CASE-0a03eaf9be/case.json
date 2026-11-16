@@ -1,0 +1,38 @@
+{
+  "case_id": "CASE-0a03eaf9be",
+  "source_file": "N05_new_order_phone_photo.eml",
+  "source_path": "C:\\dev\\order-intake-prototype\\data\\samples\\N05_new_order_phone_photo.eml",
+  "source_sha256": "0a03eaf9be0013e38d35d6b35b41e256b36d1d59e9df1e9637ce8cb979432e24",
+  "received_at": "2026-08-04T11:20:00-05:00",
+  "subject": "PO from Harbor",
+  "from_address": "amoreno@harborpet.example",
+  "from_name": "Alicia Moreno",
+  "to": "Northfield Starch Orders <starchorders@northfield-ingredients.example>",
+  "cc": "",
+  "in_reply_to": "",
+  "body_text": "Sending a picture of the PO from the plant, our scanner is down. Please process.\n\nAlicia\n\nAlicia Moreno\nBuyer | Harbor Pet Nutrition LLC\nJoplin, MO 64801\nOffice: 555-0183\n\nContents may be confidential and legally privileged, and are intended only for the recipient(s) named above. Nothing herein is intended to be a binding signature.\n",
+  "attachments": [
+    {
+      "filename": "IMG_4471.jpg",
+      "content_type": "image/jpeg",
+      "kind": "image",
+      "size_bytes": 182205,
+      "saved_path": "..\\output\\CASE-0a03eaf9be\\attachments\\IMG_4471.jpg",
+      "is_inline": false,
+      "likely_signature": false,
+      "from_nested_email": null
+    }
+  ],
+  "status": "classified",
+  "duplicate_of": null,
+  "classification": {
+    "category": "new_order",
+    "detail": "new_po_attachment",
+    "po_numbers": [],
+    "po_count": 1,
+    "confidence": 0.95,
+    "reason": "Image attachment contains the PO, indicating a new order"
+  },
+  "flags": [],
+  "notes": []
+}

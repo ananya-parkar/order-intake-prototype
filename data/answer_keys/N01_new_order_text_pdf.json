@@ -1,0 +1,47 @@
+{
+  "email_file": "N01_new_order_text_pdf.eml",
+  "scenario": "New order, text PDF, single line, price per CWT",
+  "expected": {
+    "classification": "new_order",
+    "detail": null,
+    "po_count": 1,
+    "route": "review",
+    "flags": []
+  },
+  "purchase_orders": [
+    {
+      "customer_key": "cascade",
+      "customer_name": "Cascade Batter & Breading LLC",
+      "sold_to_expected": "100231",
+      "customer_po_number": "CBB-450123",
+      "po_date": "08/03/2026",
+      "requested_delivery_date": "08/14/2026",
+      "vendor_name": "Northfield Ingredients Inc.",
+      "bill_to": "Cascade Batter & Breading LLC, Accounts Payable, 88 Orchard Way, Hood River, OR 97031",
+      "ship_to_name": "Cascade Batter & Breading - Plant 1",
+      "ship_to_address": "410 Industrial Pkwy, Hood River, OR 97031",
+      "ship_to_expected": "200231",
+      "payment_terms": "Net 30",
+      "incoterms": "FOB Origin",
+      "currency": "USD",
+      "revision": null,
+      "notes": "",
+      "lines": [
+        {
+          "line": 1,
+          "customer_material": "RM-10442",
+          "supplier_material": "70001200",
+          "description": "Pea Starch Native PS-200, Bulk truck",
+          "qty": 44000,
+          "uom": "LB",
+          "unit_price": 48.5,
+          "price_per": "CWT",
+          "line_total": 21340.0
+        }
+      ],
+      "total": 21340.0,
+      "source": "attachment: PO_CBB-450123.pdf"
+    }
+  ],
+  "notes": ""
+}

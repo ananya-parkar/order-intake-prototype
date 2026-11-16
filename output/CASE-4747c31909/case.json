@@ -1,0 +1,40 @@
+{
+  "case_id": "CASE-4747c31909",
+  "source_file": "N06_new_order_screenshot_png.eml",
+  "source_path": "C:\\dev\\order-intake-prototype\\data\\samples\\N06_new_order_screenshot_png.eml",
+  "source_sha256": "4747c319093753b741f4e40affa158cbec1411f76725ca80a56da7f0b1a7269a",
+  "received_at": "2026-08-04T13:02:00-05:00",
+  "subject": "Order RDC-1044",
+  "from_address": "kwatanabe@redwooddairy.example",
+  "from_name": "Ken Watanabe",
+  "to": "Northfield Starch Orders <starchorders@northfield-ingredients.example>",
+  "cc": "",
+  "in_reply_to": "",
+  "body_text": "Hi, screenshot of our PO from our ERP below/attached. Need it by 8/12 please.\n\nKen\n\nKen Watanabe\nSupply Coordinator | Redwood Dairy Cooperative\nEureka, CA 95501\nOffice: 555-0180\n\nContents may be confidential and legally privileged, and are intended only for the recipient(s) named above. Nothing herein is intended to be a binding signature.\n",
+  "attachments": [
+    {
+      "filename": "PO_RDC-1044.png",
+      "content_type": "image/png",
+      "kind": "image",
+      "size_bytes": 58387,
+      "saved_path": "..\\output\\CASE-4747c31909\\attachments\\PO_RDC-1044.png",
+      "is_inline": false,
+      "likely_signature": false,
+      "from_nested_email": null
+    }
+  ],
+  "status": "classified",
+  "duplicate_of": null,
+  "classification": {
+    "category": "new_order",
+    "detail": "new_po_attachment",
+    "po_numbers": [
+      "RDC-1044"
+    ],
+    "po_count": 1,
+    "confidence": 0.97,
+    "reason": "Customer provides a PO screenshot and requests delivery, indicating a new order."
+  },
+  "flags": [],
+  "notes": []
+}
