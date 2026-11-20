@@ -6,6 +6,9 @@ import re
 
 # ======================= LLM =======================
 GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
+ANTHROPIC_URL = "https://api.anthropic.com/v1/messages"
+ANTHROPIC_VERSION = "2023-06-01"
+RETRY_STATUS = {429, 500, 502, 503, 529}          # busy / temporary errors -> wait and try again
 
 # ======================= Salesforce =======================
 SF_ID_PREFIX = {              # first 3 characters of every Salesforce Id = the object type
@@ -131,3 +134,14 @@ SAP_ITEM = {"Route": "", "Shipping Point": "", "Pricing": "", "Plant": "", "Mate
             "Unit_of_Measure": "", "PO_Item": "", "CUST_MAT22": "", "Text_Id": "", "Text_Line": ""}
 SAP_REQUIRED_HEADER = ("SAP_Account_Number", "PO_Number", "PO_Date", "Request_Date")
 SAP_REQUIRED_ITEM = ("CUST_MAT22", "Quantity", "Unit_of_Measure")
+
+# ======================= Azure Document Intelligence (OCR) =======================
+DOCINTEL_API_VERSION = "2024-11-30"               # v4.0 GA
+DOCINTEL_MODEL = "prebuilt-read"                  # OCR only: text + per-word confidence
+
+
+# What the RPA actually fills (from the client's payload spec). Every other field stays "" (Created_By = "NULL").
+SAP_SPEC_HEADER = ("SAP_Account_Number", "Sold_To_Party", "Created_On", "Order_Reason", "Order_Type", "PO_Number",
+                   "Request_Date", "PO_Date", "Sales_Org", "Distribution_Channel", "Division", "contact_name")
+SAP_SPEC_ITEM = ("Pricing", "Quantity", "Unit_of_Measure", "PO_Item", "CUST_MAT22")
+SAP_FROM_MASTER_DATA = ("Order_Reason", "Order_Type", "Sales_Org", "Distribution_Channel", "Division")  # RPA gets these from its mapping DB

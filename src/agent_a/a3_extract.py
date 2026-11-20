@@ -179,6 +179,17 @@ def dates_in(text: str) -> list[str]:
         add(y, m, d)
     return found
 
+def us_reading(value: str, quote: str) -> Optional[str]:
+    """If the model read a numeric date day-first (10/01/2026 -> 2026-01-10), return the US reading (2026-10-01)."""
+    for m, d, y in re.findall(r"\b(\d{1,2})[-/.](\d{1,2})[-/.](\d{2,4})\b", quote or ""):
+        y = int(y) + 2000 if int(y) < 100 else int(y)
+        try:
+            us, day_first = datetime(y, int(m), int(d)).date().isoformat(), datetime(y, int(d), int(m)).date().isoformat()
+        except ValueError:
+            continue
+        if value == day_first != us:
+            return us
+    return None
 
 def uom_ok(u: str) -> bool:
     """True if the unit starts with a unit we know (LB, KG, BAG, TOTE...)."""
@@ -258,6 +269,9 @@ def check_field(name: str, x: XField, doc: DocCtx) -> FieldValue:
                 else:
                     checks.append("value_not_in_quote"); conf *= 0.5
         elif name in DATE_FIELDS and isinstance(value, str):
+            us = us_reading(value, src.quote)
+            if us:                                       # 10/01/2026 read as 10 Jan -> 1 Oct (US customers)
+                value = us; checks.append("us_date_order")
             if value not in dates_in(src.quote):
                 checks.append("value_not_in_quote"); conf *= 0.5
         else:
@@ -515,7 +529,7 @@ def a3_failed(c: Case) -> bool:
 def is_order_case(c: Case) -> bool:
     """A case A2 sent to A3 (new order or possible duplicate) - whatever A3 did with it since."""
     return bool(c.classification) and c.classification.category in ("new_order", "duplicate") \
-        and c.status in ("classified", "extracted", "manual_queue")
+        and c.status in ("classified", "extracted", "payload_built", "manual_queue")
 
 
 def run(out_dir: Path, retry_failed: bool = False, everything: bool = False) -> list[Case]:
@@ -597,7 +611,7 @@ def check(cases: list[Case], keys_dir: Path) -> None:
             continue
         key = json.loads(k.read_text(encoding="utf-8"))
         exp_pos = key.get("purchase_orders", [])
-        if not exp_pos or c.status not in ("extracted", "manual_queue"):
+        if not exp_pos or c.status not in ("extracted", "payload_built","manual_queue"):
             continue
         print(f"{c.case_id} {c.source_file}")
         got_by_po = {norm_po(str(p.po_number.value or "")): p for p in c.purchase_orders}

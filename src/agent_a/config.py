@@ -54,6 +54,12 @@ class A3Config(Section):
     min_page_chars: int
     min_ocr_width: int
 
+class OCRConfig(Section):
+    """ocr: which engine reads scanned pages and photos, and how long to wait for it."""
+    provider: str
+    timeout_seconds: int
+    poll_seconds: float
+    max_attempts: int
 
 class A4Config(Section):
     """a4: timezone used for Created_On."""
@@ -68,6 +74,7 @@ class Config(Section):
     a2: A2Config
     a3: A3Config
     a4: A4Config
+    ocr: OCRConfig
 
 
 def load(path: Path = ROOT / "config.yaml") -> Config:
