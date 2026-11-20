@@ -23,9 +23,8 @@ from dotenv import load_dotenv
 from psycopg.types.json import Jsonb
 
 from .a4_payload import missing
+from .config import CFG, ROOT
 from .models import Case, FieldValue
-
-ROOT = Path(__file__).resolve().parents[2]
 load_dotenv(ROOT / ".env")
 
 SCHEMA = """

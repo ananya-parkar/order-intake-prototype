@@ -15,19 +15,7 @@ from datetime import datetime
 from typing import Optional
 
 from pydantic import BaseModel, ConfigDict
-
-# Salesforce Id prefixes (first 3 characters of every Id say the object type)
-PREFIX = {
-    "Case": "500",
-    "EmailMessage": "02s",
-    "ContentDocument": "069",
-    "Account": "001",
-    "Contact": "003",
-}
-
-# Field length limits in Salesforce
-MAX_DESCRIPTION = 32_000      # Case.Description
-MAX_TEXT_BODY = 131_072       # EmailMessage.TextBody / HtmlBody
+from .constants import SF_ID_PREFIX as PREFIX
 
 # Salesforce's FileType values for common extensions
 _FILE_TYPES = {

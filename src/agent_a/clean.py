@@ -9,12 +9,8 @@ the copy we send to the LLM, so the real message isn't buried in noise:
 """
 import re
 
-_BANNER = re.compile(r"ZjQcmQRYFpfptBannerStart.*?ZjQcmQRYFpfptBannerEnd", re.S)
-_URLDEFENSE = re.compile(r"https?://urldefense\.com/v3/__(.+?)__;[^\s<>\"]*")
-_URL = re.compile(r"https?://[^\s<>\"\]]+")
-_LONG_CODE = re.compile(r"\S{60,}")             # base64 blobs, tracking ids
-_MAX_URL = 60
-
+from .constants import BANNER_RE as _BANNER, LONG_CODE_RE as _LONG_CODE, MAX_URL as _MAX_URL
+from .constants import URL_RE as _URL, URLDEFENSE_RE as _URLDEFENSE
 
 def _short_url(m: re.Match) -> str:
     url = m.group(0)
