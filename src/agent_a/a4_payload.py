@@ -2,16 +2,20 @@
 A4 - Build the SAP payload.
 
 For every case A3 marked "extracted", one payload per PO, in the exact JSON the RPA sends to SAP via Azure:
-  header: SAP_Account_Number, Sold_To_Party  <- Salesforce (Case.SAP_Account_Number__c)
-          PO_Number, PO_Date, Request_Date, contact_name  <- PO (A3)
+  header: SAP_Account_Number  <- Salesforce (Case.SAP_Account_Number__c), 0000 + 6 digits (= ship-to)
+          Sold_To_Party       <- SAP account without its 4 leading zeros
+          Order_Reason 200, Order_Type TA, Sales_Org 1000, Distribution_Channel, Division <- fixed (config.yaml)
+          PO_Number, PO_Date, Request_Date (ship date), contact_name  <- PO (A3)
           Created_On  <- today, US Central time, 'yyyy-MM-dd 00:00:00' (same as the RPA)
-  Items:  one per PO line: PO_Item 10, 20, 30 ... + CUST_MAT22, Quantity, Unit_of_Measure, Pricing  <- PO (A3)
+  Items:  one per PO line: PO_Item 10, 20, 30 ... + CUST_MAT22, Quantity, Pricing  <- PO (A3)
+          Unit_of_Measure as SAP's 3-letter code in capitals (bags -> BAG, Sack of 2000 -> SAC)
   Everything else stays "" (Created_By = "NULL"), as in the template.
   Material stays "": SAP resolves CUST_MAT22 through CMIR.
 Output: <case>/payloads/<PO_Number>.json, case status "payload_built".
 
 Run from src/:
-    python -m agent_a.a4_payload --out ..\\output --check ..\\data\\answer_keys
+    python -m agent_a.a4_payload --out ..\\output --check ..\\data\\sample_answer_keys
+    python -m agent_a.a4_payload --out ..\\output --spec        (check saved payloads against the client's spec)
 """
 import argparse
 import copy
@@ -21,8 +25,8 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from .config import CFG, ROOT
-from .constants import (SAP_FROM_MASTER_DATA, SAP_ITEM as ITEM, SAP_REQUIRED_HEADER, SAP_REQUIRED_ITEM,
-                        SAP_SPEC_HEADER, SAP_SPEC_ITEM, SAP_TEMPLATE as TEMPLATE)
+from .constants import (SAP_CRITICAL, SAP_ITEM as ITEM, SAP_MODERATE, SAP_REQUIRED_HEADER, SAP_REQUIRED_ITEM,
+                        SAP_SPEC_HEADER, SAP_SPEC_ITEM, SAP_STATIC, SAP_TEMPLATE as TEMPLATE, SAP_UOM, SAP_UOM_PREFIX)
 from .models import Case, PurchaseOrder, SapPayload
 
 
@@ -40,6 +44,23 @@ def num(v) -> str:
     return str(int(f)) if f.is_integer() else f"{f:.6f}".rstrip("0").rstrip(".")
 
 
+def sold_to(account: str) -> str:
+    """Sold_To_Party = SAP account number without its 4 leading zeros (0000104521 -> 104521)."""
+    return account[4:] if account.startswith("0000") else account
+
+
+def sap_uom(u) -> str:
+    """Customer unit -> SAP unit code, ALL CAPS (bags -> BAG, Sack of 2000 -> SAC). Unknown units: just upper-case."""
+    u = text(u).upper()
+    if u in SAP_UOM:
+        return SAP_UOM[u]
+    return next((code for prefix, code in SAP_UOM_PREFIX.items() if u.startswith(prefix)), u)
+
+def us_date(iso: str, year_digits: int = 4) -> str:
+    """'2026-09-18' -> '09/18/2026' (Request_Date) or '09/18/26' (PO_Date), as in the RPA payloads."""
+    m = re.fullmatch(r"(\d{4})-(\d{2})-(\d{2})", iso or "")
+    return f"{m[2]}/{m[3]}/{m[1][-year_digits:]}" if m else text(iso)
+
 def created_on() -> str:
     """Same as the RPA: today's date in US Central time, 'yyyy-MM-dd 00:00:00'."""
     try:
@@ -54,20 +75,25 @@ def build_payload(case: Case, po: PurchaseOrder) -> dict:
     """Fill the RPA template from the case (Salesforce) and one PO (A3); checked against SapPayload."""
     p = copy.deepcopy(TEMPLATE)
     p["SAP_Account_Number"] = text(case.sap_account_number)
-    p["Sold_To_Party"] = text(case.sap_account_number)        # same as SAP account for now (to confirm)
+    p["Sold_To_Party"] = sold_to(text(case.sap_account_number))
     p["Created_On"] = created_on()
+    p["Order_Reason"] = CFG.a4.order_reason                    # fixed values from the client (config.yaml)
+    p["Order_Type"] = CFG.a4.order_type
+    p["Sales_Org"] = CFG.a4.sales_org
+    p["Distribution_Channel"] = CFG.a4.distribution_channel
+    p["Division"] = CFG.a4.division
     p["PO_Number"] = text(po.po_number.value)
-    p["PO_Date"] = text(po.po_date.value)                      # YYYY-MM-DD from A3
+    p["PO_Date"] = us_date(text(po.po_date.value), 2)          # MM/DD/YY, as the RPA sends it
     req = po.requested_delivery_date.value or min(
         (l.delivery_date.value for l in po.lines if l.delivery_date.value), default=None)
-    p["Request_Date"] = text(req)
+    p["Request_Date"] = us_date(text(req))                           # MM/DD/YYYY, as the RPA sends it
     p["contact_name"] = text(po.buyer_name.value) or case.contact_name   # RPA takes it from the PO
     for i, line in enumerate(po.lines):
         it = copy.deepcopy(ITEM)
         it["PO_Item"] = str((i + 1) * 10)
         it["CUST_MAT22"] = text(line.customer_material.value)
         it["Quantity"] = num(line.quantity.value)
-        it["Unit_of_Measure"] = text(line.uom.value)
+        it["Unit_of_Measure"] = sap_uom(line.uom.value)
         it["Pricing"] = num(line.unit_price.value)
         p["Items"].append(it)
     return SapPayload.model_validate(p).model_dump(by_alias=True)     # wrong shape -> error, never saved
@@ -107,6 +133,7 @@ def run(out_dir: Path) -> list[Case]:
                                 "pos": [text(po.po_number.value) for po in case.purchase_orders]}) + "\n")
     return todo
 
+
 def spec_issues(p: dict) -> list[str]:
     """Compare one payload with the client's spec: exact keys and order, which fields are filled, and formats."""
     out = []
@@ -121,14 +148,31 @@ def spec_issues(p: dict) -> list[str]:
             if it.get(k) and not re.fullmatch(r"\d+(\.\d+)?", it[k]):
                 out.append(f"Item {i + 1}: {k} {it[k]!r} is not a plain number")
         out += [f"Item {i + 1}: {k} should be empty" for k in ITEM if k not in SAP_SPEC_ITEM and it.get(k)]
+        u = it.get("Unit_of_Measure", "")
+        if u and (u != u.upper() or not re.fullmatch(r"[A-Z]{2,3}", u)):
+            out.append(f"Item {i + 1}: Unit_of_Measure {u!r} is not a 2-3 letter SAP code in capitals (moderate - confirm SAP code)")
+        out += [f"Item {i + 1}: {k} is empty (critical)" for k in SAP_CRITICAL if k in it and not it[k]]
+        out += [f"Item {i + 1}: {k} is empty (moderate)" for k in SAP_MODERATE if not it.get(k)]
     if p.get("Created_By") != "NULL":
         out.append("Created_By should be 'NULL'")
+    acct = p.get("SAP_Account_Number", "")
+    if not acct:
+        out.append("SAP_Account_Number is empty (critical)")
+    elif not re.fullmatch(r"0000\d{6}", acct):
+        out.append(f"SAP_Account_Number {acct!r} is not 0000 + 6 digits (critical)")
+    if acct and p.get("Sold_To_Party") != sold_to(acct):
+        out.append(f"Sold_To_Party should be {sold_to(acct)!r} (SAP account without the 4 zeros)")
+    for k in SAP_STATIC:
+        want = getattr(CFG.a4, k.lower())
+        if want and p.get(k) != want:
+            out.append(f"{k} should be {want!r}")
     out += [f"{k} should be empty" for k in TEMPLATE if k not in SAP_SPEC_HEADER + ("Created_By", "Items") and p.get(k)]
     if not re.fullmatch(r"\d{4}-\d{2}-\d{2} 00:00:00", p.get("Created_On", "")):
         out.append("Created_On is not 'yyyy-MM-dd 00:00:00'")
-    for k in ("PO_Date", "Request_Date"):
-        if p.get(k) and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", p[k]):
-            out.append(f"{k} {p[k]!r} is not yyyy-MM-dd")
+    if p.get("PO_Date") and not re.fullmatch(r"\d{2}/\d{2}/\d{2}", p["PO_Date"]):
+        out.append(f"PO_Date {p['PO_Date']!r} is not MM/DD/YY")
+    if p.get("Request_Date") and not re.fullmatch(r"\d{2}/\d{2}/\d{4}", p["Request_Date"]):
+        out.append(f"Request_Date {p['Request_Date']!r} is not MM/DD/YYYY")
     return out
 
 
@@ -138,7 +182,8 @@ def spec_report(out_dir: Path) -> None:
     if not files:
         print("No payloads found."); return
     filled = {k: 0 for k in SAP_SPEC_HEADER + SAP_SPEC_ITEM}
-    items = bad = 0
+    items = 0
+    level = {"critical": 0, "moderate": 0, "format": 0, "clean": 0}
     for f in files:
         p = json.loads(f.read_text(encoding="utf-8"))
         for k in SAP_SPEC_HEADER:
@@ -148,23 +193,29 @@ def spec_report(out_dir: Path) -> None:
             for k in SAP_SPEC_ITEM:
                 filled[k] += bool(it.get(k))
         issues = spec_issues(p)
-        bad += bool(issues)
+        worst = ("critical" if any("(critical)" in m for m in issues) else
+                 "moderate" if any("(moderate" in m for m in issues) else "format" if issues else "clean")
+        level[worst] += 1
         for msg in issues:
             print(f"  {f.parent.parent.name} {p.get('PO_Number') or f.stem}: {msg}")
-    print(f"\n{len(files)} payloads, {items} items: {len(files) - bad} match the spec's shape and formats\n")
+    print(f"\n{len(files)} payloads, {items} items: {level['clean']} clean, {level['critical']} with a critical gap "
+          f"(SAP account / customer material), {level['moderate']} with a moderate gap (price / qty / UoM), "
+          f"{level['format']} with other format issues\n")
     print(f"{'spec field':<22}{'filled':>10}   note")
     for k, n in filled.items():
         total = items if k in SAP_SPEC_ITEM else len(files)
-        note = ("from SAP master data / RPA mapping DB - not in the email" if k in SAP_FROM_MASTER_DATA else
-                "from Salesforce account" if k in ("SAP_Account_Number", "Sold_To_Party") and n < total else "")
+        note = ("fixed value - client still to send it" if k in SAP_STATIC and not getattr(CFG.a4, k.lower()) else
+                "fixed value from config.yaml" if k in SAP_STATIC else
+                "from Salesforce account (critical)" if k in ("SAP_Account_Number", "Sold_To_Party") and n < total else "")
         print(f"{k:<22}{n:>4}/{total:<5}   {note}")
 
+
 def check(out_dir: Path, keys_dir: Path) -> None:
-    """Compare the payloads with the synthetic answer keys."""
-    def iso(s):
-        """'08/15/2026' -> '2026-08-15' (answer keys use US dates)."""
+    """Compare the payloads with the answer keys."""
+    def key_date(s, year_digits=4):
+        """Answer keys hold MM/DD/YYYY; turn it into the payload's format (MM/DD/YYYY or MM/DD/YY)."""
         m = re.match(r"(\d{2})/(\d{2})/(\d{4})", s or "")
-        return f"{m[3]}-{m[1]}-{m[2]}" if m else ""
+        return f"{m[1]}/{m[2]}/{m[3][-year_digits:]}" if m else ""
 
     def same_num(a, b):
         """True if two values are the same number (ignoring tiny rounding)."""
@@ -185,13 +236,13 @@ def check(out_dir: Path, keys_dir: Path) -> None:
             tests = [("payload", p is not None)]
             if p:
                 tests += [("PO_Number", p["PO_Number"] == e["customer_po_number"]),
-                          ("PO_Date", p["PO_Date"] == iso(e.get("po_date"))),
-                          ("Request_Date", p["Request_Date"] == iso(e.get("requested_delivery_date"))),
+                          ("PO_Date", p["PO_Date"] == key_date(e.get("po_date"), 2)),
+                          ("Request_Date", p["Request_Date"] == key_date(e.get("requested_delivery_date"))),
                           ("item_count", len(p["Items"]) == len(e.get("lines") or []))]
                 for it, el in zip(p["Items"], e.get("lines") or []):
                     tests += [("CUST_MAT22", it["CUST_MAT22"] == el.get("customer_material")),
                               ("Quantity", same_num(it["Quantity"], el.get("qty"))),
-                              ("Unit_of_Measure", it["Unit_of_Measure"].upper() == str(el.get("uom")).upper()),
+                              ("Unit_of_Measure", it["Unit_of_Measure"] == sap_uom(el.get("uom"))),
                               ("Pricing", same_num(it["Pricing"], el.get("unit_price")))]
             for name, ok in tests:
                 right += ok; total += 1
@@ -204,14 +255,12 @@ def check(out_dir: Path, keys_dir: Path) -> None:
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(description="A4 - build the SAP payload")
     ap.add_argument("--out", default=str(ROOT / CFG.paths.output))
-    ap.add_argument("--check", help="answer_keys folder (synthetic emails only)")
+    ap.add_argument("--check", help="answer_keys folder to compare against")
     ap.add_argument("--spec", action="store_true", help="only check the saved payloads against the client's spec")
     a = ap.parse_args()
     if a.spec:
         spec_report(Path(a.out))
         raise SystemExit
-    done = run(Path(a.out))
-    a = ap.parse_args()
     done = run(Path(a.out))
     print(f"\n{len(done)} case(s), {sum(len(c.purchase_orders) for c in done)} payload(s) built")
     if a.check:

@@ -62,8 +62,13 @@ class OCRConfig(Section):
     max_attempts: int
 
 class A4Config(Section):
-    """a4: timezone used for Created_On."""
+    """a4: timezone for Created_On and the fixed SAP values the client gave us."""
     timezone: str
+    order_reason: str
+    order_type: str
+    sales_org: str
+    distribution_channel: str
+    division: str
 
 
 class Config(Section):

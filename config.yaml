@@ -36,6 +36,11 @@ a3:
 
 a4:
   timezone: America/Chicago          # Created_On uses US Central time, like the RPA
+  order_reason: "200"                # always 200 (client)
+  order_type: "TA"                   # seen in the RPA payloads
+  sales_org: "1000"                  # always 1000 (client)
+  distribution_channel: "01"         # seen in the RPA payloads
+  division: "00"                     # seen in the RPA payloads
 
 
 ocr:                                 # engine for scanned PDF pages and photos (text PDF, Excel, Word are read directly)

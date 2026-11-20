@@ -80,7 +80,8 @@ Rules for every field:
 Field meanings:
 - customer_name: the buying company. vendor_name: the company the PO is addressed to (normally us).
 - buyer_name / buyer_phone / buyer_email: the customer's contact person on the PO.
-- requested_delivery_date: the header delivery / ship / pick-up date. Per-line dates go in the line's delivery_date.
+- requested_delivery_date: the header SHIP date (ship date / pick-up date). Only if the PO has no ship or pick-up date,
+  use the delivery / required / need-by date. Per-line dates go in the line's delivery_date.
 - customer_material: the customer's own item code. supplier_material: our material number, if printed
   (e.g. "Vend. Mat. No.", "Supplier item"). description: the product text.
 - quantity and uom as ordered (e.g. 400 + "BAG50LB", 44000 + "LB"). Packaging units (bags, totes, drums) stay
@@ -144,4 +145,11 @@ DOCINTEL_MODEL = "prebuilt-read"                  # OCR only: text + per-word co
 SAP_SPEC_HEADER = ("SAP_Account_Number", "Sold_To_Party", "Created_On", "Order_Reason", "Order_Type", "PO_Number",
                    "Request_Date", "PO_Date", "Sales_Org", "Distribution_Channel", "Division", "contact_name")
 SAP_SPEC_ITEM = ("Pricing", "Quantity", "Unit_of_Measure", "PO_Item", "CUST_MAT22")
-SAP_FROM_MASTER_DATA = ("Order_Reason", "Order_Type", "Sales_Org", "Distribution_Channel", "Division")  # RPA gets these from its mapping DB
+SAP_STATIC = ("Order_Reason", "Order_Type", "Sales_Org", "Distribution_Channel", "Division")   # fixed values, set in config.yaml (a4)
+SAP_CRITICAL = ("SAP_Account_Number", "CUST_MAT22")          # wrong -> wrong ship-to / CMIR -> critical failure
+SAP_MODERATE = ("Pricing", "Quantity", "Unit_of_Measure")      # wrong -> moderate failure
+
+# SAP accepts only its own unit codes, ALL CAPS (e.g. SAC, BAG). Customer spellings -> SAP code.
+# SAP accepts only its own unit codes, ALL CAPS (e.g. LB, SAC, BAG - LB as in the RPA payloads). Customer spellings -> SAP code.
+SAP_UOM = {"LBS": "LB", "LBR": "LB", "#": "LB", "BAGS": "BAG", "BG": "BAG", "50#": "BAG", "SACK": "SAC", "SACKS": "SAC", "SK": "SAC"}
+SAP_UOM_PREFIX = {"BAG": "BAG", "SACK": "SAC"}                  # BAG50LB, BAG-20KG -> BAG; SACK2000 -> SAC
