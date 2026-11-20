@@ -6,15 +6,7 @@ Later the GCP version calls Model Armor (sanitizeUserPrompt / sanitizeModelRespo
 """
 import re
 from dataclasses import dataclass, field
-
-INJECTION_PATTERNS = [
-    r"ignore (all |any )?(previous|prior|above) instructions",
-    r"disregard .{0,30}instructions",
-    r"you are now ",
-    r"reveal .{0,20}(system )?prompt",
-    r"act as (an? )?(admin|developer|system)",
-]
-
+from .constants import INJECTION_PATTERNS
 
 @dataclass
 class GuardResult:

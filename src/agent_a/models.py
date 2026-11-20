@@ -2,7 +2,7 @@
 from datetime import datetime
 from typing import Literal, Optional, Union
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 
 class Attachment(BaseModel):
@@ -131,3 +131,53 @@ class Case(BaseModel):
     purchase_orders: list[PurchaseOrder] = Field(default_factory=list)   # A3: extracted POs
     flags: list[str] = Field(default_factory=list)    # e.g. possible_duplicate, low_confidence
     notes: list[str] = Field(default_factory=list)
+
+
+
+# ---------------- A4: SAP payload (exact RPA shape) ----------------
+
+class SapItem(BaseModel):
+    """One order line in the SAP payload. Every key must be present; unknown keys are rejected."""
+    model_config = ConfigDict(extra="forbid", populate_by_name=True)
+    Route: str
+    Shipping_Point: str = Field(alias="Shipping Point")
+    Pricing: str
+    Plant: str
+    Material: str
+    Quantity: str
+    Unit_of_Measure: str
+    PO_Item: str
+    CUST_MAT22: str
+    Text_Id: str
+    Text_Line: str
+
+
+class SapPayload(BaseModel):
+    """The JSON the RPA sends to SAP via Azure. A4 validates every payload against this before saving it."""
+    model_config = ConfigDict(extra="forbid")
+    SAP_Account_Number: str
+    Currency: str
+    Sales_Group: str
+    Sales_Office: str
+    Carrier_Payment: str
+    Billing_Method: str
+    Sold_To_Party: str
+    Created_By: str
+    Created_On: str
+    Incoterms1: str
+    Incoterms2: str
+    Order_Reason: str
+    Order_Type: str
+    Pricelist: str
+    PO_Number: str
+    telephone: str
+    Request_Date: str
+    Sales_Org: str
+    Distribution_Channel: str
+    Division: str
+    Ship_Method: str
+    contact_name: str
+    PO_Date: str
+    Means_Of_Transport: str
+    Profile_Number: str
+    Items: list[SapItem]

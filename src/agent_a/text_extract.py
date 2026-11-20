@@ -24,9 +24,10 @@ try:                                   # same .env as llm.py (TESSERACT_CMD live
 except ImportError:
     pass
 
-PDF_DPI = 300
-MIN_PAGE_CHARS = 50                    # fewer characters than this = treat the page as a scan
-MIN_OCR_WIDTH = 2000                   # enlarge smaller images before OCR
+from .config import CFG
+PDF_DPI = CFG.a3.pdf_dpi
+MIN_PAGE_CHARS = CFG.a3.min_page_chars        # fewer characters than this = treat the page as a scan
+MIN_OCR_WIDTH = CFG.a3.min_ocr_width          # enlarge smaller images before OCR
 
 
 @dataclass
