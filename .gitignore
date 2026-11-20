@@ -1,9 +1,11 @@
 # Secrets - never commit
 .env
 
-# Real customer emails (if this folder is ever created) - never commit
-data/inbox/
 
+# Real customer data - never commit
+data/inbox/
+data/private/
+output_real/
 # Python cache / virtual environment
 __pycache__/
 *.pyc
