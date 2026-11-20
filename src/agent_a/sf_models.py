@@ -28,6 +28,7 @@ _FILE_TYPES = {
 
 class SFRecord(BaseModel):
     # Reject unknown fields, so a typo in a field name fails loudly
+    """Base for every Salesforce record: unknown fields are rejected."""
     model_config = ConfigDict(extra="forbid")
 
 

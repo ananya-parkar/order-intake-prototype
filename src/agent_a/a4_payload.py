@@ -110,10 +110,12 @@ def run(out_dir: Path) -> list[Case]:
 def check(out_dir: Path, keys_dir: Path) -> None:
     """Compare the payloads with the synthetic answer keys."""
     def iso(s):
+        """'08/15/2026' -> '2026-08-15' (answer keys use US dates)."""
         m = re.match(r"(\d{2})/(\d{2})/(\d{4})", s or "")
         return f"{m[3]}-{m[1]}-{m[2]}" if m else ""
 
     def same_num(a, b):
+        """True if two values are the same number (ignoring tiny rounding)."""
         try:
             return abs(float(a) - float(b)) < 0.01
         except (TypeError, ValueError):

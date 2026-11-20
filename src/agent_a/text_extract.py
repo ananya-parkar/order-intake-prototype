@@ -32,6 +32,7 @@ MIN_OCR_WIDTH = CFG.a3.min_ocr_width          # enlarge smaller images before OC
 
 @dataclass
 class ExtractResult:
+    """The text read from one file, how it was read, and OCR confidence if OCR was used."""
     text: str = ""
     method: str = "none"               # pdf_text / ocr / excel / word / text / none
     pages: int = 0
@@ -43,6 +44,7 @@ class ExtractResult:
 
 # ---------------- OCR ----------------
 def _tesseract():
+    """Load pytesseract and point it at TESSERACT_CMD from .env if set."""
     import pytesseract
     cmd = os.getenv("TESSERACT_CMD")
     if cmd:
@@ -88,12 +90,14 @@ def ocr_image(img) -> tuple[str, list[tuple[str, float]]]:
 
 
 def _finish_ocr(res: ExtractResult) -> None:
+    """Average the OCR word confidences into one number for the document."""
     if res.ocr_words:
         res.ocr_confidence = round(sum(c for _, c in res.ocr_words) / len(res.ocr_words), 3)
 
 
 # ---------------- readers ----------------
 def read_pdf(path: Path) -> ExtractResult:
+    """Read a PDF page by page; pages with almost no text are treated as scans and OCR'd."""
     import pypdfium2 as pdfium
     res = ExtractResult(method="pdf_text")
     pdf = pdfium.PdfDocument(str(path))
@@ -119,6 +123,7 @@ def read_pdf(path: Path) -> ExtractResult:
 
 
 def read_image(path: Path) -> ExtractResult:
+    """OCR an image (scan, phone photo, screenshot)."""
     from PIL import Image
     with Image.open(path) as img:
         text, words = ocr_image(img)
@@ -128,6 +133,7 @@ def read_image(path: Path) -> ExtractResult:
 
 
 def _cell(v) -> str:
+    """One Excel cell as text (dates as MM/DD/YYYY, 44000.0 -> 44000)."""
     if v is None:
         return ""
     if isinstance(v, (datetime, date)):
@@ -138,6 +144,7 @@ def _cell(v) -> str:
 
 
 def read_excel(path: Path) -> ExtractResult:
+    """Read every sheet of an Excel file (or a CSV) as tab-separated rows."""
     if path.suffix.lower() == ".csv":
         return read_text(path, method="excel")
     import openpyxl
@@ -160,6 +167,7 @@ def read_excel(path: Path) -> ExtractResult:
 
 
 def read_word(path: Path) -> ExtractResult:
+    """Read a Word file: paragraphs and table rows."""
     import docx
     d = docx.Document(str(path))
     parts = [p.text for p in d.paragraphs if p.text.strip()]
@@ -176,6 +184,7 @@ def read_word(path: Path) -> ExtractResult:
 
 
 def read_text(path: Path, method: str = "text") -> ExtractResult:
+    """Read a plain text file, trying common encodings."""
     raw = path.read_bytes()
     for enc in ("utf-8-sig", "cp1252", "latin-1"):
         try:

@@ -133,14 +133,17 @@ CREATE TABLE IF NOT EXISTS poll_pointer (
 
 
 def val(f: FieldValue):
+    """The value of an extracted field."""
     return f.value
 
 
 def text(v):
+    """Empty -> None (NULL in the database), anything else -> trimmed string."""
     return None if v in (None, "") else str(v).strip()
 
 
 def num(v):
+    """'44,000' -> 44000.0; None if it is not a number."""
     try:
         return float(str(v).replace(",", "")) if v not in (None, "") else None
     except ValueError:
@@ -148,14 +151,17 @@ def num(v):
 
 
 def day(v):
+    """Keep only proper YYYY-MM-DD dates; anything else -> None."""
     return v if isinstance(v, str) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", v) else None
 
 
 def read_json(path: Path):
+    """Read a JSON file, or None if it does not exist."""
     return json.loads(path.read_text(encoding="utf-8")) if path.exists() else None
 
 
 def save_salesforce(conn, folder: Path):
+    """Upsert the raw Salesforce Case, EmailMessage and attachments; return the Case Id."""
     sf_case = read_json(folder / "salesforce" / "case.json")
     if not sf_case:
         return None
@@ -190,6 +196,7 @@ def save_salesforce(conn, folder: Path):
 
 
 def save_case(conn, case: Case, sf_case_id) -> None:
+    """Upsert our case (status, A2 result) and replace its POs and PO lines (A3)."""
     c = case.classification
     conn.execute(
         """INSERT INTO agent_case (case_id, sf_case_id, case_number, status, source_file, source_sha256,
@@ -233,6 +240,7 @@ def save_case(conn, case: Case, sf_case_id) -> None:
 
 
 def save_payloads(conn, case_id: str, folder: Path) -> int:
+    """Replace this case's SAP payloads (A4) with the files in payloads/."""
     conn.execute("DELETE FROM sap_payload WHERE case_id = %s", (case_id,))
     files = sorted((folder / "payloads").glob("*.json"))
     for f in files:
@@ -243,6 +251,7 @@ def save_payloads(conn, case_id: str, folder: Path) -> int:
 
 
 def save_audit(conn, out_dir: Path) -> None:
+    """Copy audit.jsonl into audit_event; lines already saved are skipped."""
     path = out_dir / "audit.jsonl"
     if not path.exists():
         return
@@ -270,6 +279,7 @@ def move_pointer(conn) -> None:
 
 
 def run(out_dir: Path) -> None:
+    """Create the tables if needed and save every case folder, one transaction per case."""
     with psycopg.connect(os.environ["DATABASE_URL"]) as conn:
         conn.execute(SCHEMA)
         folders = sorted(f.parent for f in out_dir.glob("*/case.json"))
@@ -288,6 +298,7 @@ def run(out_dir: Path) -> None:
 
 
 def summary(conn) -> None:
+    """Print row counts, cases by status and the poll pointer."""
     for table in ("sf_case", "sf_email_message", "sf_attachment", "agent_case", "purchase_order", "po_line",
                   "sap_payload", "audit_event"):
         print(f"  {table:<17} {conn.execute(f'SELECT count(*) FROM {table}').fetchone()[0]}")

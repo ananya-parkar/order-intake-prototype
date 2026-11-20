@@ -45,15 +45,18 @@ FIRST_CASE_NUMBER = CFG.a1.first_case_number       # -> "00100001"
 
 # ---------- small helpers ----------
 def sha256(data: bytes) -> str:
+    """SHA-256 fingerprint of the file bytes, used to spot the same email sent twice."""
     return hashlib.sha256(data).hexdigest()
 
 
 def safe_name(name: str) -> str:
+    """Make a file name safe for Windows: replace forbidden characters and cap the length."""
     name = re.sub(r'[<>:"/\\|?*\x00-\x1f]', "_", name).strip(" .")
     return name[:150] or "unnamed"
 
 
 def kind_of(filename: str, content_type: str) -> str:
+    """Decide the attachment kind (pdf, excel, word, image, email, text, other) from extension and type."""
     ext, ct = Path(filename).suffix.lower(), (content_type or "").lower()
     if ext == ".pdf" or ct == "application/pdf":                      return "pdf"
     if ext in {".xlsx", ".xlsm", ".xls", ".csv"} or "spreadsheet" in ct: return "excel"
@@ -67,18 +70,23 @@ def kind_of(filename: str, content_type: str) -> str:
 class _HTMLToText(HTMLParser):
     """Turns an HTML-only email body into readable text (keeps table cells apart)."""
     def __init__(self):
+        """Start with no text collected and not inside a script/style block."""
         super().__init__(); self.parts, self.skip = [], 0
     def handle_starttag(self, tag, attrs):
+        """Skip script/style blocks; turn block tags into line breaks and table cells into tabs."""
         if tag in {"script", "style", "head"}: self.skip += 1
         elif tag in {"p", "div", "br", "tr", "li", "table", "hr"}: self.parts.append("\n")
         elif tag in {"td", "th"}: self.parts.append("\t")
     def handle_endtag(self, tag):
+        """Leave a script/style/head block."""
         if tag in {"script", "style", "head"} and self.skip: self.skip -= 1
     def handle_data(self, data):
+        """Keep visible text only."""
         if not self.skip: self.parts.append(data)
 
 
 def html_to_text(html: str) -> str:
+    """Turn an HTML email body into plain text, keeping line and table structure."""
     p = _HTMLToText(); p.feed(html)
     text = "".join(p.parts).replace("\xa0", " ")
     return re.sub(r"\n{3,}", "\n\n", re.sub(r"[ \t]+\n", "\n", text)).strip()
@@ -86,6 +94,7 @@ def html_to_text(html: str) -> str:
 
 def save_attachment(folder: Path, name: str, data: bytes, ctype: str,
                     inline: bool, nested_from) -> Attachment:
+    """Save one attachment to the case folder (never overwrite) and describe it as an Attachment."""
     folder.mkdir(parents=True, exist_ok=True)
     name = safe_name(name)
     target, n = folder / name, 1
@@ -107,6 +116,7 @@ def save_attachment(folder: Path, name: str, data: bytes, ctype: str,
 # ---------- reading the email file (format-neutral result) ----------
 @dataclass
 class ParsedEmail:
+    """Everything A1 reads from one .eml/.msg file before it builds the Salesforce records."""
     subject: str = ""
     from_name: str = ""
     from_address: str = ""
@@ -123,6 +133,7 @@ class ParsedEmail:
 
 
 def eml_attachments(msg, folder, nested_from=None, depth=0) -> list[Attachment]:
+    """Save all attachments of an .eml, opening forwarded emails inside it (up to MAX_NESTING levels)."""
     out = []
     for i, part in enumerate(msg.iter_attachments(), 1):
         ctype = part.get_content_type()
@@ -151,6 +162,7 @@ def eml_attachments(msg, folder, nested_from=None, depth=0) -> list[Attachment]:
 
 
 def read_eml(path: Path, folder: Path) -> ParsedEmail:
+    """Read a standard .eml file: headers, text/HTML body and attachments."""
     msg = BytesParser(policy=policy.default).parsebytes(path.read_bytes())
     p = ParsedEmail(subject=str(msg.get("Subject", "")),
                     to=str(msg.get("To", "")), cc=str(msg.get("Cc", "")),
@@ -171,6 +183,7 @@ def read_eml(path: Path, folder: Path) -> ParsedEmail:
 
 
 def read_msg(path: Path, folder: Path) -> ParsedEmail:
+    """Read an Outlook .msg file: headers, text/HTML body and attachments."""
     import extract_msg                                       # only needed for .msg
     msg = extract_msg.openMsg(str(path))
     try:
@@ -216,16 +229,19 @@ def load_accounts(path: Path) -> dict[str, tuple[SFAccount, SFContact]]:
 class CaseNumbers:
     """Gives each email a stable 8-digit CaseNumber (same file -> same number on re-runs)."""
     def __init__(self, path: Path):
+        """Load the saved email -> CaseNumber map, or start empty."""
         self.path = path
         self.map = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
 
     def get(self, key: str) -> str:
+        """Return this email's CaseNumber, giving it the next free number if it is new."""
         if key not in self.map:
             nxt = max([int(v) for v in self.map.values()] + [FIRST_CASE_NUMBER - 1]) + 1
             self.map[key] = f"{nxt:08d}"
         return self.map[key]
 
     def save(self):
+        """Write the map back so the next run reuses the same numbers."""
         self.path.parent.mkdir(parents=True, exist_ok=True)
         self.path.write_text(json.dumps(self.map, indent=2), encoding="utf-8")
 
@@ -289,6 +305,7 @@ def build_sf_records(key: str, case_number: str, p: ParsedEmail,
 
 
 def write_json(path: Path, data) -> None:
+    """Write data as pretty JSON, creating the folder if needed."""
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
 
@@ -296,6 +313,7 @@ def write_json(path: Path, data) -> None:
 # ---------- main step ----------
 def run(inbox: Path, out_dir: Path, accounts_file: Path) -> list[Case]:
     # "PO 123 (1).eml" sorts after "PO 123.eml" so the original wins the duplicate check
+    """A1 for every email in the inbox: build Salesforce-shaped records and case.json, flag duplicate files."""
     files = sorted((p for p in inbox.iterdir() if p.suffix.lower() in {".eml", ".msg"}),
                    key=lambda p: (re.sub(r" \(\d+\)$", "", p.stem).lower(), len(p.name)))
     accounts = load_accounts(accounts_file)

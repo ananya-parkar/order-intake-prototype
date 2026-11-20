@@ -6,6 +6,7 @@ from pydantic import BaseModel, Field, ConfigDict
 
 
 class Attachment(BaseModel):
+    """One attachment A1 saved from the email."""
     filename: str
     content_type: str
     kind: Literal["pdf", "excel", "word", "image", "email", "text", "other"]
@@ -18,6 +19,7 @@ class Attachment(BaseModel):
 
 
 class Classification(BaseModel):             # filled by A2
+    """A2's answer for the email."""
     category: Literal["new_order", "revised_po", "duplicate", "not_an_order"]
     detail: str = ""                         # e.g. order_status_inquiry, cancellation
     po_numbers: list[str] = Field(default_factory=list)
@@ -29,6 +31,7 @@ class Classification(BaseModel):             # filled by A2
 # ---------------- A3: documents and extracted POs ----------------
 
 class DocumentText(BaseModel):              # one attachment (or the email body) as A3 read it
+    """How A3 read one attachment (or the email body)."""
     filename: str                           # attachment name, or "email_body"
     method: Literal["pdf_text", "ocr", "excel", "word", "text", "email_body", "none"]
     pages: int = 0
@@ -40,12 +43,14 @@ class DocumentText(BaseModel):              # one attachment (or the email body)
 
 
 class Source(BaseModel):                    # where a value was read from
+    """Where an extracted value came from: file, page and exact quote."""
     file: str = ""
     page: Optional[int] = None
     quote: str = ""                         # the exact text the value came from
 
 
 class FieldValue(BaseModel):                # one extracted field
+    """One extracted value with its confidence, source and the checks that changed it."""
     value: Union[float, str, None] = None   # None = not on the document
     confidence: float = 0.0                 # 0-1, set by A3's checks (not just the model's opinion)
     source: Source = Field(default_factory=Source)
@@ -53,10 +58,12 @@ class FieldValue(BaseModel):                # one extracted field
 
 
 def _f():
+    """Default for a field that has not been extracted yet."""
     return Field(default_factory=FieldValue)
 
 
 class LineItem(BaseModel):
+    """One PO line; the comments show which SAP payload field each value feeds."""
     line_no: FieldValue = _f()              # customer's line number -> PO_Item (10, 20...) in A4
     customer_material: FieldValue = _f()    # -> CUST_MAT22
     supplier_material: FieldValue = _f()    # Ingredion material, if printed -> Material
@@ -70,6 +77,7 @@ class LineItem(BaseModel):
 
 
 class PurchaseOrder(BaseModel):
+    """One PO as A3 extracted it, with overall confidence, missing fields and flags."""
     source_file: str                        # attachment name, or "email_body"
     read_method: str = ""                   # pdf_text / ocr / excel / word / email_body
     po_number: FieldValue = _f()            # -> PO_Number

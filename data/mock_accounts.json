@@ -1,0 +1,140 @@
+{
+  "_note": "SYNTHETIC customers for the sample emails. Real customers go in data/private/accounts.json (git-ignored).",
+  "accounts": [
+    {
+      "Id": "001000TiL3RiY4JAKV",
+      "Name": "Cascade Batter Co.",
+      "SAP_Account_Number__c": "0000104521",
+      "Is_BOT_Customer__c": true,
+      "Contacts": [
+        {
+          "Id": "003000NdqMD8szKASR",
+          "AccountId": "001000TiL3RiY4JAKV",
+          "Name": "Dana Holloway",
+          "Email": "dholloway@cascadebatter.example",
+          "Phone": "+1 503-555-0142"
+        }
+      ]
+    },
+    {
+      "Id": "001000KT75panHjAGI",
+      "Name": "Prairie Snack Foods",
+      "SAP_Account_Number__c": "0000104588",
+      "Is_BOT_Customer__c": true,
+      "Contacts": [
+        {
+          "Id": "003000fvFJOGJPNAY5",
+          "AccountId": "001000KT75panHjAGI",
+          "Name": "Marcus Lindqvist",
+          "Email": "mlindqvist@prairiesnack.example",
+          "Phone": "+1 402-555-0177"
+        }
+      ]
+    },
+    {
+      "Id": "001000f2S1DXLeAAIX",
+      "Name": "Summit Bakeries Inc.",
+      "SAP_Account_Number__c": "0000104602",
+      "Is_BOT_Customer__c": false,
+      "Contacts": [
+        {
+          "Id": "0030008HYLoLtBsA2K",
+          "AccountId": "001000f2S1DXLeAAIX",
+          "Name": "Priya Raman",
+          "Email": "praman@summitbakeries.example",
+          "Phone": "+1 303-555-0119"
+        }
+      ]
+    },
+    {
+      "Id": "001000t3kiJcWGEAA3",
+      "Name": "Golden Valley Soups",
+      "SAP_Account_Number__c": "0000104635",
+      "Is_BOT_Customer__c": true,
+      "Contacts": [
+        {
+          "Id": "003000KesVDbs82ASB",
+          "AccountId": "001000t3kiJcWGEAA3",
+          "Name": "Tom Becker",
+          "Email": "tbecker@goldenvalleysoups.example",
+          "Phone": "+1 559-555-0163"
+        }
+      ]
+    },
+    {
+      "Id": "0010004qIg8YlfzAIC",
+      "Name": "Harbor Pet Nutrition",
+      "SAP_Account_Number__c": "0000104671",
+      "Is_BOT_Customer__c": false,
+      "Contacts": [
+        {
+          "Id": "003000625mxEF8uAAG",
+          "AccountId": "0010004qIg8YlfzAIC",
+          "Name": "Alicia Moreno",
+          "Email": "amoreno@harborpet.example",
+          "Phone": "+1 757-555-0128"
+        }
+      ]
+    },
+    {
+      "Id": "001000ijIGW89BtAYJ",
+      "Name": "Redwood Dairy Cooperative",
+      "SAP_Account_Number__c": "0000104709",
+      "Is_BOT_Customer__c": true,
+      "Contacts": [
+        {
+          "Id": "003000U94sicLLGAC2",
+          "AccountId": "001000ijIGW89BtAYJ",
+          "Name": "Ken Watanabe",
+          "Email": "kwatanabe@redwooddairy.example",
+          "Phone": "+1 707-555-0184"
+        }
+      ]
+    },
+    {
+      "Id": "001000vHIpYX9ZjAML",
+      "Name": "Bluegrass Meat Packers",
+      "SAP_Account_Number__c": "0000104733",
+      "Is_BOT_Customer__c": false,
+      "Contacts": [
+        {
+          "Id": "003000LzcNzdLn1ASE",
+          "AccountId": "001000vHIpYX9ZjAML",
+          "Name": "Jolene Price",
+          "Email": "jprice@bluegrassmeat.example",
+          "Phone": "+1 859-555-0151"
+        }
+      ]
+    },
+    {
+      "Id": "001000C5WYUHH6CA0X",
+      "Name": "Northern Plains Distribution",
+      "SAP_Account_Number__c": "0000104768",
+      "Is_BOT_Customer__c": true,
+      "Contacts": [
+        {
+          "Id": "003000TJsZBdEk4AWF",
+          "AccountId": "001000C5WYUHH6CA0X",
+          "Name": "Greg Halvorsen",
+          "Email": "orders@nplainsdist.example",
+          "Phone": "+1 701-555-0136"
+        }
+      ]
+    },
+    {
+      "Id": "001000OdfbMls6JACR",
+      "Name": "Lakeshore Confections",
+      "SAP_Account_Number__c": "0000104790",
+      "Is_BOT_Customer__c": true,
+      "Contacts": [
+        {
+          "Id": "003000gCyV9w1doAUA",
+          "AccountId": "001000OdfbMls6JACR",
+          "Name": "Rachel Kim",
+          "Email": "rkim@lakeshoreconfections.example",
+          "Phone": "+1 616-555-0109"
+        }
+      ]
+    }
+  ]
+}
