@@ -24,7 +24,7 @@ from pathlib import Path
 
 from .models import Case
 
-ROOT = Path(__file__).resolve().parents[2]
+from .config import CFG, ROOT
 CATEGORIES = {"new_order", "revised_po", "duplicate", "not_an_order"}
 
 # Ingredion Request_Type__c -> our A2 category (anything else = not_an_order)
@@ -126,7 +126,7 @@ def score(sheet: Path) -> None:
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(description="Make or score the A2 review sheet")
-    ap.add_argument("--out", default=str(ROOT / "output"))
+    ap.add_argument("--out", default=str(ROOT / CFG.paths.output))
     ap.add_argument("--sheet", help="where the review sheet lives (default: <out>/review.csv)")
     ap.add_argument("--score", action="store_true", help="score the filled-in review sheet")
     a = ap.parse_args()

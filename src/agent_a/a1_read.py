@@ -33,18 +33,15 @@ from html.parser import HTMLParser
 from pathlib import Path
 from typing import Optional
 
+from .config import CFG, ROOT
+from .constants import MAX_DESCRIPTION, MAX_HEADERS, MAX_SUBJECT, MAX_TEXT_BODY
 from .models import Attachment, Case
 from .sf_adapter import from_salesforce
-from .sf_models import (MAX_DESCRIPTION, MAX_TEXT_BODY, SFAccount, SFAttachment,
-                        SFCase, SFContact, SFEmailMessage, fake_sf_id, file_type_for)
+from .sf_models import SFAccount, SFAttachment, SFCase, SFContact, SFEmailMessage, fake_sf_id, file_type_for
 
-ROOT = Path(__file__).resolve().parents[2]
-SIGNATURE_MAX_BYTES = 30_000       # inline images smaller than this = logos
-MAX_NESTING = 2                    # forwarded email inside forwarded email
-FIRST_CASE_NUMBER = 100_001        # -> "00100001"
-MAX_SUBJECT = 255                  # Case.Subject limit in Salesforce
-MAX_HEADERS = 32_000               # EmailMessage.Headers limit
-
+SIGNATURE_MAX_BYTES = CFG.a1.signature_max_bytes   # inline images smaller than this = logos
+MAX_NESTING = CFG.a1.max_nesting                   # forwarded email inside forwarded email
+FIRST_CASE_NUMBER = CFG.a1.first_case_number       # -> "00100001"
 
 # ---------- small helpers ----------
 def sha256(data: bytes) -> str:
@@ -353,9 +350,9 @@ def run(inbox: Path, out_dir: Path, accounts_file: Path) -> list[Case]:
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(description="A1 - build Salesforce-shaped cases from email files")
-    ap.add_argument("--inbox", default=str(ROOT / "data" / "samples"))
-    ap.add_argument("--out", default=str(ROOT / "output"))
-    ap.add_argument("--accounts", default=str(ROOT / "data" / "mock_accounts.json"),
+    ap.add_argument("--inbox", default=str(ROOT / CFG.paths.samples))
+    ap.add_argument("--out", default=str(ROOT / CFG.paths.output))
+    ap.add_argument("--accounts", default=str(ROOT / CFG.paths.accounts),
                     help="customer lookup (real customers: data/private/accounts.json)")
     a = ap.parse_args()
     out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
