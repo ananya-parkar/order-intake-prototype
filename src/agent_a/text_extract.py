@@ -88,6 +88,13 @@ def ocr_image(img) -> tuple[str, list[tuple[str, float]]]:
         words.append((w, conf / 100))
     return "\n".join(" ".join(ws) for ws in lines.values()), words
 
+def ocr(img) -> tuple[str, list[tuple[str, float]]]:
+    """OCR one page with the engine set in config.yaml (Tesseract or Azure Document Intelligence)."""
+    if CFG.ocr.provider == "azure_di":
+        from PIL import ImageOps
+        from .docintel import analyze_image
+        return analyze_image(ImageOps.exif_transpose(img))     # DI cleans/rotates itself; just fix camera rotation
+    return ocr_image(img)
 
 def _finish_ocr(res: ExtractResult) -> None:
     """Average the OCR word confidences into one number for the document."""
@@ -109,7 +116,7 @@ def read_pdf(path: Path) -> ExtractResult:
             text = page.get_textpage().get_text_range().replace("\r\n", "\n").replace("\r", "\n")
             if len(text.strip()) < MIN_PAGE_CHARS:      # scanned page -> OCR it
                 img = page.render(scale=PDF_DPI / 72).to_pil()
-                text, words = ocr_image(img)
+                text, words = ocr(img)
                 res.ocr_words += words
                 res.ocr_pages += 1
             parts.append(f"=== Page {i + 1} ===\n{text.strip()}")
@@ -126,7 +133,7 @@ def read_image(path: Path) -> ExtractResult:
     """OCR an image (scan, phone photo, screenshot)."""
     from PIL import Image
     with Image.open(path) as img:
-        text, words = ocr_image(img)
+        text, words = ocr(img)
     res = ExtractResult(text=f"=== Page 1 ===\n{text}", method="ocr", pages=1, ocr_pages=1, ocr_words=words)
     _finish_ocr(res)
     return res

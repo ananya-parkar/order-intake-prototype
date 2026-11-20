@@ -21,7 +21,8 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from .config import CFG, ROOT
-from .constants import SAP_ITEM as ITEM, SAP_REQUIRED_HEADER, SAP_REQUIRED_ITEM, SAP_TEMPLATE as TEMPLATE
+from .constants import (SAP_FROM_MASTER_DATA, SAP_ITEM as ITEM, SAP_REQUIRED_HEADER, SAP_REQUIRED_ITEM,
+                        SAP_SPEC_HEADER, SAP_SPEC_ITEM, SAP_TEMPLATE as TEMPLATE)
 from .models import Case, PurchaseOrder, SapPayload
 
 
@@ -106,6 +107,57 @@ def run(out_dir: Path) -> list[Case]:
                                 "pos": [text(po.po_number.value) for po in case.purchase_orders]}) + "\n")
     return todo
 
+def spec_issues(p: dict) -> list[str]:
+    """Compare one payload with the client's spec: exact keys and order, which fields are filled, and formats."""
+    out = []
+    if list(p) != list(TEMPLATE):
+        out.append("header keys/order differ from the RPA template")
+    for i, it in enumerate(p.get("Items", [])):
+        if list(it) != list(ITEM):
+            out.append(f"Item {i + 1}: keys/order differ from the RPA template")
+        if it.get("PO_Item") != str((i + 1) * 10):
+            out.append(f"Item {i + 1}: PO_Item is {it.get('PO_Item')!r}, expected {(i + 1) * 10}")
+        for k in ("Quantity", "Pricing"):
+            if it.get(k) and not re.fullmatch(r"\d+(\.\d+)?", it[k]):
+                out.append(f"Item {i + 1}: {k} {it[k]!r} is not a plain number")
+        out += [f"Item {i + 1}: {k} should be empty" for k in ITEM if k not in SAP_SPEC_ITEM and it.get(k)]
+    if p.get("Created_By") != "NULL":
+        out.append("Created_By should be 'NULL'")
+    out += [f"{k} should be empty" for k in TEMPLATE if k not in SAP_SPEC_HEADER + ("Created_By", "Items") and p.get(k)]
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2} 00:00:00", p.get("Created_On", "")):
+        out.append("Created_On is not 'yyyy-MM-dd 00:00:00'")
+    for k in ("PO_Date", "Request_Date"):
+        if p.get(k) and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", p[k]):
+            out.append(f"{k} {p[k]!r} is not yyyy-MM-dd")
+    return out
+
+
+def spec_report(out_dir: Path) -> None:
+    """Check every saved payload against the client's spec and show which spec fields we fill and how often."""
+    files = sorted(out_dir.glob("*/payloads/*.json"))
+    if not files:
+        print("No payloads found."); return
+    filled = {k: 0 for k in SAP_SPEC_HEADER + SAP_SPEC_ITEM}
+    items = bad = 0
+    for f in files:
+        p = json.loads(f.read_text(encoding="utf-8"))
+        for k in SAP_SPEC_HEADER:
+            filled[k] += bool(p.get(k))
+        for it in p["Items"]:
+            items += 1
+            for k in SAP_SPEC_ITEM:
+                filled[k] += bool(it.get(k))
+        issues = spec_issues(p)
+        bad += bool(issues)
+        for msg in issues:
+            print(f"  {f.parent.parent.name} {p.get('PO_Number') or f.stem}: {msg}")
+    print(f"\n{len(files)} payloads, {items} items: {len(files) - bad} match the spec's shape and formats\n")
+    print(f"{'spec field':<22}{'filled':>10}   note")
+    for k, n in filled.items():
+        total = items if k in SAP_SPEC_ITEM else len(files)
+        note = ("from SAP master data / RPA mapping DB - not in the email" if k in SAP_FROM_MASTER_DATA else
+                "from Salesforce account" if k in ("SAP_Account_Number", "Sold_To_Party") and n < total else "")
+        print(f"{k:<22}{n:>4}/{total:<5}   {note}")
 
 def check(out_dir: Path, keys_dir: Path) -> None:
     """Compare the payloads with the synthetic answer keys."""
@@ -153,6 +205,12 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser(description="A4 - build the SAP payload")
     ap.add_argument("--out", default=str(ROOT / CFG.paths.output))
     ap.add_argument("--check", help="answer_keys folder (synthetic emails only)")
+    ap.add_argument("--spec", action="store_true", help="only check the saved payloads against the client's spec")
+    a = ap.parse_args()
+    if a.spec:
+        spec_report(Path(a.out))
+        raise SystemExit
+    done = run(Path(a.out))
     a = ap.parse_args()
     done = run(Path(a.out))
     print(f"\n{len(done)} case(s), {sum(len(c.purchase_orders) for c in done)} payload(s) built")

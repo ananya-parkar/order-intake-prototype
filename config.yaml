@@ -2,8 +2,8 @@
 # Secrets (GROQ_API_KEY, DATABASE_URL, TESSERACT_CMD) stay in .env and never go in this file.
 
 llm:
-  provider: groq                     # only groq for now; Vertex AI Gemini in production
-  model: openai/gpt-oss-120b
+  provider: anthropic                # anthropic (Claude) or groq
+  model: claude-sonnet-5-5
   temperature: 0
   reasoning_effort: low              # fewer hidden tokens -> fewer rate-limit errors
   max_completion_tokens: 16000       # room for big POs
@@ -36,3 +36,10 @@ a3:
 
 a4:
   timezone: America/Chicago          # Created_On uses US Central time, like the RPA
+
+
+ocr:                                 # engine for scanned PDF pages and photos (text PDF, Excel, Word are read directly)
+  provider: azure_di                 # azure_di (Document Intelligence) or tesseract
+  timeout_seconds: 60
+  poll_seconds: 1.5                  # how often to ask DI whether the result is ready
+  max_attempts: 6                    # retries when DI is busy (free tier: 20 calls per minute)
