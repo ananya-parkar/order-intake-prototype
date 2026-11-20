@@ -39,11 +39,13 @@ YOUR_COLUMNS = ["correct_category", "sf_request_type", "comment"]
 
 
 def load_cases(out_dir: Path) -> list[Case]:
+    """All cases in the output folder, sorted by case id."""
     cases = [Case.model_validate_json(p.read_text(encoding="utf-8")) for p in out_dir.glob("*/case.json")]
     return sorted(cases, key=lambda c: c.case_id)
 
 
 def read_sheet(path: Path) -> dict[str, dict]:
+    """Read the review CSV into {case_id: row}; empty if it does not exist yet."""
     if not path.exists():
         return {}
     with path.open(encoding="utf-8-sig", newline="") as f:
@@ -51,6 +53,7 @@ def read_sheet(path: Path) -> dict[str, dict]:
 
 
 def make(out_dir: Path, sheet: Path) -> Path:
+    """Write the review CSV for a person to fill in, keeping answers already filled in."""
     sheet.parent.mkdir(parents=True, exist_ok=True)
     old = read_sheet(sheet)                                  # keep what was already filled in
     rows = []
@@ -94,6 +97,7 @@ def expected_of(row: dict) -> tuple[str, str]:
 
 
 def score(sheet: Path) -> None:
+    """Compare A2's answers with the reviewer's answers and print the accuracy."""
     rows = read_sheet(sheet)
     if not rows:
         raise SystemExit(f"No {sheet} - make it first (run without --score).")

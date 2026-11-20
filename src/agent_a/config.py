@@ -13,6 +13,7 @@ class Section(BaseModel):
 
 
 class LLMConfig(Section):
+    """llm: which model to call and how (temperature, tokens, timeout, retries)."""
     provider: str
     model: str
     temperature: float
@@ -23,24 +24,28 @@ class LLMConfig(Section):
 
 
 class PathsConfig(Section):
+    """paths: where the sample emails, output and account list are."""
     samples: str
     output: str
     accounts: str
 
 
 class A1Config(Section):
+    """a1: case numbering and attachment handling."""
     first_case_number: int
     signature_max_bytes: int
     max_nesting: int
 
 
 class A2Config(Section):
+    """a2: how much email text goes to the model and the low-confidence threshold."""
     body_limit_chars: int
     low_confidence: float
     use_ariba_rule: bool
 
 
 class A3Config(Section):
+    """a3: document size sent to the model, confidence caps and OCR settings."""
     supplier_names: str
     max_doc_chars: int
     ocr_low: float
@@ -51,10 +56,12 @@ class A3Config(Section):
 
 
 class A4Config(Section):
+    """a4: timezone used for Created_On."""
     timezone: str
 
 
 class Config(Section):
+    """The whole config.yaml."""
     llm: LLMConfig
     paths: PathsConfig
     a1: A1Config

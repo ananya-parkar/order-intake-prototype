@@ -13,6 +13,7 @@ from .sf_models import SFAttachment, SFCase, SFEmailMessage
 
 
 class AdapterError(ValueError):
+    """The Salesforce records don't fit together (e.g. an email from another case)."""
     pass
 
 

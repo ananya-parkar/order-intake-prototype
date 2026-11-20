@@ -34,6 +34,7 @@ LOW_CONFIDENCE = CFG.a2.low_confidence
 
 # What we ask the model to return (every field required -> works with Groq strict mode)
 class ClassifyOut(BaseModel):
+    """What the model must return for one email (strict JSON schema)."""
     category: Literal["new_order", "revised_po", "duplicate", "not_an_order"]
     detail: str
     po_numbers: list[str]
@@ -42,6 +43,7 @@ class ClassifyOut(BaseModel):
     reason: str
 
 def build_prompt(case: Case) -> str:
+    """Build the text the model sees: subject, sender, attachment list and the cleaned email body."""
     files = [a for a in case.attachments if not a.likely_signature]
     att_lines = "\n".join(
         f"- {a.filename} ({a.kind}{', inside forwarded email ' + a.from_nested_email if a.from_nested_email else ''})"
@@ -66,6 +68,7 @@ def norm_po(po: str) -> str:
 
 
 def audit(out_dir: Path, case_id: str, event: str, **details):
+    """Append one A2 event to audit.jsonl."""
     with (out_dir / "audit.jsonl").open("a", encoding="utf-8") as f:
         f.write(json.dumps({"ts": datetime.now(timezone.utc).isoformat(), "case_id": case_id,
                             "step": "A2", "event": event, **details}, default=str) + "\n")
@@ -89,6 +92,7 @@ def known_format(case: Case):
 
 
 def classify_case(case: Case, seen_pos: dict[str, str]) -> None:
+    """Classify one case (fixed rule or model), check duplicate POs and set the next status."""
     known = known_format(case)
     if known:
         result, rule = known
@@ -127,10 +131,12 @@ def classify_case(case: Case, seen_pos: dict[str, str]) -> None:
 
 
 def a2_failed(c: Case) -> bool:
+    """True if A2 failed on this case before (e.g. rate limit), so it can be retried."""
     return c.status == "manual_queue" and not c.classification and bool(c.notes) and c.notes[-1].startswith("A2 failed")
 
 
 def run(out_dir: Path, retry_failed: bool = False) -> list[Case]:
+    """A2 for every case in status 'read', oldest email first so duplicates are found in order."""
     cases = [Case.model_validate_json(p.read_text(encoding="utf-8")) for p in out_dir.glob("*/case.json")]
     todo = [c for c in cases if c.status == "read" or (retry_failed and a2_failed(c))]   # skip duplicates / failed reads
     for c in todo:

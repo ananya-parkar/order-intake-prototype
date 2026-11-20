@@ -46,6 +46,7 @@ SUPPLIER_NAMES = CFG.a3.supplier_names
 # ======================= what the model returns =======================
 # Every value is a string ("" = not on the document); code turns numbers and dates into real values.
 class XField(BaseModel):
+    """One field as the model returns it: value plus the exact quote, page and its own confidence."""
     value: str
     quote: str          # exact text from the document that contains the value
     page: int           # from the "=== Page N ===" markers, 1 if none
@@ -53,6 +54,7 @@ class XField(BaseModel):
 
 
 class XLine(BaseModel):
+    """One PO line as the model returns it."""
     line_no: XField
     customer_material: XField
     supplier_material: XField
@@ -66,6 +68,7 @@ class XLine(BaseModel):
 
 
 class XPO(BaseModel):
+    """One purchase order as the model returns it."""
     po_number: XField
     po_date: XField
     requested_delivery_date: XField
@@ -86,6 +89,7 @@ class XPO(BaseModel):
 
 
 class XDoc(BaseModel):
+    """The model's answer for one document: what it is, and the POs in it."""
     doc_type: Literal["purchase_order", "order_acknowledgement_form", "coa", "invoice", "bol",
                       "shipment_notice", "terms", "quote", "other"]
     purchase_orders: list[XPO]      # empty unless the document contains a purchase order
@@ -93,13 +97,16 @@ class XDoc(BaseModel):
 SYSTEM = A3_SYSTEM_PROMPT.format(supplier_names=SUPPLIER_NAMES)
 
 def norm(s: str) -> str:
+    """Lower-case and squeeze whitespace, for comparing text."""
     return re.sub(r"\s+", " ", (s or "")).strip().lower()
 
 def nospace(s: str) -> str:
+    """Lower-case and remove all whitespace, for comparing text that OCR split oddly."""
     return re.sub(r"\s+", "", (s or "")).lower()
 
 
 def to_number(s) -> Optional[float]:
+    """'44,000' / '$48.50' -> float; None if it is not a number."""
     if s is None or s == "":
         return None
     t = re.sub(r"[,$\s]|USD", "", str(s))
@@ -110,6 +117,7 @@ def to_number(s) -> Optional[float]:
 
 
 def numbers_in(text: str) -> list[float]:
+    """All numbers that appear in a piece of text."""
     out = []
     for m in re.finditer(r"\d[\d,]*(?:\.\d+)?|\.\d+", text or ""):
         n = to_number(m.group(0))
@@ -121,6 +129,7 @@ def numbers_in(text: str) -> list[float]:
 def ocr_fix_numbers(text: str) -> str:
     """'44OOO' -> '44000': fix look-alike letters only inside tokens that are mostly digits."""
     def fix(m):
+        """Fix one token if it is mostly digits; leave words alone."""
         tok = m.group(0)
         digits = sum(ch.isdigit() for ch in tok)
         return tok.translate(OCR_DIGIT_FIX) if digits and digits >= len(tok) / 2 else tok
@@ -136,6 +145,7 @@ def ocr_fix_uom(s: str) -> str:
 
 
 def parse_iso(s: str) -> Optional[str]:
+    """'2026-08-15' -> same date if valid, else None."""
     try:
         return datetime.strptime((s or "").strip(), "%Y-%m-%d").date().isoformat()
     except ValueError:
@@ -148,6 +158,7 @@ def dates_in(text: str) -> list[str]:
     t, found = text or "", []
 
     def add(y, m, d):
+        """Add one date (2-digit years become 20xx) if it is a real date and not already found."""
         try:
             y = int(y); y = y + 2000 if y < 100 else y
             iso = datetime(y, int(m), int(d)).date().isoformat()
@@ -170,6 +181,7 @@ def dates_in(text: str) -> list[str]:
 
 
 def uom_ok(u: str) -> bool:
+    """True if the unit starts with a unit we know (LB, KG, BAG, TOTE...)."""
     head = re.match(r"[A-Za-z]+", (u or "").strip())
     return bool(head) and head.group(0).upper() in KNOWN_UOM
 
@@ -178,12 +190,14 @@ def uom_ok(u: str) -> bool:
 class DocCtx:
     """Everything about one document that the checks need."""
     def __init__(self, filename: str, method: str, text: str, ocr_words: list[tuple[str, float]]):
+        """Keep the document text in plain, normalised and OCR-fixed forms."""
         self.filename, self.method, self.text = filename, method, text
         self.ocr_words = ocr_words
         self.n_text, self.ns_text = norm(text), nospace(text)
         self.n_fixed = norm(ocr_fix_numbers(text)) if method == "ocr" else self.n_text
 
     def quote_found(self, quote: str) -> bool:
+        """True if the model's quote really appears in the document text."""
         q = norm(quote)
         return bool(q) and (q in self.n_text or nospace(q) in self.ns_text
                             or (self.method == "ocr" and norm(ocr_fix_numbers(quote)) in self.n_fixed))
@@ -200,6 +214,7 @@ class DocCtx:
 
 
 def check_field(name: str, x: XField, doc: DocCtx) -> FieldValue:
+    """Check one model value against the document (quote, format, OCR) and set its confidence."""
     raw = (x.value or "").strip()
     src = Source(file=doc.filename, page=x.page or 1, quote=(x.quote or "").strip())
     if not raw:
@@ -287,6 +302,7 @@ def per_lb(price_per: str) -> Optional[float]:
 
 
 def line_expected_total(line: LineItem) -> Optional[float]:
+    """Quantity x price for a line, converting units when price is per CWT/100 LB/KG etc."""
     q, p = line.quantity.value, line.unit_price.value
     if not isinstance(q, float) or not isinstance(p, float):
         return None
@@ -301,18 +317,21 @@ def line_expected_total(line: LineItem) -> Optional[float]:
 
 
 def raise_conf(fv: FieldValue, note: str):
+    """Raise a field's confidence to at least 0.9 when a cross-check confirms it."""
     if fv.value is not None and "quote_not_found" not in fv.checks and "no_quote" not in fv.checks:
         fv.confidence = round(max(fv.confidence, 0.9), 3)
         fv.checks.append(note)
 
 
 def lower_conf(fv: FieldValue, note: str):
+    """Lower a field's confidence by 30% when a cross-check disagrees."""
     if fv.value is not None:
         fv.confidence = round(fv.confidence * 0.7, 3)
         fv.checks.append(note)
 
 
 def cross_check(po: PurchaseOrder) -> None:
+    """Compare qty x price with line totals and the PO total; flag zero prices and mismatches."""
     sum_lines, all_totals = 0.0, True
     for ln in po.lines:
         if isinstance(ln.unit_price.value, float) and ln.unit_price.value == 0:
@@ -345,6 +364,7 @@ def cross_check(po: PurchaseOrder) -> None:
 
 # ======================= step 7: summary =======================
 def summarise(po: PurchaseOrder, a2_pos: list[str], doc: DocCtx, ocr_conf: Optional[float]) -> None:
+    """Set the PO's overall confidence (lowest key field), missing fields and flags."""
     key: dict[str, FieldValue] = {"po_number": po.po_number, "po_date": po.po_date,
                                   "ship_to_address": po.ship_to_address}
     line_dates = [ln.delivery_date for ln in po.lines if ln.delivery_date.value]
@@ -379,6 +399,7 @@ def summarise(po: PurchaseOrder, a2_pos: list[str], doc: DocCtx, ocr_conf: Optio
 # ======================= steps 1-8 for one case =======================
 def build_po(x: XPO, doc: DocCtx, a2_pos: list[str], ocr_conf: Optional[float],
              email_date: Optional[datetime] = None) -> PurchaseOrder:
+    """Turn the model's PO into a checked PurchaseOrder with per-field confidence."""
     head = {k: check_field(k, getattr(x, k), doc) for k in XPO.model_fields if k != "lines"}
     if doc.method == "email_body" and head["po_date"].value is None and email_date:
         # an order written in an email is dated when the email was sent
@@ -407,10 +428,12 @@ def find_file(case_dir: Path, a) -> Path:
 
 
 def pick_documents(case: Case) -> list:
+    """Attachments worth reading (no logos, only pdf/excel/word/image/text)."""
     return [a for a in case.attachments if not a.likely_signature and a.kind in DOC_KINDS]
 
 
 def write_text(case_dir: Path, name: str, text: str) -> str:
+    """Save the text A3 read to extracted/<file>.txt and return its path."""
     p = case_dir / "extracted" / f"{name}.txt"
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(text, encoding="utf-8")
@@ -419,12 +442,14 @@ def write_text(case_dir: Path, name: str, text: str) -> str:
 
 
 def read_with_model(doc: DocCtx) -> tuple[XDoc, list[str]]:
+    """Send one document's text to the model and get back its type and POs."""
     text = doc.text if len(doc.text) <= MAX_DOC_CHARS else doc.text[:MAX_DOC_CHARS] + "\n[...rest of document cut]"
     user = f"Document: {doc.filename}\nRead with: {doc.method}\n\n<<<\n{text}\n>>>"
     return llm.chat_json(SYSTEM, user, XDoc)
 
 
 def process_document(case: Case, case_dir: Path, filename: str, res: ExtractResult) -> list[PurchaseOrder]:
+    """Read one document end to end: record how it was read, ask the model, check the POs."""
     d = DocumentText(filename=filename, method=res.method if not res.error else "none", pages=res.pages,
                      chars=len(res.text), ocr_confidence=res.ocr_confidence, error=res.error)
     case.documents.append(d)
@@ -444,6 +469,7 @@ def process_document(case: Case, case_dir: Path, filename: str, res: ExtractResu
 
 
 def extract_case(case: Case, case_dir: Path) -> None:
+    """A3 for one case: read every attachment, fall back to the email body, set the status."""
     shutil.rmtree(case_dir / "extracted", ignore_errors=True)        # re-run = start clean
     case.documents, case.purchase_orders = [], []
     pos: list[PurchaseOrder] = []
@@ -472,6 +498,7 @@ def extract_case(case: Case, case_dir: Path) -> None:
 
 # ======================= run + check =======================
 def audit(out_dir: Path, case: Case) -> None:
+    """Append one A3 event to audit.jsonl (model, POs, confidence, flags)."""
     with (out_dir / "audit.jsonl").open("a", encoding="utf-8") as f:
         f.write(json.dumps({"ts": datetime.now(timezone.utc).isoformat(), "case_id": case.case_id, "step": "A3",
                             "event": case.status, "model": llm.model_name(),
@@ -481,6 +508,7 @@ def audit(out_dir: Path, case: Case) -> None:
 
 
 def a3_failed(c: Case) -> bool:
+    """True if A3 failed on this case before (e.g. rate limit), so it can be retried."""
     return c.status == "manual_queue" and bool(c.notes) and c.notes[-1].startswith("A3 failed")
 
 
@@ -491,6 +519,7 @@ def is_order_case(c: Case) -> bool:
 
 
 def run(out_dir: Path, retry_failed: bool = False, everything: bool = False) -> list[Case]:
+    """A3 for every classified case; stops early if the API stays busy."""
     cases = [Case.model_validate_json(p.read_text(encoding="utf-8")) for p in out_dir.glob("*/case.json")]
     todo = sorted((c for c in cases if c.status == "classified" or (retry_failed and a3_failed(c))
                    or (everything and is_order_case(c))),
@@ -535,6 +564,7 @@ def run(out_dir: Path, retry_failed: bool = False, everything: bool = False) -> 
 
 
 def _key_date(s) -> Optional[str]:
+    """First date found in an answer-key value, as YYYY-MM-DD."""
     if not s:
         return None
     return next(iter(dates_in(str(s))), None)
@@ -546,6 +576,7 @@ def check(cases: list[Case], keys_dir: Path) -> None:
     by_method: dict[str, list] = {}
 
     def score(field: str, got: FieldValue, expected, same, method: str):
+        """Record one field comparison: right or wrong, and the confidence it had."""
         ok = same(got.value, expected)
         s = stats.setdefault(field, [0, 0, [], []]); s[1] += 1
         m = by_method.setdefault(method, [0, 0]); m[1] += 1
