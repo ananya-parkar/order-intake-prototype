@@ -3,3 +3,4 @@ extract-msg>=0.48
 requests>=2.31
 python-dotenv>=1.0
 psycopg[binary]>=3.1
+pyyaml>=6.0

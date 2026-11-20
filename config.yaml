@@ -1,0 +1,38 @@
+# Agent A settings. Change values here, not in the code.
+# Secrets (GROQ_API_KEY, DATABASE_URL, TESSERACT_CMD) stay in .env and never go in this file.
+
+llm:
+  provider: groq                     # only groq for now; Vertex AI Gemini in production
+  model: openai/gpt-oss-120b
+  temperature: 0
+  reasoning_effort: low              # fewer hidden tokens -> fewer rate-limit errors
+  max_completion_tokens: 16000       # room for big POs
+  timeout_seconds: 120
+  max_attempts: 6                    # retries when Groq is busy (429 / 5xx)
+
+paths:                               # relative to the project folder
+  samples: data/samples              # synthetic emails (safe to send to an external LLM)
+  output: output
+  accounts: data/mock_accounts.json
+
+a1:
+  first_case_number: 100001          # -> CaseNumber "00100001"
+  signature_max_bytes: 30000         # inline images smaller than this are logos
+  max_nesting: 2                     # forwarded email inside forwarded email
+
+a2:
+  body_limit_chars: 6000             # email text sent to the model
+  low_confidence: 0.6                # below this -> flag low_confidence
+  use_ariba_rule: true               # fixed rule for SAP Ariba order emails (no model call)
+
+a3:
+  supplier_names: "Ingredion, Northfield Ingredients"
+  max_doc_chars: 15000               # document text sent to the model
+  ocr_low: 0.80                      # OCR confidence below this -> check ocr_low
+  no_quote_cap: 0.30                 # max confidence when the quote is not found in the document
+  pdf_dpi: 300                       # scan rendering for OCR
+  min_page_chars: 50                 # fewer characters on a PDF page -> treat it as a scan
+  min_ocr_width: 2000                # enlarge smaller images before OCR
+
+a4:
+  timezone: America/Chicago          # Created_On uses US Central time, like the RPA
