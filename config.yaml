@@ -1,14 +1,16 @@
 # Agent A settings. Change values here, not in the code.
-# Secrets (GROQ_API_KEY, DATABASE_URL, TESSERACT_CMD) stay in .env and never go in this file.
+# Secrets (ANTHROPIC_API_KEY, GROQ_API_KEY, DATABASE_URL, DOCINTEL_KEY ...) stay in .env and never go in this file.
 
 llm:
   provider: anthropic                # anthropic (Claude) or groq
   model: claude-sonnet-5-5
-  temperature: 0
-  reasoning_effort: low              # fewer hidden tokens -> fewer rate-limit errors
+  temperature: 0                     # Groq only - newer Claude models don't accept it
+  reasoning_effort: low              # Groq only: fewer hidden tokens -> fewer rate-limit errors
   max_completion_tokens: 16000       # room for big POs
-  timeout_seconds: 120
-  max_attempts: 6                    # retries when Groq is busy (429 / 5xx)
+  timeout_seconds: 300               # big POs can take more than 2 minutes
+  max_attempts: 6                    # retries when the model API is busy (429 / 5xx), times out or drops
+  price_input_per_mtok: 2.00         # USD per million input tokens  (claude-sonnet-5-5 list price - check before quoting)
+  price_output_per_mtok: 10.00       # USD per million output tokens
 
 paths:                               # relative to the project folder
   samples: data/samples              # synthetic emails (safe to send to an external LLM)
@@ -36,15 +38,37 @@ a3:
 
 a4:
   timezone: America/Chicago          # Created_On uses US Central time, like the RPA
-  order_reason: "200"                # always 200 (client)
-  order_type: "TA"                   # seen in the RPA payloads
-  sales_org: "1000"                  # always 1000 (client)
-  distribution_channel: "01"         # seen in the RPA payloads
-  division: "00"                     # seen in the RPA payloads
-
+  order_reason: "200"                # fixed SAP values from the client
+  order_type: TA
+  sales_org: "1000"
+  distribution_channel: "01"
+  division: "00"
+  # review gate (payloads/<PO>.meta.json): every case is reviewed; these decide ready_for_sap vs needs_review
+  review_min_confidence: 0.85        # PO confidence below this -> needs_review
+  check_past_request_date: true      # flag a Request_Date that is already past (set false for old test emails)
+  zero_qty_lines: skip               # skip = leave quantity-0 lines out | send = keep them (flagged)
+  sap_uom_codes: [LB, KG, BAG, SAC]  # unit codes SAP accepts - add more once the RPA team confirms
+  uom_map:                           # customer spelling -> SAP code (exact match, upper case)
+    LBS: LB
+    LBR: LB
+    "#": LB
+    BAGS: BAG
+    BG: BAG
+    "50#": BAG
+    SACK: SAC
+    SACKS: SAC
+    SK: SAC
+  uom_prefix:                        # starts with -> SAP code (BAG50LB -> BAG, SACK2000 -> SAC)
+    BAG: BAG
+    SACK: SAC
 
 ocr:                                 # engine for scanned PDF pages and photos (text PDF, Excel, Word are read directly)
   provider: azure_di                 # azure_di (Document Intelligence) or tesseract
   timeout_seconds: 60
   poll_seconds: 1.5                  # how often to ask DI whether the result is ready
   max_attempts: 6                    # retries when DI is busy (free tier: 20 calls per minute)
+  price_per_1000_pages: 0            # 0 on the Free F0 tier; set the S0 "Read" price from Azure's pricing page
+
+cache:                               # reuse model answers / OCR for the same input (cache.py)
+  enabled: true                      # false = always call the model and OCR again
+  dir: .cache                        # git-ignored - holds real email and PO text, never commit it

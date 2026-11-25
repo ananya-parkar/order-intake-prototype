@@ -149,7 +149,4 @@ SAP_STATIC = ("Order_Reason", "Order_Type", "Sales_Org", "Distribution_Channel",
 SAP_CRITICAL = ("SAP_Account_Number", "CUST_MAT22")          # wrong -> wrong ship-to / CMIR -> critical failure
 SAP_MODERATE = ("Pricing", "Quantity", "Unit_of_Measure")      # wrong -> moderate failure
 
-# SAP accepts only its own unit codes, ALL CAPS (e.g. SAC, BAG). Customer spellings -> SAP code.
-# SAP accepts only its own unit codes, ALL CAPS (e.g. LB, SAC, BAG - LB as in the RPA payloads). Customer spellings -> SAP code.
-SAP_UOM = {"LBS": "LB", "LBR": "LB", "#": "LB", "BAGS": "BAG", "BG": "BAG", "50#": "BAG", "SACK": "SAC", "SACKS": "SAC", "SK": "SAC"}
-SAP_UOM_PREFIX = {"BAG": "BAG", "SACK": "SAC"}                  # BAG50LB, BAG-20KG -> BAG; SACK2000 -> SAC
+# Unit-of-measure mapping (customer spelling -> SAP code) lives in config.yaml: a4.uom_map / a4.uom_prefix / a4.sap_uom_codes

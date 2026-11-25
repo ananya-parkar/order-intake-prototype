@@ -22,6 +22,7 @@ import hmac
 import io
 import json
 import os
+import re
 import sys
 import threading
 import time
@@ -61,7 +62,16 @@ def cases_in(out: Path) -> list[dict]:
 
 
 def payload_files(out: Path) -> list[Path]:
-    return sorted(out.glob("*/payloads/*.json"))
+    """Payload files only (not the <PO>.meta.json review files next to them)."""
+    return [p for p in sorted(out.glob("*/payloads/*.json")) if not p.name.endswith(".meta.json")]
+
+
+def meta_for(payload: Path) -> dict:
+    """The review gate written next to a payload (<PO>.meta.json), or {} if there is none."""
+    try:
+        return json.loads(payload.with_name(payload.stem + ".meta.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
 
 
 def fv(x):
@@ -126,14 +136,19 @@ def step_items(step: str, out: Path, since: float) -> list[dict]:
                               "tag": "no purchase order found - goes to a person", "kind": "warn"})
     elif step == "a4":
         for p in payload_files(out):
-            if p.stat().st_mtime >= since:
-                try:
-                    j = json.loads(p.read_text(encoding="utf-8"))
-                except (OSError, ValueError):
+            try:
+                if p.stat().st_mtime < since:
                     continue
-                its = j.get("Items") if isinstance(j.get("Items"), list) else [j.get("Items")] if j.get("Items") else []
-                items.append({"case": p.parent.parent.name, "text": f"SAP payload for PO {j.get('PO_Number') or p.stem}",
-                              "tag": f"{len(its)} item(s)", "kind": "ok"})
+                j = json.loads(p.read_text(encoding="utf-8"))
+            except (OSError, ValueError):                     # A4 is rewriting this file right now
+                continue
+            m = meta_for(p)
+            its = j.get("Items") if isinstance(j.get("Items"), list) else []
+            needs = m.get("review_status") == "needs_review"
+            n = sum(r.get("severity") != "info" for r in m.get("reasons", []))
+            items.append({"case": p.parent.parent.name, "text": f"SAP payload for PO {j.get('PO_Number') or p.stem}",
+                          "tag": f"{len(its)} item(s) · " + (f"needs review ({n})" if needs else "ready for SAP"),
+                          "kind": "warn" if needs else "ok"})
     return items
 
 
@@ -167,7 +182,9 @@ def summary_for(step: str, out: Path) -> str:
         failed = sum(a3_failed(c) for c in cs)
         return f"{pos} POs extracted" + (f" · {failed} to retry" if failed else "")
     if step == "a4":
-        return f"{len(payload_files(out))} SAP payloads"
+        metas = [meta_for(p) for p in payload_files(out)]
+        ready = sum(m.get("review_status") == "ready_for_sap" for m in metas)
+        return f"{len(metas)} SAP payloads · {ready} ready · {len(metas) - ready} need review"
     return "saved"
 
 
@@ -241,7 +258,8 @@ def pipeline_thread(state: State, start: str) -> None:
                 with state.lock:
                     s["status"], s["secs"] = "failed", round(time.time() - s["started"] - 1, 1)
                     s["items"] = step_items(s["id"], state.cfg.out, s["started"])
-                    state.error = f"{s['id'].upper()} stopped: {type(e).__name__}: {e}"
+                    # hide user:password in connection strings before the message reaches the page
+                    state.error = f"{s['id'].upper()} stopped: {type(e).__name__}: " + re.sub(r"://[^@\s]+@", "://****@", str(e))
                 old.write(traceback.format_exc())
                 return
             items = step_items(s["id"], state.cfg.out, s["started"])
@@ -260,11 +278,16 @@ def case_row(c: dict) -> dict:
     pos = c.get("purchase_orders") or []
     po_nums = [str(fv(p.get("po_number"))[0]) for p in pos if fv(p.get("po_number"))[0]] or cl.get("po_numbers") or []
     confs = [p.get("overall_confidence") for p in pos if p.get("overall_confidence") is not None]
+    d = Path(c["_dir"]) / "payloads"
+    files = [p for p in sorted(d.glob("*.json")) if not p.name.endswith(".meta.json")] if d.exists() else []
+    metas = [meta_for(p) for p in files]
+    review = ("needs_review" if any(m.get("review_status") == "needs_review" for m in metas)
+              else "ready_for_sap" if metas else None)
+    first = next((r["message"] for m in metas for r in m.get("reasons", []) if r.get("severity") != "info"), "")
     return {"case_id": c.get("case_id"), "received": (c.get("received_at") or "")[:16].replace("T", " "),
             "sender": c.get("from_name") or c.get("from_address") or "", "subject": c.get("subject") or "",
             "category": cl.get("category"), "po_numbers": po_nums, "confidence": min(confs) if confs else None,
-            "status": c.get("status"),
-            "payloads": len(list((Path(c["_dir"]) / "payloads").glob("*.json"))),
+            "status": c.get("status"), "payloads": len(files), "review": review, "review_reason": first,
             "reason": (c.get("notes") or [""])[-1] if c.get("status") == "manual_queue" else ""}
 
 
@@ -272,17 +295,22 @@ def results(out: Path) -> dict:
     cs = cases_in(out)
     rows = [case_row(c) for c in cs]
     cats = [r["category"] for r in rows]
+    metas = [meta_for(p) for p in payload_files(out)]
+    ready = sum(m.get("review_status") == "ready_for_sap" for m in metas)
     return {"rows": rows, "tiles": [
         ["Emails", len(rows)], ["New orders", cats.count("new_order")], ["Revised POs", cats.count("revised_po")],
         ["Not an order", cats.count("not_an_order")], ["POs extracted", sum(len(c.get("purchase_orders") or []) for c in cs)],
-        ["SAP payloads", len(payload_files(out))], ["Need a person", sum(r["status"] == "manual_queue" for r in rows)]]}
+        ["SAP payloads", len(metas)], ["Ready for SAP", ready], ["Needs review", len(metas) - ready],
+        ["Need a person", sum(r["status"] == "manual_queue" for r in rows)]]}
 
 
 def case_detail(out: Path, case_id: str) -> dict:
     d = out / Path(case_id).name
     c = json.loads((d / "case.json").read_text(encoding="utf-8"))
-    c["_payloads"] = [{"name": p.name, "json": json.loads(p.read_text(encoding="utf-8"))}
-                      for p in sorted((d / "payloads").glob("*.json"))] if (d / "payloads").exists() else []
+    files = [p for p in sorted((d / "payloads").glob("*.json")) if not p.name.endswith(".meta.json")] \
+        if (d / "payloads").exists() else []
+    c["_payloads"] = [{"name": p.name, "json": json.loads(p.read_text(encoding="utf-8")), "meta": meta_for(p)}
+                      for p in files]
     return c
 
 
@@ -464,7 +492,7 @@ pre.json{background:#1f2933;color:#e3ebf3;border-radius:8px;padding:12px 14px;fo
 </div>
 <div class="card" id="actCard" style="display:none"><h2>What the agent is doing</h2><p class="hint">Each step, and every case as it finishes.</p><div id="activity"></div></div>
 <div class="card" id="resultsCard" style="display:none">
-  <h2>Results</h2><p class="hint">Click a case for the full detail, or <b>View payload</b> for the SAP order payload.</p>
+  <h2>Results</h2><p class="hint">Click a case for the full detail, or <b>View payload</b> for the SAP order payload. Every case goes to a reviewer: <b>Ready for SAP</b> = nothing found, confirm only · <b>Needs review</b> = check the reasons.</p>
   <div class="tiles" id="tiles"></div>
   <p class="legend">Confidence <span class="conf hi">0.85+</span> trusted &nbsp;<span class="conf mid">0.60–0.85</span> check &nbsp;<span class="conf lo">&lt;0.60</span> doubtful</p>
   <table><thead><tr><th>Case</th><th>Received</th><th>From</th><th>Subject</th><th>Decision</th><th>PO number</th><th>Confidence</th><th>SAP payload</th><th>Status</th></tr></thead><tbody id="rows"></tbody></table>
@@ -486,6 +514,8 @@ const conf = c => c == null ? "" : `<span class="conf ${c>=0.85?"hi":c>=0.6?"mid
 const badge = c => c ? `<span class="badge ${c}">${CAT[c]||esc(c)}</span>` : `<span class="badge nocat">–</span>`;
 const val = f => (f && typeof f === "object" && "value" in f) ? f : {value: f, confidence: null, source: {}};
 const num = v => typeof v === "number" ? v.toLocaleString(undefined,{maximumFractionDigits:4}) : esc(v);
+const reviewBadge = r => r === "needs_review" ? '<span class="k warn">Needs review</span>' : '<span class="k ok">Ready for SAP</span>';
+const SEV = {critical: "err", warning: "warn", info: "muted"};
 
 $("#pill").textContent = CFG.no_db ? "Offline run · database off" : "Offline run · saving to database";
 $("#paths").textContent = `Emails from ${CFG.inbox}  ·  results in ${CFG.out}`;
@@ -549,12 +579,12 @@ $("#show").onclick = () => loadResults().then(() => $("#resultsCard").scrollInto
 async function loadResults(){
   const r = await fetch("/results").then(r => r.json());
   $("#resultsCard").style.display = "block";
-  $("#tiles").innerHTML = r.tiles.map(([k,v]) => `<div class="tile ${k==="SAP payloads"?"hl":""}"><b>${v}</b><span>${esc(k)}</span></div>`).join("");
+  $("#tiles").innerHTML = r.tiles.map(([k,v]) => `<div class="tile ${k==="Ready for SAP"?"hl":""}"><b>${v}</b><span>${esc(k)}</span></div>`).join("");
   $("#rows").innerHTML = r.rows.map(x => `<tr data-id="${esc(x.case_id)}"><td><b>${esc(x.case_id)}</b></td><td>${esc(x.received)}</td>
     <td>${esc(x.sender).slice(0,40)}</td><td>${esc(x.subject).slice(0,100)}</td><td>${badge(x.category)}</td>
     <td>${esc(x.po_numbers.join(", "))||'<span class="muted">–</span>'}</td><td>${conf(x.confidence)||'<span class="muted">–</span>'}</td>
     <td>${x.payloads ? `<button class="view">View payload${x.payloads>1?" ("+x.payloads+")":""}</button>` : '<span class="muted">–</span>'}</td>
-    <td>${esc(STATUS[x.status]||x.status)}${x.reason?`<div class="why ${/^A\d failed/.test(x.reason)?"":"info"}" title="${esc(x.reason)}">${esc(x.reason.replace(/^A\d: /,"")).slice(0,80)}</div>`:""}</td></tr>`).join("")
+    <td>${x.review ? reviewBadge(x.review) : esc(STATUS[x.status]||x.status)}${x.review_reason?`<div class="why" title="${esc(x.review_reason)}">${esc(x.review_reason).slice(0,80)}</div>`:""}${x.reason?`<div class="why ${/^A\d failed/.test(x.reason)?"":"info"}" title="${esc(x.reason)}">${esc(x.reason.replace(/^A\d: /,"")).slice(0,80)}</div>`:""}</td></tr>`).join("")
     || `<tr><td colspan="9" class="muted">No cases yet. Run the pipeline first.</td></tr>`;
   document.querySelectorAll("#rows tr[data-id]").forEach(tr => tr.onclick = ev => {
     document.querySelectorAll("#rows tr").forEach(t => t.classList.remove("sel")); tr.classList.add("sel");
@@ -595,10 +625,13 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") closeCase();
 
 function payloadHtml(p){
   const j = p.json || {}, items = Array.isArray(j.Items) ? j.Items : (j.Items ? [j.Items] : []);
+  const m = p.meta || {}, rs = m.reasons || [];
+  const reasons = rs.length ? `<div style="margin:0 0 12px">${rs.map(r => `<div style="margin:4px 0"><span class="k ${SEV[r.severity]||"muted"}">${esc(r.severity)}</span> ${esc(r.message)}</div>`).join("")}</div>`
+    : (m.review_status ? `<p class="muted" style="font-size:12.5px;margin:0 0 12px">No problems found. The reviewer only needs to confirm.</p>` : "");
   const filled = Object.entries(j).filter(([k,v]) => k !== "Items" && v !== "" && v != null && v !== "NULL");
   const empty = Object.entries(j).filter(([k,v]) => k !== "Items" && (v === "" || v == null));
   const icols = items.length ? Object.keys(items[0]).filter(k => items.some(it => it[k] !== "" && it[k] != null)) : [];
-  return `<div class="paybox"><div class="ptitle"><b>SAP order payload · PO ${esc(j.PO_Number || p.name)}</b><span class="k ok">ready for SAP simulation</span></div>
+  return `<div class="paybox"><div class="ptitle"><b>SAP order payload · PO ${esc(j.PO_Number || p.name)}</b>${m.review_status ? reviewBadge(m.review_status) : '<span class="k ok">ready for SAP simulation</span>'}</div>${reasons}
     <table class="kv"><tbody>${filled.map(([k,v]) => `<tr><td>${esc(k)}</td><td><b>${esc(v)}</b></td></tr>`).join("")}</tbody></table>
     ${items.length?`<div class="sec">Items</div><table><thead><tr>${icols.map(k=>`<th>${esc(k)}</th>`).join("")}</tr></thead><tbody>${items.map(it=>`<tr style="cursor:default">${icols.map(k=>`<td>${esc(it[k])}</td>`).join("")}</tr>`).join("")}</tbody></table>`:""}
     ${empty.length?`<p class="muted" style="font-size:12px;margin-top:12px">Left empty (filled later by Salesforce lookup or SAP): ${empty.map(([k])=>esc(k)).join(", ")}</p>`:""}

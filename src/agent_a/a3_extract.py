@@ -22,20 +22,24 @@ import json
 import os
 import re
 import shutil
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Literal, Optional
 
 from pydantic import BaseModel
 
-from . import llm
+from . import docintel, llm
+from .a2_classify import usage_line
 from .a2_classify import norm_po
 from .clean import clean_email_text
 from .config import CFG, ROOT
 from .constants import (A3_SYSTEM_PROMPT, DATE_FIELDS, DOC_KINDS, KNOWN_UOM, LB_PER, MONTHS, NUM_FIELDS,
                         OCR_DIGIT_FIX)
+from . import po_compare
 from .models import Case, DocumentText, FieldValue, LineItem, PurchaseOrder, Source
 from .text_extract import ExtractResult, extract
+from .trace import prompt_version, step_trace
 
 SAMPLES = (ROOT / CFG.paths.samples).resolve()
 MAX_DOC_CHARS = CFG.a3.max_doc_chars          # text sent to the model per document (POs are at the start; T&Cs later)
@@ -502,6 +506,8 @@ def extract_case(case: Case, case_dir: Path) -> None:
             best[k] = po
     case.purchase_orders = list(best.values())
 
+    case.trace["a3"] = step_trace(SYSTEM, ocr=CFG.ocr.provider,       # which model / prompt / OCR engine read it
+                                  methods=sorted({d.method for d in case.documents}))
     if case.purchase_orders:                                         # step 8
         case.status = "extracted"
     else:
@@ -511,14 +517,14 @@ def extract_case(case: Case, case_dir: Path) -> None:
 
 
 # ======================= run + check =======================
-def audit(out_dir: Path, case: Case) -> None:
-    """Append one A3 event to audit.jsonl (model, POs, confidence, flags)."""
+def audit(out_dir: Path, case: Case, usage: dict | None = None) -> None:
+    """Append one A3 event to audit.jsonl (model, POs, confidence, flags, tokens / cost / time)."""
     with (out_dir / "audit.jsonl").open("a", encoding="utf-8") as f:
         f.write(json.dumps({"ts": datetime.now(timezone.utc).isoformat(), "case_id": case.case_id, "step": "A3",
-                            "event": case.status, "model": llm.model_name(),
+                            "event": case.status, "model": llm.model_name(), "prompt_version": prompt_version(SYSTEM),
                             "pos": [str(p.po_number.value) for p in case.purchase_orders],
                             "overall": [p.overall_confidence for p in case.purchase_orders],
-                            "flags": [p.flags for p in case.purchase_orders]}) + "\n")
+                            "flags": [p.flags for p in case.purchase_orders], **(usage or {})}) + "\n")
 
 
 def a3_failed(c: Case) -> bool:
@@ -528,7 +534,8 @@ def a3_failed(c: Case) -> bool:
 
 def is_order_case(c: Case) -> bool:
     """A case A2 sent to A3 (new order or possible duplicate) - whatever A3 did with it since."""
-    return bool(c.classification) and c.classification.category in ("new_order", "duplicate") \
+    return bool(c.classification) and (c.classification.category in ("new_order", "duplicate")
+                                       or c.classification.detail == "revised_by_content") \
         and c.status in ("classified", "extracted", "payload_built", "manual_queue")
 
 
@@ -537,9 +544,10 @@ def run(out_dir: Path, retry_failed: bool = False, everything: bool = False) -> 
     cases = [Case.model_validate_json(p.read_text(encoding="utf-8")) for p in out_dir.glob("*/case.json")]
     todo = sorted((c for c in cases if c.status == "classified" or (retry_failed and a3_failed(c))
                    or (everything and is_order_case(c))),
-                  key=lambda c: c.case_id)
+                  key=lambda c: (c.received_at is None, c.received_at, c.case_id))   # oldest first: the original
+                                                                                     # PO is read before its resend
     for c in todo:
-        c.notes = [n for n in c.notes if not n.startswith(("A3 failed", "A3: no purchase order"))]  # fresh start
+        c.notes = [n for n in c.notes if not n.startswith(("A3 failed", "A3: no purchase order", "A3: PO "))]  # fresh start
     busy_in_a_row = 0
 
     allow_real = os.getenv("ALLOW_EXTERNAL_LLM_FOR_REAL_DATA", "false").strip().lower() == "true"
@@ -549,18 +557,28 @@ def run(out_dir: Path, retry_failed: bool = False, everything: bool = False) -> 
             raise SystemExit(f"Refusing to send non-synthetic documents to {llm.PROVIDER}: {real[:3]}... "
                              f"Set ALLOW_EXTERNAL_LLM_FOR_REAL_DATA=true in .env only if approved.")
 
+    run_total = {"llm_calls": 0, "cache_hits": 0, "tokens_in": 0, "tokens_out": 0, "seconds": 0.0,
+                 "ocr_pages": 0, "ocr_cache_hits": 0}
     for case in todo:
         case_dir = out_dir / case.case_id
+        llm.usage_reset(); docintel.usage_reset()
+        t0 = time.perf_counter()
         try:
             extract_case(case, case_dir)
+            po_compare.check(case, cases)                            # duplicate or revised, by the PO's content
         except Exception as e:                                       # model down, etc. - never stop the run
             case.status = "manual_queue"
             case.notes.append(f"A3 failed: {type(e).__name__}: {e}")
             busy_in_a_row = busy_in_a_row + 1 if "busy" in str(e).lower() else 0
         else:
             busy_in_a_row = 0
+        usage = {**llm.usage_take(), **docintel.usage_take(), "seconds": round(time.perf_counter() - t0, 2)}
+        if "a3" in case.trace:
+            case.trace["a3"]["usage"] = usage
+        for k in run_total:
+            run_total[k] += usage[k]
         (case_dir / "case.json").write_text(case.model_dump_json(indent=2), encoding="utf-8")
-        audit(out_dir, case)
+        audit(out_dir, case, usage)
         docs = ", ".join(f"{d.method}:{d.doc_type or d.error or '?'}" for d in case.documents)
         pos = "; ".join(f"{p.po_number.value} ({len(p.lines)} ln, conf {p.overall_confidence:.2f}"
                         f"{', ' + ' '.join(p.flags) if p.flags else ''}"
@@ -574,6 +592,9 @@ def run(out_dir: Path, retry_failed: bool = False, everything: bool = False) -> 
                   "daily token limit). Cases already done are saved. Later, continue with:\n"
                   "    python -m agent_a.a3_extract --out <same folder> --retry-failed")
             break
+    if todo:
+        print(usage_line("A3", run_total) + (f", {run_total['ocr_pages']} OCR page(s)" if run_total["ocr_pages"] else "")
+              + (f", {run_total['ocr_cache_hits']} OCR page(s) from cache" if run_total["ocr_cache_hits"] else ""))
     return todo
 
 

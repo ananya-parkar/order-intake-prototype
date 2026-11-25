@@ -1,5 +1,6 @@
 """Loads config.yaml once and checks it with Pydantic. Use: from .config import CFG, ROOT."""
 from pathlib import Path
+from typing import Literal
 
 import yaml
 from pydantic import BaseModel, ConfigDict
@@ -21,6 +22,8 @@ class LLMConfig(Section):
     max_completion_tokens: int
     timeout_seconds: int
     max_attempts: int
+    price_input_per_mtok: float = 0.0       # USD per million input tokens (0 = don't show cost)
+    price_output_per_mtok: float = 0.0      # USD per million output tokens
 
 
 class PathsConfig(Section):
@@ -54,21 +57,36 @@ class A3Config(Section):
     min_page_chars: int
     min_ocr_width: int
 
+
 class OCRConfig(Section):
     """ocr: which engine reads scanned pages and photos, and how long to wait for it."""
     provider: str
     timeout_seconds: int
     poll_seconds: float
     max_attempts: int
+    price_per_1000_pages: float = 0.0       # USD per 1,000 pages (0 = free tier / don't show cost)
+
 
 class A4Config(Section):
-    """a4: timezone for Created_On and the fixed SAP values the client gave us."""
+    """a4: timezone for Created_On, the fixed SAP values the client gave us, UoM mapping and the review gate."""
     timezone: str
     order_reason: str
     order_type: str
     sales_org: str
     distribution_channel: str
     division: str
+    review_min_confidence: float            # PO confidence below this -> needs_review
+    check_past_request_date: bool           # flag a Request_Date that is already in the past
+    zero_qty_lines: Literal["skip", "send"] # quantity-0 lines: leave out of the payload, or send (flagged)
+    sap_uom_codes: list[str]                # unit codes SAP accepts; anything else -> unknown_uom
+    uom_map: dict[str, str]                 # customer spelling -> SAP code (exact match)
+    uom_prefix: dict[str, str]              # starts with -> SAP code (BAG50LB -> BAG)
+
+
+class CacheConfig(Section):
+    """cache: reuse model answers and OCR results for the same input (see cache.py)."""
+    enabled: bool = True
+    dir: str = ".cache"                     # relative to the project folder; must stay git-ignored
 
 
 class Config(Section):
@@ -80,6 +98,7 @@ class Config(Section):
     a3: A3Config
     a4: A4Config
     ocr: OCRConfig
+    cache: CacheConfig = CacheConfig()
 
 
 def load(path: Path = ROOT / "config.yaml") -> Config:

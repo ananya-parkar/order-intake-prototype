@@ -139,6 +139,8 @@ class Case(BaseModel):
     purchase_orders: list[PurchaseOrder] = Field(default_factory=list)   # A3: extracted POs
     flags: list[str] = Field(default_factory=list)    # e.g. possible_duplicate, low_confidence
     notes: list[str] = Field(default_factory=list)
+    # which model / prompt / config / code produced each step's result (see trace.py), e.g. trace["a2"]["model"]
+    trace: dict[str, dict] = Field(default_factory=dict)
 
 
 

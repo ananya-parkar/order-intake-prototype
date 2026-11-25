@@ -15,6 +15,7 @@ import argparse
 import json
 import os
 import re
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Literal
@@ -26,6 +27,7 @@ from .clean import clean_email_text
 from .config import CFG, ROOT
 from .constants import A2_SYSTEM_PROMPT as SYSTEM, ARIBA_KIND, ARIBA_SENDER
 from .models import Case, Classification
+from .trace import prompt_version, step_trace
 
 SAMPLES = (ROOT / CFG.paths.samples).resolve()
 BODY_LIMIT = CFG.a2.body_limit_chars          # characters of email text sent to the model
@@ -98,8 +100,10 @@ def classify_case(case: Case, seen_pos: dict[str, str]) -> None:
         result, rule = known
         findings = []
         case.notes.append(f"A2: decided by fixed rule '{rule}' (no model call)")
+        case.trace["a2"] = step_trace(decided_by=f"rule:{rule}")
     else:
         result, findings = llm.chat_json(SYSTEM, build_prompt(case), ClassifyOut)
+        case.trace["a2"] = step_trace(SYSTEM, decided_by="model")
     c = Classification(**result.model_dump())
     # Clean PO numbers; drop empty or all-zero values (a model sometimes returns "0" when it can't see one)
     c.po_numbers = [n for n in (norm_po(p) for p in c.po_numbers) if n and not re.fullmatch(r"0+", n)]
@@ -157,19 +161,37 @@ def run(out_dir: Path, retry_failed: bool = False) -> list[Case]:
         if c not in todo and c.classification and c.classification.category == "new_order":
             for po in c.classification.po_numbers:
                 seen_pos.setdefault(po, c.case_id)
+    run_total = {"llm_calls": 0, "cache_hits": 0, "tokens_in": 0, "tokens_out": 0, "seconds": 0.0}
     for case in todo:
+        llm.usage_reset()
+        t0 = time.perf_counter()
         try:
             classify_case(case, seen_pos)
         except Exception as e:                                  # model down, bad JSON twice, etc.
             case.status = "manual_queue"
             case.notes.append(f"A2 failed: {e}")
+        usage = {**llm.usage_take(), "seconds": round(time.perf_counter() - t0, 2)}   # tokens, cost, time
+        if "a2" in case.trace:
+            case.trace["a2"]["usage"] = usage
+        for k in run_total:
+            run_total[k] += usage[k]
         (out_dir / case.case_id / "case.json").write_text(case.model_dump_json(indent=2), encoding="utf-8")
         cl = case.classification
-        audit(out_dir, case.case_id, case.status, model=llm.model_name(),
-              category=cl.category if cl else None, pos=cl.po_numbers if cl else [], flags=case.flags)
+        audit(out_dir, case.case_id, case.status, model=llm.model_name(), prompt_version=prompt_version(SYSTEM),
+              category=cl.category if cl else None, pos=cl.po_numbers if cl else [], flags=case.flags, **usage)
         print(f"{case.case_id}  {case.source_file[:40]:<40} -> {cl.category if cl else 'ERROR':<13} "
               f"{(cl.detail if cl else ''):<24} {','.join(cl.po_numbers) if cl else ''} {' '.join(case.flags)}")
+    if todo:
+        print(usage_line("A2", run_total))
     return todo
+
+
+def usage_line(step: str, t: dict) -> str:
+    """One summary line for a run: model calls, tokens, cost and time."""
+    cost = llm.cost_usd(t["tokens_in"], t["tokens_out"])
+    return (f"\n{step} usage: {t['llm_calls']} model calls, {t['tokens_in']:,} tokens in, {t['tokens_out']:,} out"
+            + (f", ~${cost:.4f}" if cost is not None else "") + f", {t['seconds']:.0f}s"
+            + (f", {t['cache_hits']} answer(s) from cache" if t.get("cache_hits") else ""))
 
 
 def check(cases: list[Case], keys_dir: Path) -> None:

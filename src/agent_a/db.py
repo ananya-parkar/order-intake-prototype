@@ -22,7 +22,7 @@ import psycopg
 from dotenv import load_dotenv
 from psycopg.types.json import Jsonb
 
-from .a4_payload import missing
+from .a4_payload import missing, payload_paths
 from .config import CFG, ROOT
 from .models import Case, FieldValue
 load_dotenv(ROOT / ".env")
@@ -242,7 +242,7 @@ def save_case(conn, case: Case, sf_case_id) -> None:
 def save_payloads(conn, case_id: str, folder: Path) -> int:
     """Replace this case's SAP payloads (A4) with the files in payloads/."""
     conn.execute("DELETE FROM sap_payload WHERE case_id = %s", (case_id,))
-    files = sorted((folder / "payloads").glob("*.json"))
+    files = payload_paths(folder / "payloads")         # not the .meta.json review files
     for f in files:
         p = json.loads(f.read_text(encoding="utf-8"))
         conn.execute("INSERT INTO sap_payload (case_id, po_number, payload, missing_fields) VALUES (%s, %s, %s, %s)",

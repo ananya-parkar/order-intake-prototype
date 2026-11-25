@@ -9,6 +9,7 @@ Both providers are asked for strict JSON that matches the Pydantic schema.
 If the JSON still doesn't validate, we ask the model once more to fix it.
 """
 import os
+import threading
 import time
 from typing import Type, TypeVar
 
@@ -16,7 +17,7 @@ import requests
 from dotenv import load_dotenv
 from pydantic import BaseModel, ValidationError
 
-from . import guard
+from . import cache, guard
 from .config import CFG, ROOT
 from .constants import ANTHROPIC_URL, ANTHROPIC_VERSION, GROQ_URL, RETRY_STATUS
 
@@ -24,6 +25,47 @@ load_dotenv(ROOT / ".env")          # secrets only: ANTHROPIC_API_KEY / GROQ_API
 
 PROVIDER = CFG.llm.provider
 T = TypeVar("T", bound=BaseModel)
+
+# ---------------- usage: tokens, time and cost per case ----------------
+# Counted per thread, so cases running side by side (later) don't mix their numbers.
+_local = threading.local()
+
+
+def _usage() -> dict:
+    """This thread's running totals since the last usage_reset()."""
+    if getattr(_local, "u", None) is None:
+        _local.u = {"llm_calls": 0, "cache_hits": 0, "tokens_in": 0, "tokens_out": 0, "llm_seconds": 0.0}
+    return _local.u
+
+
+def usage_reset() -> None:
+    """Start counting from zero (call before each case)."""
+    _local.u = None
+
+
+def cost_usd(tokens_in: int, tokens_out: int):
+    """Cost from the prices in config.yaml (USD per million tokens); None if no prices are set."""
+    p_in, p_out = CFG.llm.price_input_per_mtok, CFG.llm.price_output_per_mtok
+    if not (p_in or p_out):
+        return None
+    return round(tokens_in / 1e6 * p_in + tokens_out / 1e6 * p_out, 6)
+
+
+def usage_take() -> dict:
+    """Totals since the last reset - calls, tokens in/out, seconds waiting for the model, cost - then reset."""
+    u = dict(_usage())
+    usage_reset()
+    u["llm_seconds"] = round(u["llm_seconds"], 2)
+    u["llm_cost_usd"] = cost_usd(u["tokens_in"], u["tokens_out"])
+    return u
+
+
+def _count(tokens_in, tokens_out) -> None:
+    """Add one model call's tokens to this thread's totals."""
+    u = _usage()
+    u["llm_calls"] += 1
+    u["tokens_in"] += int(tokens_in or 0)
+    u["tokens_out"] += int(tokens_out or 0)
 
 
 class LLMError(Exception):
@@ -68,23 +110,41 @@ def _key(name: str) -> str:
     return key
 
 
+def _wait(attempt: int, retry_after=None) -> float:
+    """Seconds to wait before the next try: the server's retry-after if it sent one, else 1, 2, 4, 8 ... (max 60)."""
+    try:
+        wait = float(retry_after) if retry_after is not None else 2 ** attempt
+    except ValueError:
+        wait = 2 ** attempt
+    return min(max(wait, 1), 60)
+
+
 def _post(url: str, body: dict, headers: dict) -> dict:
-    """POST to the model API; wait and retry when it is busy (429 / 5xx / 529 overloaded)."""
-    for attempt in range(CFG.llm.max_attempts):
-        r = requests.post(url, json=body, headers=headers, timeout=CFG.llm.timeout_seconds)
+    """POST to the model API; wait and retry when it is busy (429 / 5xx / 529 overloaded),
+    when it does not answer in time (timeout) or when the connection drops."""
+    last = ""
+    ATTEMPTS = CFG.llm.max_attempts
+    for attempt in range(ATTEMPTS):
+        try:
+            r = requests.post(url, json=body, headers=headers, timeout=CFG.llm.timeout_seconds)
+        except (requests.Timeout, requests.ConnectionError) as e:   # no answer / network dropped -> try again
+            last = type(e).__name__
+            wait = _wait(attempt)
+            if attempt < ATTEMPTS - 1:                      # last try failed -> give up below
+                print(f"   {PROVIDER} {last}, trying again in {wait:.0f}s...")
+                time.sleep(wait)
+            continue
         if r.status_code == 200:
             return r.json()
         if r.status_code in RETRY_STATUS:
-            try:
-                wait = float(r.headers.get("retry-after", 2 ** attempt))
-            except ValueError:
-                wait = 2 ** attempt
-            wait = min(max(wait, 1), 60)
-            print(f"   {PROVIDER} busy ({r.status_code}), waiting {wait:.0f}s and retrying...")
-            time.sleep(wait)
+            last = f"busy ({r.status_code})"
+            wait = _wait(attempt, r.headers.get("retry-after"))
+            if attempt < ATTEMPTS - 1:                      # last try failed -> give up below
+                print(f"   {PROVIDER} {last}, trying again in {wait:.0f}s...")
+                time.sleep(wait)
             continue
-        raise LLMError(f"{PROVIDER} {r.status_code}: {r.text[:300]}")
-    raise LLMError(f"{PROVIDER} still busy after {CFG.llm.max_attempts} tries")
+        raise LLMError(f"{PROVIDER} {r.status_code}: {r.text[:300]}")   # 400 / 401 / 403 ... -> retrying won't help
+    raise LLMError(f"{PROVIDER} still failing after {CFG.llm.max_attempts} tries ({last})")
 
 
 def _call_anthropic(messages: list[dict], out_model: Type[BaseModel]) -> str:
@@ -99,6 +159,9 @@ def _call_anthropic(messages: list[dict], out_model: Type[BaseModel]) -> str:
     }
     data = _post(ANTHROPIC_URL, body, {"x-api-key": _key("ANTHROPIC_API_KEY"),
                                        "anthropic-version": ANTHROPIC_VERSION})
+    u = data.get("usage", {})
+    _count(u.get("input_tokens", 0) + u.get("cache_read_input_tokens", 0) + u.get("cache_creation_input_tokens", 0),
+           u.get("output_tokens", 0))
     return "".join(b.get("text", "") for b in data.get("content", []) if b.get("type") == "text")
 
 
@@ -114,15 +177,21 @@ def _call_groq(messages: list[dict], out_model: Type[BaseModel]) -> str:
             "name": out_model.__name__, "schema": strict_schema(out_model), "strict": True}},
     }
     data = _post(GROQ_URL, body, {"Authorization": f"Bearer {_key('GROQ_API_KEY')}"})
+    u = data.get("usage", {})
+    _count(u.get("prompt_tokens", 0), u.get("completion_tokens", 0))
     return data["choices"][0]["message"]["content"]
 
 
 def _call(messages: list[dict], out_model: Type[BaseModel]) -> str:
     """Send one request to the provider set in config.yaml and return its raw JSON text."""
-    if PROVIDER == "anthropic":
-        return _call_anthropic(messages, out_model)
-    if PROVIDER == "groq":
-        return _call_groq(messages, out_model)
+    t0 = time.perf_counter()
+    try:
+        if PROVIDER == "anthropic":
+            return _call_anthropic(messages, out_model)
+        if PROVIDER == "groq":
+            return _call_groq(messages, out_model)
+    finally:
+        _usage()["llm_seconds"] += time.perf_counter() - t0          # time waiting for the model, retries included
     raise LLMError(f"Unsupported llm.provider '{PROVIDER}' in config.yaml (use 'anthropic' or 'groq')")
 
 
@@ -131,11 +200,24 @@ def chat_json(system: str, user: str, out_model: Type[T]) -> tuple[T, list[str]]
     findings = guard.screen_input(user).findings
     messages = [{"role": "system", "content": system}, {"role": "user", "content": user}]
 
+    # Same provider + model + prompt + text + schema as before -> reuse that answer (no call, no cost)
+    key = cache.make_key(PROVIDER, CFG.llm.model, system, user, strict_schema(out_model))
+    hit = cache.get("llm", key)
+    if hit is not None:
+        try:
+            result = out_model.model_validate_json(hit["content"])
+            _usage()["cache_hits"] += 1
+            return result, findings + guard.screen_response(hit["content"]).findings
+        except (ValidationError, KeyError, TypeError):
+            pass                                               # old / damaged entry -> ask the model
+
     for attempt in range(2):                                   # first try + one repair
         content = _call(messages, out_model)
         findings += guard.screen_response(content).findings
         try:
-            return out_model.model_validate_json(content), findings
+            result = out_model.model_validate_json(content)
+            cache.put("llm", key, {"model": CFG.llm.model, "content": content})   # only answers that validated
+            return result, findings
         except ValidationError as e:
             messages += [{"role": "assistant", "content": content},
                          {"role": "user", "content": f"That JSON did not match the schema: {e}. Return only corrected JSON."}]
